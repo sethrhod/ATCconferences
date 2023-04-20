@@ -9,7 +9,7 @@ import Speakers from "./components/Speakers";
 import Sponsors from "./components/Sponsors";
 import Schedule from "./components/Schedule";
 import MyTimeline from "./components/My-timeline";
-// import Feedback from "./components/Feedback";
+import Feedback from "./components/Feedback";
 import CodeOfConduct from "./components/Code-of-Conduct";
 import Speaker from "./components/scripts/Speaker_class.js";
 import Sessions from "./components/scripts/Sessions_class.js";
@@ -79,14 +79,18 @@ export default function App() {
   }, [sessions]);
 
   const load = async() => {
+    let keys = [];
     try {
-      const keys = await AsyncStorage.getAllKeys();
+      // gets all keys from db
+      keys = await AsyncStorage.getAllKeys();
       // loops through all values and adds them to the bookmarks array
       return keys.map((session_id) => {
         const id = sessions.sessions.find(
           (session) => session.id === session_id
         );
-        setBookmarks((bookmarks) => [...bookmarks, id]);
+        if (id !== undefined) {
+          setBookmarks((bookmarks) => [...bookmarks, id]);
+        };
       });
     } catch (e) {
       console.log(e);
@@ -125,7 +129,7 @@ export default function App() {
           <Drawer.Screen name="Sponsors" component={Sponsors} />
           <Drawer.Screen name="Schedule" component={Schedule} />
           <Drawer.Screen name="My Timeline" component={MyTimeline} />
-          {/* <Drawer.Screen name="Feedback" component={Feedback} /> */}
+          <Drawer.Screen name="Feedback" component={Feedback} />
           <Drawer.Screen name="Code of Conduct" component={CodeOfConduct} />
         </Drawer.Navigator>
       </NavigationContainer>

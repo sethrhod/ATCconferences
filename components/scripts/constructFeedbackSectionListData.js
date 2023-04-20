@@ -10,7 +10,7 @@ const constructSectionListData = (sessions, feedback) => {
   sessions.sessions.forEach((session) => {
     feedback.forEach((feedback) => {
       // if feedback session id matches session id, push the session to the sessionsWithFeedback array if it doesn't already exist
-      if (session.id === feedback.sessionId) {
+      if (session.id === feedback.sessionid) {
         if (!sessionsWithFeedback.includes(session)) {
           sessionsWithFeedback.push(session);
         }
@@ -35,7 +35,7 @@ const constructSectionListData = (sessions, feedback) => {
     // add appropraite feedback to the session
     obj.data.forEach((session) => {
       feedback.forEach((feedback) => {
-        if (session.id === feedback.sessionId) {
+        if (session.id === feedback.sessionid) {
           session.feedback = feedback;
         }
       });

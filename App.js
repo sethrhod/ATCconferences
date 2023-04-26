@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import uuid from 'react-native-uuid';
 import Overview from "./components/Overview";
 import Speakers from "./components/Speakers";
 import Sponsors from "./components/Sponsors";
@@ -28,6 +29,8 @@ export default function App() {
   const [bookmarks, setBookmarks] = useState([]);
   //boolean for whether the id's have been retrived from the db or not
   const [isLoading, setIsLoading] = useState(true);
+  //uuid for the user
+  const [uuid, setUUID] = useState(null);
 
   // // refresh the app when the bookmarks change
   // const [refresh, setRefresh] = useState(false);
@@ -40,9 +43,28 @@ export default function App() {
     speakers,
     sessions,
     bookmarks,
+    uuid,
     setSpeakers,
     setSessions,
     setBookmarks,
+    setUUID,
+  };
+
+  const getFeedback = async () => {
+    const value = await AsyncStorage.getItem('@uuid');
+    try {
+      const response = await fetch(CustomData.flaskURL + value, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // fetching speakers, creating objects from those speakers, then passing them in to the fetchsessions function that creates session objects with the proper speakers objects
@@ -60,13 +82,15 @@ export default function App() {
       });
   }, []);
 
-  const fetchSessions = (all_speakers) => {
-    fetch(CustomData.sessionsURL)
+  const fetchSessions = async (all_speakers) => {
+    await getFeedback().then((feedback) => {
+      fetch(CustomData.sessionsURL)
       .then((response) => response.json())
       .then((data) => {
-        let classinstance = new Sessions(data[0], all_speakers);
+        let classinstance = new Sessions(data[0], all_speakers, feedback);
         setSessions(classinstance);
       });
+    });
   };
 
   // load bookmarked sessions from db using asyncstorage when sesssions is not null
@@ -78,15 +102,24 @@ export default function App() {
     }
   }, [sessions]);
 
+  // const createUUID = async () => {
+  //   const newUUID = uuid.v4();
+  //   await AsyncStorage.setItem('@uuid', newUUID);
+  // };
+
   const load = async() => {
-    let keys = [];
     try {
+      // checks if uuid exists, if not then it creates one
+      const value = await AsyncStorage.getItem('@uuid');
+      if (value !== null) {
+        setUUID(value);
+      }
       // gets all keys from db
       keys = await AsyncStorage.getAllKeys();
-      // loops through all values and adds them to the bookmarks array
-      return keys.map((session_id) => {
+      // loops through all values and add them to the bookmarks array
+      keys.map((key) => {
         const id = sessions.sessions.find(
-          (session) => session.id === session_id
+          (session) => session.id === key
         );
         if (id !== undefined) {
           setBookmarks((bookmarks) => [...bookmarks, id]);

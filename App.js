@@ -1,25 +1,24 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
-import Overview from "./components/Overview";
-import Speakers from "./components/Speakers";
-import Sponsors from "./components/Sponsors";
-import Schedule from "./components/Schedule";
-import MyTimeline from "./components/My-timeline";
-import Feedback from "./components/Feedback";
-import CodeOfConduct from "./components/Code-of-Conduct";
-import Speaker from "./components/scripts/Speaker_class.js";
-import Sessions from "./components/scripts/Sessions_class.js";
-import SessionizeContext from "./SessionizeContext.js";
+import Overview from './components/Overview';
+import Speakers from './components/Speakers';
+import Sponsors from './components/Sponsors';
+import Schedule from './components/Schedule';
+import MyTimeline from './components/My-timeline';
+import Feedback from './components/Feedback';
+import CodeOfConduct from './components/Code-of-Conduct';
+import SessionizeContext from './SessionizeContext.js';
+import fetchAllData from './components/scripts/fetchAllData';
 
 export default function App() {
   const Drawer = createDrawerNavigator();
 
-  const CustomData = require("./custom-data.json");
+  const CustomData = require('./custom-data.json');
 
   //speaker objects
   const [speakers, setSpeakers] = useState(null);
@@ -50,47 +49,35 @@ export default function App() {
     setUUID,
   };
 
-  const getFeedback = async () => {
+  // fetching speakers, creating objects from those speakers, then passing them in to the fetchsessions function that creates session objects with the proper speakers objects
+  useEffect(() => {
+    checkUUID();
+  }, []);
+
+  useEffect(() => {
+    if (uuid === null) {
+      return;
+    } else {
+      fetchAllData(setSessions, setSpeakers, uuid);
+    }
+  }, [uuid]);
+
+  const checkUUID = async() => {
+    // checks if uuid exists, if not then it creates one
     const value = await AsyncStorage.getItem('@uuid');
-    try {
-      const response = await fetch(CustomData.flaskURL + value, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-      const json = await response.json();
-      return json;
-    } catch (error) {
-      console.error(error);
+    if (value !== null) {
+      setUUID(value);
+      return value;
+    } else {
+      return createUUID();
     }
   };
 
-  // fetching speakers, creating objects from those speakers, then passing them in to the fetchsessions function that creates session objects with the proper speakers objects
-  useEffect(() => {
-    fetch(CustomData.speakersURL)
-      .then((response) => response.json())
-      .then((data) => {
-        let all_speakers = [];
-        data.map((speaker) => {
-          let classinstance = new Speaker(speaker);
-          all_speakers.push(classinstance);
-        });
-        setSpeakers(all_speakers);
-        fetchSessions(all_speakers);
-      });
-  }, []);
-
-  const fetchSessions = async (all_speakers) => {
-    await getFeedback().then((feedback) => {
-      fetch(CustomData.sessionsURL)
-      .then((response) => response.json())
-      .then((data) => {
-        let classinstance = new Sessions(data[0], all_speakers, feedback);
-        setSessions(classinstance);
-      });
-    });
+  const createUUID = async () => {
+    const newUUID = uuid.v4();
+    setUUID(newUUID);
+    await AsyncStorage.setItem('@uuid', newUUID);
+    return newUUID;
   };
 
   // load bookmarked sessions from db using asyncstorage when sesssions is not null
@@ -102,28 +89,16 @@ export default function App() {
     }
   }, [sessions]);
 
-  // const createUUID = async () => {
-  //   const newUUID = uuid.v4();
-  //   await AsyncStorage.setItem('@uuid', newUUID);
-  // };
-
-  const load = async() => {
+  const load = async () => {
     try {
-      // checks if uuid exists, if not then it creates one
-      const value = await AsyncStorage.getItem('@uuid');
-      if (value !== null) {
-        setUUID(value);
-      }
       // gets all keys from db
       keys = await AsyncStorage.getAllKeys();
       // loops through all values and add them to the bookmarks array
-      keys.map((key) => {
-        const id = sessions.sessions.find(
-          (session) => session.id === key
-        );
+      keys.map(key => {
+        const id = sessions.sessions.find(session => session.id === key);
         if (id !== undefined) {
-          setBookmarks((bookmarks) => [...bookmarks, id]);
-        };
+          setBookmarks(bookmarks => [...bookmarks, id]);
+        }
       });
     } catch (e) {
       console.log(e);
@@ -138,7 +113,7 @@ export default function App() {
       return;
     } else {
       // loops through all bookmarks and saves them to the db
-      bookmarks.map((session) => {
+      bookmarks.map(session => {
         AsyncStorage.setItem(session.id, session.id);
       });
     }
@@ -148,7 +123,7 @@ export default function App() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <Text style={{ color: "white" }}>Loading...</Text>
+        <Text style={{color: 'white'}}>Loading...</Text>
       </View>
     );
   }
@@ -156,7 +131,8 @@ export default function App() {
   return (
     <SessionizeContext.Provider value={value}>
       <NavigationContainer theme={MyTheme}>
-        <Drawer.Navigator screenOptions={{ headerTintColor: MyTheme.colors.primary }}>
+        <Drawer.Navigator
+          screenOptions={{headerTintColor: MyTheme.colors.primary}}>
           <Drawer.Screen name="Overview" component={Overview} />
           <Drawer.Screen name="Speakers" component={Speakers} />
           <Drawer.Screen name="Sponsors" component={Sponsors} />
@@ -173,22 +149,22 @@ export default function App() {
 const MyTheme = {
   dark: true,
   colors: {
-    primary: "#DBE9EE",
-    secondary: "#C4C4C4",
-    tertiary: "#4A6FA5",
-    background: "#166088",
-    card: "#166088",
-    text: "white",
-    border: "#166088",
-    notification: "#00FFFF",
+    primary: '#DBE9EE',
+    secondary: '#C4C4C4',
+    tertiary: '#4A6FA5',
+    background: '#166088',
+    card: '#166088',
+    text: 'white',
+    border: '#166088',
+    notification: '#00FFFF',
   },
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

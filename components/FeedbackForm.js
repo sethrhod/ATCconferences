@@ -1,17 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   Alert,
-  Pressable,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomData from '../custom-data.json';
 import {useTheme} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function FeedbackForm(props) {
   const {colors} = useTheme();
@@ -69,50 +66,55 @@ export default function FeedbackForm(props) {
       });
   };
 
+  const inputRef = React.useRef();
+
+  useEffect(() => {
+    props.sectionListRef.current.scrollToLocation({
+      itemIndex: props.itemIndex,
+      sectionIndex: props.sectionIndex,
+      viewPosition: 0,
+      viewOffset: -50,
+    });
+  }, []);
+
+  const [ignoreBlur, setIgnoreBlur] = React.useState(false);
+
+  const handleSubmit = () => {
+    if (text !== '') {
+      // add feedback to session object to update list without refreshing
+      props.session.feedback = {
+        feedback: text,
+        sessionid: props.session.id,
+        userid: props.uuid,
+      };
+      if (props.request === 'POST') {
+        submitFeedback(props.session.id, text);
+      } else if (props.request === 'PUT') {
+        editFeedback(props.session.id, text);
+      }
+    }
+    props.setFeedbackEntryVisible ? props.setFeedbackEntryVisible(false) : null;
+    props.setEditView ? props.setEditView(false) : null;
+    props.SwipeableRef.current.close();
+  };
+
   return (
     <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <Text style={{fontSize: 30, color: colors.text}}>Feedback</Text>
+      style={[styles.feedback_input, {backgroundColor: colors.tertiary}]}>
       <TextInput
-        style={{width: '80%', borderWidth: 1, backgroundColor: 'white'}}
         onChangeText={text => setText(text)}
         multiline={true}
+        onBlur={() => handleSubmit()}
         value={text}
+        autoFocus={true}
         placeholder="Feedback"
-      />
-      <Pressable
-        onPress={
-          props.request === 'POST'
-            ? () => submitFeedback(props.selectedSession.id, text)
-            : () => editFeedback(props.selectedSession.id, text)
-        }>
-        <Text style={{color: colors.text}}>Submit</Text>
-      </Pressable>
-      <Pressable
+        placeholderTextColor={colors.secondary}
+        cursorColor={colors.text}
+        ref={inputRef}
         style={{
-          flex: 0.1,
-          borderRadius: 10,
-          backgroundColor: colors.secondary,
-          flexDirection: 'row',
+          color: colors.text,
         }}
-        onPress={() => props.setModalVisible(!props.modalVisible)}>
-        <Text
-          style={{
-            flex: 1,
-            color: colors.tertiary,
-            fontWeight: '600',
-            fontSize: 15,
-          }}>
-          Close
-        </Text>
-        <Icon name="times" color={colors.tertiary} size={40} />
-      </Pressable>
+      />
     </View>
   );
 }
@@ -123,4 +125,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  feedback_input: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+    marginTop: 0,
+  }
 });

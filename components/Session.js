@@ -1,4 +1,12 @@
-import {StyleSheet, Text, View, Image, Pressable, Modal} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+  Modal,
+  KeyboardAvoidingView,
+} from 'react-native';
 import React, {useEffect, useContext} from 'react';
 import SessionizeContext from '../SessionizeContext';
 import Feedback from './Feedback';
@@ -7,6 +15,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useTheme} from '@react-navigation/native';
 import Moment from 'react-moment';
+import SessionModal from './SessionInfoModal';
 import FeedbackForm from './FeedbackForm';
 
 export default function Session(props) {
@@ -106,14 +115,18 @@ export default function Session(props) {
     }
   };
 
-  // close swipeable ref when component renders
+  // close swipeable ref when component renders or refreshes
   useEffect(() => {
+    setFeedbackEntryVisible(false);
+
     if (SwipeableRef.current) {
       SwipeableRef.current.close();
     }
-  }, []);
+  }, [props.refreshing]);
 
   const [modalVisible, setModalVisible] = React.useState(false);
+
+  const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
 
   const LeftSwipeActions = () => {
     return (
@@ -126,14 +139,6 @@ export default function Session(props) {
           margin: 10,
           padding: 10,
         }}>
-        <Modal animationType="slide" transparent={false} visible={modalVisible}>
-          <FeedbackForm
-            session={props.session}
-            setFeedback={props.setFeedback}
-            setModalVisible={setModalVisible()}
-            modalVisible={modalVisible}
-          />
-        </Modal>
         <Pressable
           style={{
             flex: 1,
@@ -141,15 +146,7 @@ export default function Session(props) {
             backgroundColor: colors.secondary,
           }}
           onPress={() => addBookmark()}>
-          <Text
-            style={{
-              flex: 1,
-              color: colors.tertiary,
-              fontWeight: '600',
-              fontSize: 15,
-            }}>
-            Add to Timeline
-          </Text>
+          <Text style={[styles.left_swipe_titles, {color: colors.tertiary}]}>Add to Timeline</Text>
           {props.session.bookmarked ? (
             <Icon name="bookmark" color={colors.tertiary} size={40} solid />
           ) : (
@@ -162,21 +159,19 @@ export default function Session(props) {
             borderRadius: 10,
             backgroundColor: colors.secondary,
           }}
-          onPress={() => setModalVisible(!modalVisible)}>
-          <Text
-            style={{
-              flex: 1,
-              color: colors.tertiary,
-              fontWeight: '600',
-              fontSize: 15,
-            }}>
-            Add Feedback
-          </Text>
-          {props.session.bookmarked ? (
-            <Icon name="plus-square" color={colors.tertiary} size={40} solid />
-          ) : (
-            <Icon name="plus-square" color={colors.tertiary} size={40} />
-          )}
+          onPress={() => setFeedbackEntryVisible(!feedbackEntryVisible)}>
+          <Text style={[styles.left_swipe_titles, {color: colors.tertiary}]}>Add Feedback</Text>
+          <Icon name="plus-square" color={colors.tertiary} size={40} solid />
+        </Pressable>
+        <Pressable
+          style={{
+            flex: 1,
+            borderRadius: 10,
+            backgroundColor: colors.secondary,
+          }}
+          onPress={() => setModalVisible(true)}>
+          <Text style={[styles.left_swipe_titles, {color: colors.tertiary}]}>Session Info</Text>
+          <Icon name="info-circle" color={colors.tertiary} size={40} solid />
         </Pressable>
       </View>
     );
@@ -253,7 +248,35 @@ export default function Session(props) {
           </View>
         </View>
       </Swipeable>
-      <Feedback session={props.session} />
+      <SessionModal
+        session={props.session}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+      {feedbackEntryVisible ? (
+        <FeedbackForm
+          session={props.session}
+          feedbackEntryVisible={feedbackEntryVisible}
+          setFeedbackEntryVisible={setFeedbackEntryVisible}
+          SwipeableRef={SwipeableRef}
+          sectionListRef={props.sectionListRef}
+          itemIndex={props.itemIndex}
+          sectionIndex={props.sectionIndex}
+          setSections={props.setSections}
+          onRefresh={props.onRefresh}
+          request="POST"
+        />
+      ) : null}
+      <Feedback 
+        session={props.session}
+        SwipeableRef={SwipeableRef}
+        sectionListRef={props.sectionListRef}
+        itemIndex={props.itemIndex}
+        sectionIndex={props.sectionIndex}
+        setSections={props.setSections}
+        refreshing={props.refreshing}
+        onRefresh={props.onRefresh}
+         />
     </View>
   );
 }
@@ -282,7 +305,7 @@ const styles = StyleSheet.create({
   speaker_room: {
     textAlign: 'center',
     fontSize: 15,
-    fontWeight: 'semi-bold',
+    fontWeight: 'semibold',
   },
   logo: {
     width: 25,
@@ -299,5 +322,10 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  left_swipe_titles: {
+    flex: 1,
+    fontWeight: '600',
+    fontSize: 12,
   },
 });

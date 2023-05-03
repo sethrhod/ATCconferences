@@ -8,6 +8,7 @@ export default class Sessions {
     this.start_times = new Set(data.sessions.map((x) => x.startsAt));
     this.end_times = new Set(data.sessions.map((x) => x.endsAt));
     this.rooms = new Set(data.sessions.map((x) => x.room));
+    this.all_speakers = all_speakers;
     this.feedback = this.feedback;
     this.matchFeedback(feedback);
   }

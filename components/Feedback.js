@@ -1,28 +1,59 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import {useTheme} from '@react-navigation/native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import FeedbackForm from './FeedbackForm';
 
 export default function Feedback(props) {
-
   const {colors} = useTheme();
 
-  {/* if feedback exists, show feedback */}
+  const [editView, setEditView] = React.useState(false);
 
-  return props.session.feedback ? (
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: 10,
-        }}>
-          <Text style={{color: colors.text}}>{props.session.feedback.feedback}</Text>
-      </View>
-    ) : (null);
+  useEffect(() => {
+    setEditView(false);
+  }, [props.refreshing]);
+
+  // only render if feedback is not null
+  if (props.session.feedback !== undefined) {
+    if (editView === true) {
+      return (
+        <FeedbackForm
+          session={props.session}
+          setEditView={setEditView}
+          feedbackText={props.session.feedback.feedback}
+          SwipeableRef={props.SwipeableRef}
+          sectionListRef={props.sectionListRef}
+          itemIndex={props.itemIndex}
+          sectionIndex={props.sectionIndex}
+          setSections={props.setSections}
+          onRefresh={props.onRefresh}
+          request="PATCH"
+        />
+      );
+    } else {
+      return (
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: 10,
+            backgroundColor: colors.tertiary,
+            borderRadius: 10,
+            padding: 10,
+            marginBottom: 20,
+            marginTop: 0,
+          }}>
+          <TouchableOpacity onPress={() => setEditView(!editView)}>
+            <Text style={{color: colors.text}}>
+              {props.session.feedback.feedback}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+  }
+  return null;
 }
 
 const styles = StyleSheet.create({

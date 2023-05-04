@@ -1,9 +1,10 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import uuid from 'react-native-uuid';
 import Overview from './components/Overview';
 import Speakers from './components/Speakers';
@@ -29,7 +30,9 @@ export default function App() {
   //boolean for whether the id's have been retrived from the db or not
   const [isLoading, setIsLoading] = useState(true);
   //uuid for the user
-  const [uuid, setUUID] = useState(null);
+  const [uUID, setUUID] = useState(null);
+  //boolean for whether the filter is open or not
+  const [filter, setFilter] = useState(false);
 
   // // refresh the app when the bookmarks change
   // const [refresh, setRefresh] = useState(false);
@@ -43,10 +46,12 @@ export default function App() {
     sessions,
     bookmarks,
     uuid,
+    filter,
     setSpeakers,
     setSessions,
     setBookmarks,
     setUUID,
+    setFilter,
   };
 
   // fetching speakers, creating objects from those speakers, then passing them in to the fetchsessions function that creates session objects with the proper speakers objects
@@ -55,14 +60,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (uuid === null) {
+    if (uUID === null) {
       return;
     } else {
-      fetchAllData(setSessions, setSpeakers, uuid);
+      fetchAllData(setSessions, setSpeakers, uUID);
     }
-  }, [uuid]);
+  }, [uUID]);
 
-  const checkUUID = async() => {
+  const checkUUID = async () => {
     // checks if uuid exists, if not then it creates one
     const value = await AsyncStorage.getItem('@uuid');
     if (value !== null) {
@@ -119,6 +124,21 @@ export default function App() {
     }
   }, [bookmarks]);
 
+  const headerRight = () => {
+    return (
+    <TouchableOpacity
+      onPress={() => setFilter(!filter)}
+      style={{marginRight: 10}}>
+      <Icon
+        name="filter"
+        size={20}
+        color={MyTheme.colors.primary}
+        style={{marginRight: 10}}
+      />
+    </TouchableOpacity>
+    );
+  };
+
   // only shows app home page if bookmarks are done loading from db
   if (isLoading) {
     return (
@@ -136,9 +156,14 @@ export default function App() {
           <Drawer.Screen name="Overview" component={Overview} />
           <Drawer.Screen name="Speakers" component={Speakers} />
           <Drawer.Screen name="Sponsors" component={Sponsors} />
-          <Drawer.Screen name="Schedule" component={Schedule} />
-          <Drawer.Screen name="My Timeline" component={MyTimeline} />
-          <Drawer.Screen name="Feedback" component={Feedback} />
+          <Drawer.Screen
+            name="Schedule"
+            component={filter ? MyTimeline : Schedule}
+            options={{
+              title: filter ? 'My Timeline' : 'Schedule',
+              headerRight: () => headerRight(),
+            }}
+          />
           <Drawer.Screen name="Code of Conduct" component={CodeOfConduct} />
         </Drawer.Navigator>
       </NavigationContainer>

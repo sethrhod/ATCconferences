@@ -1,17 +1,76 @@
-import React, {useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {useTheme} from '@react-navigation/native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import FeedbackForm from './FeedbackForm';
+import SessionizeContext from '../SessionizeContext';
 
 export default function Feedback(props) {
   const {colors} = useTheme();
 
+  const CustomData = require('../custom-data.json');
+
+  const {uuid} = useContext(SessionizeContext);
+  
   const [editView, setEditView] = React.useState(false);
 
   useEffect(() => {
     setEditView(false);
   }, [props.refreshing]);
+
+  const deleteFeedback = async (sessionID, feedbackText) => {
+    fetch(CustomData.flaskURL + uuid, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sessionid: sessionID,
+        feedback: feedbackText,
+      }),
+    })
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+      })
+      .finally(() => {
+        Alert.alert('Feedback Deleted');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  // remove feedback from session object to update list without refreshing
+  const handlePress = () => {
+    deleteFeedback(props.session.feedback.sessionid, props.session.feedback.feedback);
+    props.session.feedback = undefined;
+    setEditView(!editView);
+  };
+
+  const DeleteSwipeableRef = React.useRef(null);
+
+  const Delete = () => {
+    return (
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row',
+          margin: 10,
+          backgroundColor: colors.secondary,
+          borderRadius: 10,
+          marginBottom: 20,
+          marginTop: 0,
+        }}
+        onPress={() => handlePress()}>
+        <Text style={{color: colors.tertiary, marginRight: 10}}>Delete</Text>
+        <Icon name="trash" color={colors.tertiary} size={20} />
+      </TouchableOpacity>
+    );
+  };
 
   // only render if feedback is not null
   if (props.session.feedback !== undefined) {
@@ -27,29 +86,37 @@ export default function Feedback(props) {
           sectionIndex={props.sectionIndex}
           setSections={props.setSections}
           onRefresh={props.onRefresh}
-          request="PATCH"
+          request="PUT"
         />
       );
     } else {
       return (
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: 10,
-            backgroundColor: colors.tertiary,
-            borderRadius: 10,
-            padding: 10,
-            marginBottom: 20,
-            marginTop: 0,
-          }}>
-          <TouchableOpacity onPress={() => setEditView(!editView)}>
-            <Text style={{color: colors.text}}>
-              {props.session.feedback.feedback}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <Swipeable
+          ref={DeleteSwipeableRef}
+          renderLeftActions={() => <Delete />}
+          overshootLeft={false}
+          leftThreshold={100}
+          friction={2}
+          overshootFriction={8}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: 10,
+              backgroundColor: colors.tertiary,
+              borderRadius: 10,
+              padding: 10,
+              marginBottom: 20,
+              marginTop: 0,
+            }}>
+            <TouchableOpacity onPress={() => setEditView(!editView)}>
+              <Text style={{color: colors.text}}>
+                {props.session.feedback.feedback}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Swipeable>
       );
     }
   }

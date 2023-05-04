@@ -79,29 +79,36 @@ export default function MyTimeline() {
         <Button title="Clear My Timeline" onPress={() => clearAll()} />
 
         <SectionList
-          sections={constructSectionListData(bookmarks)}
-          ref={sectionListRef}
-          style={{ height: "100%", flex: 1, margin: 10 }}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 50 }}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          renderItem={({ item }) => (
-            <View style={styles.list_item}>
-              <Session
-                session={item}
-                starts={item.startsAt}
-                ends={item.endsAt}
-              />
-            </View>
-          )}
-          renderSectionHeader={({ section: { title } }) => (
-            <View style={[styles.timeblock, {backgroundColor: colors.tertiary}]}>
-              <Text style={[styles.timeblock_text, {color: colors.text}]}>{title}</Text>
-            </View>
-          )}
-        />
+        sections={constructSectionListData(bookmarks)}
+        ref={sectionListRef}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        style={{height: '100%', flex: 1, margin: 10, marginRight: 0}}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{paddingBottom: 50}}
+        renderItem={({item, index, section}) => (
+          <Session
+            session={item}
+            starts={item.startsAt}
+            ends={item.endsAt}
+            // starts={getNewTime(item.startsAt)}
+            // ends={getNewTime(item.endsAt)}
+            itemIndex={index}
+            sectionIndex={section.index}
+            sectionListRef={sectionListRef}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        )}
+        renderSectionHeader={({section: {title, index}}) => (
+          <View style={styles.timeblock} key={index}>
+            <Text style={[styles.timeblock_text, {color: colors.text}]}>
+              {title}
+            </Text>
+          </View>
+        )}
+      />
       </SafeAreaView>
     );
 
@@ -113,15 +120,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   timeblock_text: {
-    padding: 10,
-    fontSize: 20,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   timeblock: {
-    alignItems: "center",
-    maxHeight: 60,
     margin: 10,
-    justifyContent: "center",
-    borderRadius: 10,
   },
   noSessions: {
     textAlign: "center",

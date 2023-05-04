@@ -79,7 +79,7 @@ export default function FeedbackForm(props) {
 
   const [ignoreBlur, setIgnoreBlur] = React.useState(false);
 
-  const handleSubmit = () => {
+  const handleBlur = () => {
     if (text !== '') {
       // add feedback to session object to update list without refreshing
       props.session.feedback = {
@@ -89,14 +89,14 @@ export default function FeedbackForm(props) {
       };
       if (props.request === 'POST') {
         submitFeedback(props.session.id, text);
+        props.SwipeableRef.current.close();
       } else if (props.request === 'PUT') {
         editFeedback(props.session.id, text);
       }
     }
     props.setFeedbackEntryVisible ? props.setFeedbackEntryVisible(false) : null;
     props.setEditView ? props.setEditView(false) : null;
-    props.SwipeableRef.current.close();
-  };
+    };
 
   return (
     <View
@@ -104,7 +104,7 @@ export default function FeedbackForm(props) {
       <TextInput
         onChangeText={text => setText(text)}
         multiline={true}
-        onBlur={() => handleSubmit()}
+        onBlur={() => handleBlur()}
         value={text}
         autoFocus={true}
         placeholder="Feedback"

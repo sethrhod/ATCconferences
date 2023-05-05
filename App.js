@@ -4,17 +4,16 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import uuid from 'react-native-uuid';
 import Overview from './components/Overview';
 import Speakers from './components/Speakers';
 import Sponsors from './components/Sponsors';
 import Schedule from './components/Schedule';
 import MyTimeline from './components/My-timeline';
-import Feedback from './components/Feedback';
 import CodeOfConduct from './components/Code-of-Conduct';
 import SessionizeContext from './SessionizeContext.js';
 import fetchAllData from './components/scripts/fetchAllData';
+import FilterList from './components/FilterList';
 
 export default function App() {
   const Drawer = createDrawerNavigator();
@@ -33,6 +32,8 @@ export default function App() {
   const [uUID, setUUID] = useState(null);
   //boolean for whether the filter is open or not
   const [filter, setFilter] = useState(false);
+  // list of filter options
+  const [filterOptions, setFilterOptions] = useState(['My Timeline', 'Rooms', 'Times']);
 
   // // refresh the app when the bookmarks change
   // const [refresh, setRefresh] = useState(false);
@@ -126,16 +127,11 @@ export default function App() {
 
   const headerRight = () => {
     return (
-    <TouchableOpacity
-      onPress={() => setFilter(!filter)}
-      style={{marginRight: 10}}>
-      <Icon
-        name="filter"
-        size={20}
-        color={MyTheme.colors.primary}
-        style={{marginRight: 10}}
-      />
-    </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => setFilter(!filter)}
+        style={{marginRight: 10}}>
+        <FilterList filterOptions={filterOptions} setFilterOptions={setFilterOptions}/>
+      </TouchableOpacity>
     );
   };
 

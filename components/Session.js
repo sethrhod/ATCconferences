@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { useTheme } from "@react-navigation/native";
+import Moment from "react-moment";
 
 export default function Session(props) {
 
@@ -21,6 +22,7 @@ export default function Session(props) {
         flexDirection: "row",
         alignItems: "center",
       }}
+      key={index}
     >
       <Image
         key={index}
@@ -34,9 +36,13 @@ export default function Session(props) {
   const Times = (props) => {
     return (
       <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-        <Text style={[styles.times, {color: colors.card}]}>{props.starts}</Text>
-        <Text style={[styles.times, {color: colors.card}]}>-</Text>
-        <Text style={[styles.times, {color: colors.card}]}>{props.ends}</Text>
+        <Moment element={Text} format="h:mm A" style={[styles.time, {color: colors.card}]}>
+          {props.starts}
+        </Moment>
+        <Text style={[styles.time, {color: colors.card}]}> - </Text>
+        <Moment element={Text} format="h:mm A" style={[styles.time, {color: colors.card}]}>
+          {props.ends}
+        </Moment>
       </View>
     );
   };

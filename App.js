@@ -132,7 +132,7 @@ export default function App() {
           <Drawer.Screen name="Sponsors" component={Sponsors} />
           <Drawer.Screen name="Schedule" component={Schedule} />
           <Drawer.Screen name="My Timeline" component={MyTimeline} />
-          <Drawer.Screen name="Feedback" component={Feedback} />
+          {/* <Drawer.Screen name="Feedback" component={Feedback} /> */}
           <Drawer.Screen name="Code of Conduct" component={CodeOfConduct} />
         </Drawer.Navigator>
       </NavigationContainer>

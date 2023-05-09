@@ -6,7 +6,7 @@ import {
   RefreshControl,
   SafeAreaView,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import SessionizeContext from "../SessionizeContext.js";
 import Session from "./Session.js";
 import TimeScroll from "./TimeScroll.js";
@@ -43,15 +43,18 @@ export default function Schedule() {
         style={{ height: "100%", flex: 1, margin: 10, marginRight: 0 }}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 50 }}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <Session
             session={item}
-            starts={getNewTime(item.startsAt)}
-            ends={getNewTime(item.endsAt)}
+            starts={item.startsAt}
+            ends={item.endsAt}
+            // starts={getNewTime(item.startsAt)}
+            // ends={getNewTime(item.endsAt)}
+            key={index}
           />
         )}
-        renderSectionHeader={({ section: { title } }) => (
-          <View style={[styles.timeblock, {backgroundColor: colors.tertiary}]}>
+        renderSectionHeader={({ section: { title }, index }) => (
+          <View style={[styles.timeblock, {backgroundColor: colors.tertiary}]} key={index}>
             <Text style={[styles.timeblock_text, {color: colors.text}]}>{title}</Text>
           </View>
         )}

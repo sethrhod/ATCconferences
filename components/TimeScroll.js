@@ -7,7 +7,7 @@ export default function TimeScroll(props) {
   const { colors } = useTheme();
 
   return props.sectionListData.map((time, index) => (
-    <View style={styles.time_scroll}>
+    <View style={styles.time_scroll} key={index}>
       <TouchableOpacity
         onPress={() => {
           props.sectionListRef.current.scrollToLocation({

@@ -1,4 +1,4 @@
-function getNewTime(time) {
+const getNewTime = (time) => {
   const getAmPm = (hours) => {
     if (hours > 12) {
       return "PM";
@@ -35,6 +35,7 @@ function getNewTime(time) {
     String(getNewMinutes(minutes)) +
     " " +
     String(getAmPm(hours));
+  
   return newTime;
 }
 

@@ -6,6 +6,7 @@ import getNewTime from "./scripts/getNewTime.js"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Session from "./Session.js";
 import { useTheme } from "@react-navigation/native";
+import Moment from "react-moment";
 
 export default function MyTimeline() {
 
@@ -34,7 +35,7 @@ export default function MyTimeline() {
       // create an empty object to store the data
       let obj = {};
       // set the title of the object to the start time of the session and add to the same hour sessions
-      obj.title = getNewTime(time);
+      obj.title = <Moment element={Text} format="h:mm A">{time}</Moment>;
       // set the data of the object to the sessions that start at the same time
       obj.data = bookmarks.filter((bookmark) => bookmark.startsAt === time);
 
@@ -87,8 +88,8 @@ export default function MyTimeline() {
             <View style={styles.list_item}>
               <Session
                 session={item}
-                starts={getNewTime(item.startsAt)}
-                ends={getNewTime(item.endsAt)}
+                starts={item.startsAt}
+                ends={item.endsAt}
               />
             </View>
           )}

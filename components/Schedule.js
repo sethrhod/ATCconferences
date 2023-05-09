@@ -23,9 +23,13 @@ export default function Schedule() {
   const {setSessions} = useContext(SessionizeContext);
   const {bookmarks} = useContext(SessionizeContext);
   const {uuid} = useContext(SessionizeContext);
+  const {filterValues} = useContext(SessionizeContext);
+  const {setFilterValues} = useContext(SessionizeContext);
 
   const [refreshing, setRefreshing] = React.useState(false);
-  const [sections, setSections] = React.useState(constructSectionListData(sessions, bookmarks))
+  const [sections, setSections] = React.useState(
+    constructSectionListData(sessions, bookmarks),
+  );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);

@@ -30,10 +30,20 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   //uuid for the user
   const [uUID, setUUID] = useState(null);
-  //boolean for whether the filter is open or not
-  const [filter, setFilter] = useState(false);
   // list of filter options
-  const [filterOptions, setFilterOptions] = useState(['My Timeline', 'Rooms', 'Times']);
+  const [filterOptions, setFilterOptions] = useState([
+    {name: 'My Timeline', value: false},
+    {
+      name: 'Rooms',
+      value: false,
+      options: null,
+    },
+    {
+      name: 'Times',
+      value: false,
+      options: null,
+    },
+  ]);
 
   // // refresh the app when the bookmarks change
   // const [refresh, setRefresh] = useState(false);
@@ -47,12 +57,12 @@ export default function App() {
     sessions,
     bookmarks,
     uuid,
-    filter,
+    filterOptions,
     setSpeakers,
     setSessions,
     setBookmarks,
     setUUID,
-    setFilter,
+    setFilterOptions,
   };
 
   // fetching speakers, creating objects from those speakers, then passing them in to the fetchsessions function that creates session objects with the proper speakers objects
@@ -88,10 +98,34 @@ export default function App() {
 
   // load bookmarked sessions from db using asyncstorage when sesssions is not null
   useEffect(() => {
+    let rooms = [];
+    let times = [];
     if (sessions === null) {
       return;
     } else {
       load();
+      // loops through all sessions and adds the rooms to the rooms array
+      sessions.sessions.map(session => {
+        if (!rooms.includes(session.room)) {
+          rooms.push({
+            name: session.room,
+            value: false,
+          });
+        }
+      });
+      // sets the options for the rooms filter
+      filterOptions[1].options = rooms;
+      // loops through all sessions and adds the times to the times array
+      sessions.sessions.map(session => {
+        if (!times.includes(session.startsAt)) {
+          times.push({
+            name: session.startsAt,
+            value: false,
+          });
+        }
+      });
+      // sets the options for the times filter
+      filterOptions[2].options = times;
     }
   }, [sessions]);
 
@@ -127,12 +161,19 @@ export default function App() {
 
   const headerRight = () => {
     return (
-      <TouchableOpacity
-        onPress={() => setFilter(!filter)}
-        style={{marginRight: 10}}>
-        <FilterList filterOptions={filterOptions} setFilterOptions={setFilterOptions}/>
-      </TouchableOpacity>
+      <FilterList
+        filterOptions={filterOptions}
+        setFilterOptions={setFilterOptions}
+      />
     );
+  };
+
+  const renderSchedule = () => {
+    if (filterOptions[0].value) {
+      return MyTimeline;
+    } else {
+      return Schedule;
+    }
   };
 
   // only shows app home page if bookmarks are done loading from db
@@ -154,9 +195,9 @@ export default function App() {
           <Drawer.Screen name="Sponsors" component={Sponsors} />
           <Drawer.Screen
             name="Schedule"
-            component={filter ? MyTimeline : Schedule}
+            component={renderSchedule()}
             options={{
-              title: filter ? 'My Timeline' : 'Schedule',
+              title: 'Schedule',
               headerRight: () => headerRight(),
             }}
           />

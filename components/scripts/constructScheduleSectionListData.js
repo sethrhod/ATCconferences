@@ -3,6 +3,7 @@ import {Text} from 'react-native';
 
 // a function that costructs a list of session data thats compatible with the SectionList component
 const constructSectionListData = (sessions, bookmarks) => {
+
   // create an empty array to store the data
   let data = [];
 

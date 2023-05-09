@@ -7,142 +7,155 @@ import {
   Pressable,
   FlatList,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useTheme} from '@react-navigation/native';
-import SessionizeContext from '../SessionizeContext.js';
 
 export default function FilterList(props) {
   const {colors} = useTheme();
 
-  const {sessions} = React.useContext(SessionizeContext);
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [filterView, setFilterView] = React.useState(null);
 
-  const dropdownRef = React.useRef(null);
+  const FlatListItem = props => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          margin: 10,
+          justifyContent: 'space-between',
+        }}>
+        <Text style={{color: colors.text, fontSize: 15}}>
+          {props.item.name}
+        </Text>
+        <Pressable
+          style={{
+            marginLeft: 10,
+            backgroundColor: colors.background,
+            borderRadius: 5,
+            padding: 5,
+          }}
+          onPress={() => {
+            let newFilterOptions = [...props.filterOptions];
+            if (props.item.name === 'My Timeline') {
+              newFilterOptions[0].value = !newFilterOptions[0].value;
+            } else {
+              newFilterOptions[filterView].options[props.itemIndex].value =
+                !newFilterOptions[filterView].options[props.itemIndex].value;
+            }
+            props.setFilterOptions(newFilterOptions);
+          }}>
+          <Text style={{color: colors.text, fontSize: 15}}>
+            {props.item.value ? 'On' : 'Off'}
+          </Text>
+        </Pressable>
+      </View>
+    );
+  };
 
-  const options = {
-    'Rooms': [],
-    'Times': [],
-  }
-
-  if (sessions.rooms) {
-    for (const room of sessions.rooms) {
-      options.Rooms.push(room);
-    }
-  }
-  if (sessions.start_times) {
-    for (const time of sessions.start_times) {
-      options.Times.push(time);
-    }
-  }
+  const FilterOptionsList = props => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          margin: 10,
+          justifyContent: 'space-between',
+        }}>
+        <Text style={{color: colors.text, fontSize: 15}}>
+          {props.item.name}
+        </Text>
+        <TouchableOpacity
+          style={{marginLeft: 10}}
+          onPress={() => {
+            setFilterView(props.index);
+          }}>
+          <Icon name="chevron-circle-down" size={20} color={colors.text} />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   return (
     <View>
-      {/* <Modal animationType="slide" transparent={true} visible={modalVisible}>
-        {selectedFilter == 'Rooms' ? (
-          <View style={styles.centeredView}>
-            <View
-              style={[styles.modalView, {backgroundColor: colors.secondary}]}>
-              <Text style={styles.modalText}>Rooms</Text>
-              <Pressable onPress={() => setModalVisible(false)}>
-                <Icon name="times" color={colors.tertiary} size={40} />
-              </Pressable>
-              <FlatList
-                data={rooms}
-                style={{flex: 1, width: '100%', height: '100%', margin: 10}}
-                renderItem={({item, index}) => (
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      padding: 10,
-                      borderWidth: 1,
-                      borderBottomWidth: 0,
-                      borderColor: 'black',
-                    }}
-                    key={index}>
-                    <Text style={{color: colors.text}}>{item}</Text>
-                  </View>
-                )}
-                keyExtractor={item => item}
-              />
-            </View>
-          </View>
-        ) : selectedFilter == 'Times' ? (
-          <View style={styles.centeredView}>
-            <View
-              style={[styles.modalView, {backgroundColor: colors.secondary}]}>
-              <Text style={styles.modalText}>Times</Text>
-              <Pressable
-                style={{
-                  margin: 10,
-                }}
-                onPress={() => setModalVisible(false)}>
-                <Icon name="times" color={colors.tertiary} size={40} />
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: 10,
+        }}
+        onPress={() => {
+          setModalVisible(true);
+        }}>
+        <Icon name="filter" size={20} color={colors.text} />
+        <Text style={{color: colors.text, fontSize: 20, marginLeft: 10}}>
+          Filter
+        </Text>
+      </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.centeredView}>
+          <View
+            style={[
+              styles.modalView,
+              {
+                backgroundColor: colors.tertiary,
+                shadowColor: colors.background,
+              },
+            ]}>
+            {filterView ? (
+              <SafeAreaView>
+                <TouchableOpacity onPress={() => setFilterView(null)}>
+                  <Icon
+                    name="chevron-circle-left"
+                    size={20}
+                    color={colors.text}
+                  />
+                </TouchableOpacity>
                 <FlatList
-                  data={times}
+                  style={{
+                    borderRadius: 5,
+                    padding: 5,
+                  }}
+                  data={props.filterOptions[filterView].options}
                   renderItem={({item, index}) => (
-                    <View
-                      style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                      }}
-                      key={index}>
-                      <Text style={{color: colors.text}}>{item}</Text>
-                    </View>
+                    <FlatListItem
+                      item={item}
+                      itemIndex={index}
+                      filterOptions={props.filterOptions}
+                      setFilterOptions={props.setFilterOptions}
+                    />
                   )}
-                  keyExtractor={item => item}
+                  keyExtractor={item => item.id}
+                  contentContainerStyle={{paddingBottom: 50}}
                 />
-              </Pressable>
-            </View>
+              </SafeAreaView>
+            ) : (
+              <View>
+                <FlatListItem
+                  item={props.filterOptions[0]}
+                  index={0}
+                  filterOptions={props.filterOptions}
+                  setFilterOptions={props.setFilterOptions}
+                />
+                <FilterOptionsList item={props.filterOptions[1]} index={1} />
+                <FilterOptionsList item={props.filterOptions[2]} index={2} />
+              </View>
+            )}
           </View>
-        ) : null}
-      </Modal> */}
-      <SelectDropdown
-        data={props.filterOptions}
-        ref={dropdownRef}
-        renderDropdownIcon={() => (
-          <Icon name="filter" color={colors.text} size={25} />
-        )}
-        defaultButtonText="Filter"
-        buttonStyle={{
-          width: 100,
-          height: 40,
-          backgroundColor: colors.background,
-        }}
-        buttonTextStyle={{
-          fontSize: 15,
-          color: colors.text,
-        }}
-        onBlur={() => {
-          dropdownRef.current.reset();
-          props.setFilterOptions(['My Timeline', 'Rooms', 'Times']);
-        }}
-        onSelect={(selectedItem, index) => {
-          const objectExists = Object.values(options).includes(selectedItem);
-          if (objectExists) {
-            dropdownRef.current.reset();
-            props.setFilterOptions(['My Timeline', 'Rooms', 'Times']);
-            return;
-          }
-          props.setFilterOptions(options[selectedItem]);
-          dropdownRef.current.openDropdown();
-          console.log(selectedItem, index);
-        }}
-        buttonTextAfterSelection={(selectedItem, index) => {
-          // text represented after item is selected
-          // if data array is an array of objects then return selectedItem.property to render after item is selected
-          return selectedItem;
-        }}
-        rowTextForSelection={(item, index) => {
-          // text represented for each item in dropdown
-          // if data array is an array of objects then return item.property to represent item in dropdown
-          return item;
-        }}
-      />
+          <Pressable
+            style={{...styles.button, backgroundColor: colors.tertiary}}
+            onPress={() => setModalVisible(false)}>
+            <Text style={styles.textStyle}>Close</Text>
+          </Pressable>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -150,29 +163,38 @@ export default function FilterList(props) {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
+    margin: 20,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center',
   },
   modalView: {
-    flex: 1,
-    margin: 70,
-    marginHorizontal: 30,
-    borderRadius: 10,
-    padding: 10,
-    alignItems: 'center',
-    shadowColor: 'white',
+    margin: 20,
+    borderRadius: 20,
+    padding: 25,
     shadowOffset: {
       width: 0,
-      height: 0,
+      height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowOpacity: 0.75,
+    shadowRadius: 3.84,
     elevation: 5,
   },
   modalText: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,
+    textAlign: 'center',
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    margin: 20,
+    marginTop: 0,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
 });

@@ -1,21 +1,17 @@
 import getNewTime from "./getNewTime";
 
 // a function that costructs a list of session data thats compatible with the SectionList component
-const constructSectionListData = (sessions, feedback) => {
+const constructSectionListData = (sessions) => {
   // create an empty array to store the data
   let data = [];
 
+  // create an empty array to store the sessions that have feedback
   let sessionsWithFeedback = [];
 
   sessions.sessions.forEach((session) => {
-    feedback.forEach((feedback) => {
-      // if feedback session id matches session id, push the session to the sessionsWithFeedback array if it doesn't already exist
-      if (session.id === feedback.sessionId) {
-        if (!sessionsWithFeedback.includes(session)) {
-          sessionsWithFeedback.push(session);
-        }
-      }
-    });
+    if (session.feedback !== undefined) {
+      sessionsWithFeedback.push(session);
+    }
   });
 
   // loop through the sessions
@@ -32,14 +28,6 @@ const constructSectionListData = (sessions, feedback) => {
     obj.data = sessionsWithFeedback.filter(
       (session) => session.startsAt == time
     );
-    // add appropraite feedback to the session
-    obj.data.forEach((session) => {
-      feedback.forEach((feedback) => {
-        if (session.id === feedback.sessionId) {
-          session.feedback = feedback;
-        }
-      });
-    });
     if (obj.data.length > 0) {
       // push the object to the data array
       data.push(obj);

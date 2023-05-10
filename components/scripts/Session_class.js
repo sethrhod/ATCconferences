@@ -12,6 +12,7 @@ export default class Session {
     // the state that determines whether the session is bookmarked or not
     this.bookmarked = false;
   }
+
   // a method that find the matching speaker id in the all_speakers array and the speakers_small_object array and returns the corresponding speaker object from the all_speakers array
   getSpeakers(all_speakers) {
     var speakers = [];

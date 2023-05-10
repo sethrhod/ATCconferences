@@ -1,6 +1,6 @@
-import { StyleSheet, SafeAreaView, FlatList, StatusBar, View, Text, Image, Linking, TouchableOpacity } from "react-native";
+import { StyleSheet, SafeAreaView, FlatList, View, Text, Image, Linking, TouchableOpacity } from "react-native";
 import React, { useContext } from 'react';
-import { FontAwesome5 } from "@expo/vector-icons";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from "../SessionizeContext";
 import { useTheme } from "@react-navigation/native";
 
@@ -20,10 +20,11 @@ const Item = (props) => (
           {var title = link.title;
             // an if statement to catch the company website link and change the icon to a briefcase
             {if (title == "Company Website") {title = "Briefcase"}}
+            {if (title == "Blog") {title = "pencil"}}
             return (
               <View key={index} style={{ justifyContent: 'center', padding: 5 }}>
                 <TouchableOpacity onPress={() => Linking.openURL(link.url)}>
-                  <FontAwesome5 name={title.toLowerCase()} size={20} color={props.colors.card} item_container/>
+                  <Icon name={title.toLowerCase()} size={20} color={props.colors.card} item_container/>
                 </TouchableOpacity>
               </View>
           )}

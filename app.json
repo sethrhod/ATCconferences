@@ -1,7 +1,4 @@
 {
-  "expo": {
-    "slug": "my-app",
-    "name": "my-app"
-  },
-  "name": "my-app"
+  "name": "AtlCloudConf_MobileApp",
+  "displayName": "AtlCloudConf_MobileApp"
 }

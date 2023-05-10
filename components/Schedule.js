@@ -7,6 +7,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
+import Moment from 'react-moment';
 import SessionizeContext from '../SessionizeContext.js';
 import Session from './Session.js';
 import TimeScroll from './TimeScroll.js';
@@ -23,8 +24,8 @@ export default function Schedule() {
   const {setSessions} = useContext(SessionizeContext);
   const {bookmarks} = useContext(SessionizeContext);
   const {uuid} = useContext(SessionizeContext);
-  const {filterValues} = useContext(SessionizeContext);
-  const {setFilterValues} = useContext(SessionizeContext);
+  const {filterOptions} = useContext(SessionizeContext);
+  const {setFilterOptions} = useContext(SessionizeContext);
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [sections, setSections] = React.useState(
@@ -40,8 +41,98 @@ export default function Schedule() {
   }, []);
 
   useEffect(() => {
+    onRefresh();
+  }, [filterOptions]);
+
+  const applyFilters = newSections => {
+    let rooms = [];
+    let times = [];
+    filterOptions.forEach(option => {
+      if (option.name === 'Rooms' || option.name === 'Times') {
+        option.options.forEach(subOption => {
+          if (subOption.value) {
+            if (option.name === 'Rooms') {
+              rooms.push(subOption.name);
+            } else if (option.name === 'Times') {
+              times.push(subOption.name.props.children);
+            }
+          }
+        });
+      }
+    });
+    if (rooms.length === 0 && times.length === 0) {
+      return newSections;
+    }
+    let filteredSections = [];
+    newSections.forEach(section => {
+      let filteredData = [];
+      section.data.forEach(item => {
+        // if rooms and times are not empty, filter by both 
+        if (rooms.length > 0 && times.length > 0) {
+          if (rooms.includes(item.room) && times.includes(item.startsAt)) {
+            filteredData.push(item);
+          }
+          // if rooms is not empty, filter by rooms
+        } else if (rooms.length > 0) {
+          if (rooms.includes(item.room)) {
+            filteredData.push(item);
+          }
+          // if times is not empty, filter by times
+        } else if (times.length > 0) {
+          if (times.includes(item.startsAt)) {
+            filteredData.push(item);
+          }
+        }
+      });
+      if (filteredData.length > 0) {
+        filteredSections.push({title: section.title, data: filteredData});
+      }
+    });
+    return filteredSections;
+  };
+
+  useEffect(() => {
+    let rooms = [];
+    let times = [];
+    // loops through all sessions and adds the rooms to the rooms array
+    sessions.sessions.map(session => {
+      if (!rooms.includes(session.room)) {
+        rooms.push(session.room);
+      }
+    });
+    // loops through all sessions and adds the times to the times array
+    sessions.sessions.map(session => {
+      if (!times.includes(session.startsAt)) {
+        times.push(session.startsAt);
+      }
+    });
+    let roomsObjects = [];
+    let timesObjects = [];
+    // loops through all rooms and creates an object for each room
+    rooms.map(room => {
+      roomsObjects.push({name: room, value: false});
+    });
+    // loops through all times and creates an object for each time
+    times.map(time => {
+      let formattedTime = (
+        <Moment element={Text} format="h:mm A">
+          {time}
+        </Moment>
+      );
+      timesObjects.push({name: formattedTime, value: false});
+    });
+    let newFilterOptions = filterOptions;
+    // sets the options for the times filter
+    newFilterOptions[2].options = timesObjects;
+    // sets the options for the rooms filter
+    newFilterOptions[1].options = roomsObjects;
+    setFilterOptions(newFilterOptions);
+  }, []);
+
+  useEffect(() => {
     let newSections = constructSectionListData(sessions, bookmarks);
-    setSections(newSections);
+    let filteredSections = applyFilters(newSections);
+    setSections(filteredSections);
   }, [sessions]);
 
   return (

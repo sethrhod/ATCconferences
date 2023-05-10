@@ -104,28 +104,6 @@ export default function App() {
       return;
     } else {
       load();
-      // loops through all sessions and adds the rooms to the rooms array
-      sessions.sessions.map(session => {
-        if (!rooms.includes(session.room)) {
-          rooms.push({
-            name: session.room,
-            value: false,
-          });
-        }
-      });
-      // sets the options for the rooms filter
-      filterOptions[1].options = rooms;
-      // loops through all sessions and adds the times to the times array
-      sessions.sessions.map(session => {
-        if (!times.includes(session.startsAt)) {
-          times.push({
-            name: session.startsAt,
-            value: false,
-          });
-        }
-      });
-      // sets the options for the times filter
-      filterOptions[2].options = times;
     }
   }, [sessions]);
 

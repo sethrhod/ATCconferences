@@ -34,9 +34,6 @@ export default function Feedback(props) {
       .then(json => {
         console.log(json);
       })
-      .finally(() => {
-        Alert.alert('Feedback Deleted');
-      })
       .catch(error => {
         console.error(error);
       });

@@ -33,9 +33,6 @@ export default function FeedbackForm(props) {
       .then(json => {
         console.log(json);
       })
-      .finally(() => {
-        Alert.alert('Feedback Submitted');
-      })
       .catch(error => {
         console.error(error);
       });
@@ -57,9 +54,6 @@ export default function FeedbackForm(props) {
       .then(response => response.json())
       .then(json => {
         console.log(json);
-      })
-      .finally(() => {
-        Alert.alert('Feedback Edited');
       })
       .catch(error => {
         console.error(error);

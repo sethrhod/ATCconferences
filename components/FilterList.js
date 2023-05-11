@@ -126,6 +126,7 @@ export default function FilterList(props) {
                   data={props.filterOptions[filterView].options}
                   renderItem={({item, index}) => (
                     <FlatListItem
+                      key={index}
                       item={item}
                       itemIndex={index}
                       filterOptions={props.filterOptions}

@@ -90,6 +90,7 @@ export default function MyTimeline() {
         renderItem={({item, index, section}) => (
           <Session
             session={item}
+            key={index}
             starts={item.startsAt}
             ends={item.endsAt}
             // starts={getNewTime(item.startsAt)}

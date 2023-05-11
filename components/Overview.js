@@ -68,7 +68,7 @@ export default function Overview(props) {
             style={{
               color: colors.secondary,
               fontSize: 15,
-              fontWeight: 'semi-bold',
+              fontWeight: 'semibold',
               lineHeight: 16,
               textAlign: 'center',
               paddingTop: 25,

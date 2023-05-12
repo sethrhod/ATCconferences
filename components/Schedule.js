@@ -67,7 +67,7 @@ export default function Schedule() {
     newSections.forEach(section => {
       let filteredData = [];
       section.data.forEach(item => {
-        // if rooms and times are not empty, filter by both 
+        // if rooms and times are not empty, filter by both
         if (rooms.length > 0 && times.length > 0) {
           if (rooms.includes(item.room) && times.includes(item.startsAt)) {
             filteredData.push(item);
@@ -135,48 +135,61 @@ export default function Schedule() {
     setSections(filteredSections);
   }, [sessions]);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <SectionList
-        sections={sections}
-        ref={sectionListRef}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        style={{height: '100%', flex: 1, margin: 10, marginRight: 0}}
-        keyExtractor={item => item.id}
-        contentContainerStyle={{paddingBottom: 50}}
-        renderItem={({item, index, section}) => (
-          <Session
-            session={item}
-            starts={item.startsAt}
-            ends={item.endsAt}
-            // starts={getNewTime(item.startsAt)}
-            // ends={getNewTime(item.endsAt)}
-            itemIndex={index}
-            sectionIndex={section.index}
-            sectionListRef={sectionListRef}
-            setSections={setSections}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        )}
-        renderSectionHeader={({section: {title, index}}) => (
-          <View style={styles.timeblock} key={index}>
-            <Text style={[styles.timeblock_text, {color: colors.text}]}>
-              {title}
-            </Text>
-          </View>
-        )}
-      />
-      <View style={styles.time_scroll_container}>
-        <TimeScroll
-          sectionListData={sections}
-          sectionListRef={sectionListRef}
+  // conditional render for when there are no sessions
+  if (sessions.sessions.length === 0) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.noSessionsContainer}>
+          <Text style={[styles.noSessionsText, {color: colors.text}]}>
+            No sessions found
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <SectionList
+          sections={sections}
+          ref={sectionListRef}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          style={{height: '100%', flex: 1, margin: 10, marginRight: 0}}
+          keyExtractor={item => item.id}
+          contentContainerStyle={{paddingBottom: 50}}
+          renderItem={({item, index, section}) => (
+            <Session
+              session={item}
+              starts={item.startsAt}
+              ends={item.endsAt}
+              // starts={getNewTime(item.startsAt)}
+              // ends={getNewTime(item.endsAt)}
+              itemIndex={index}
+              sectionIndex={section.index}
+              sectionListRef={sectionListRef}
+              setSections={setSections}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          )}
+          renderSectionHeader={({section: {title, index}}) => (
+            <View style={styles.timeblock} key={index}>
+              <Text style={[styles.timeblock_text, {color: colors.text}]}>
+                {title}
+              </Text>
+            </View>
+          )}
         />
-      </View>
-    </SafeAreaView>
-  );
+        <View style={styles.time_scroll_container}>
+          <TimeScroll
+            sectionListData={sections}
+            sectionListRef={sectionListRef}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -224,5 +237,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.9,
     shadowRadius: 10,
     elevation: 5,
+  },
+  noSessionsContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noSessionsText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });

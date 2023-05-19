@@ -7,11 +7,10 @@ import FeedbackForm from './FeedbackForm';
 import SessionizeContext from '../SessionizeContext';
 
 export default function Feedback(props) {
-  const {colors} = useTheme();
 
-  const CustomData = require('../custom-data.json');
-
-  const {uuid} = useContext(SessionizeContext);
+  const {uUID} = useContext(SessionizeContext);
+  const {customData} = useContext(SessionizeContext);
+  const {event} = useContext(SessionizeContext);
   
   const [editView, setEditView] = React.useState(false);
 
@@ -20,7 +19,7 @@ export default function Feedback(props) {
   }, [props.refreshing]);
 
   const deleteFeedback = async (sessionID, feedbackText) => {
-    fetch(CustomData.flaskURL + uuid, {
+    fetch(customData.DevelopersAssociationofGeorgiaAPI + uUID, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -57,14 +56,13 @@ export default function Feedback(props) {
           justifyContent: 'center',
           flexDirection: 'row',
           margin: 10,
-          backgroundColor: colors.secondary,
           borderRadius: 10,
           marginBottom: 20,
           marginTop: 0,
         }}
         onPress={() => handlePress()}>
-        <Text style={{color: colors.tertiary, marginRight: 10}}>Delete</Text>
-        <Icon name="trash" color={colors.tertiary} size={20} />
+        <Text style={{marginRight: 10}}>Delete</Text>
+        <Icon name="trash" size={20} />
       </TouchableOpacity>
     );
   };
@@ -95,20 +93,9 @@ export default function Feedback(props) {
           leftThreshold={100}
           friction={2}
           overshootFriction={8}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: 10,
-              backgroundColor: colors.tertiary,
-              borderRadius: 10,
-              padding: 10,
-              marginBottom: 20,
-              marginTop: 0,
-            }}>
+          <View style={[styles.feedback, {backgroundColor: event.colors.primary}]}>
             <TouchableOpacity onPress={() => setEditView(!editView)}>
-              <Text style={{color: colors.text}}>
+              <Text style={{color: event.colors.text}}>
                 {props.session.feedback.feedback}
               </Text>
             </TouchableOpacity>
@@ -153,11 +140,13 @@ const styles = StyleSheet.create({
   },
   feedback: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
+    justifyContent: 'center',
     margin: 10,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+    marginTop: 0,
   },
   feedback_text: {
     flex: 1,

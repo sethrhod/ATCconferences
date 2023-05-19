@@ -15,6 +15,8 @@ import Session from './Session';
 export default function Sponsors() {
   const {sessions} = useContext(SessionizeContext);
 
+  const {event} = useContext(SessionizeContext);
+
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
@@ -55,7 +57,7 @@ export default function Sponsors() {
   };
 
   const SubItem = props => (
-    <View style={{marginBottom: 20}}>
+    <View style={[styles.sub_item, {backgroundColor: event.colors.foreground}]}>
       <TouchableHighlight onPress={() => Linking.openURL(props.sponsors.url)}>
         <View style={styles.logo_container}>
           <Image style={styles.logo} source={{uri: props.sponsors.uri}} />
@@ -68,7 +70,7 @@ export default function Sponsors() {
   const sponsor_level_color = sponsor_level => {
     switch (sponsor_level) {
       case 'Platinum':
-        return '#E5E4E2';
+        return '#DFDFE2';
       case 'Gold':
         return '#FFD700';
       default:
@@ -83,14 +85,6 @@ export default function Sponsors() {
           styles.sponsor_level,
           {
             color: sponsor_level_color(props.item.sponsor_level),
-            shadowColor: sponsor_level_color(props.item.sponsor_level),
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.5,
-            shadowRadius: 3.84,
-            elevation: 5,
           },
         ]}>
         {props.item.sponsor_level}
@@ -105,7 +99,7 @@ export default function Sponsors() {
   );
 
   return (
-    <SafeAreaView style={styles.item_container}>
+    <SafeAreaView style={[styles.item_container, {backgroundColor: event.colors.background}]}>
       <FlatList
         data={data}
         renderItem={({item}) => <Item item={item} />}
@@ -119,7 +113,6 @@ export default function Sponsors() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
   },
   item_container: {
@@ -128,20 +121,18 @@ const styles = StyleSheet.create({
   },
   sponsor_level_container: {
     alignItems: 'center',
-    width: '90%',
     padding: 5,
-    marginVertical: 8,
-    marginHorizontal: 16,
   },
   sponsor_level: {
     fontSize: 32,
-    color: 'white',
+    fontWeight: 'bold',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 5,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    fontStyle: 'italic',
   },
   logo_container: {
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    borderRadius: 15,
-    width: '100%',
     padding: 5,
     marginVertical: 8,
   },
@@ -149,5 +140,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
     resizeMode: 'contain',
+  },
+  sub_item: {
+    borderRadius: 20,
+    padding: 10,
+    marginVertical: 10,
+    shadowColor: '#000',
+    elevation: 5,
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
   },
 });

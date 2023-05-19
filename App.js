@@ -1,210 +1,311 @@
-import 'react-native-gesture-handler';
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from 'react-native-uuid';
-import Overview from './components/Overview';
-import Speakers from './components/Speakers';
-import Sponsors from './components/Sponsors';
-import Schedule from './components/Schedule';
-import MyTimeline from './components/My-timeline';
-import CodeOfConduct from './components/Code-of-Conduct';
-import SessionizeContext from './SessionizeContext.js';
-import fetchAllData from './components/scripts/fetchAllData';
-import FilterList from './components/FilterList';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Appearance,
+} from 'react-native';
+import {unzip} from 'react-native-zip-archive';
+import Event from './components/Event';
+import RNFS from 'react-native-fs';
 
 export default function App() {
-  const Drawer = createDrawerNavigator();
+  const [events, setEvents] = useState([]);
+  const [eventToRender, setEventToRender] = useState(null);
+  const CustomData = require('./app.json');
 
-  const CustomData = require('./custom-data.json');
-
-  //speaker objects
-  const [speakers, setSpeakers] = useState(null);
-  //session objects containing assigned speaker objects
-  const [sessions, setSessions] = useState(null);
-  //list of session objects to appear in the users timeline
-  const [bookmarks, setBookmarks] = useState([]);
-  //boolean for whether the id's have been retrived from the db or not
-  const [isLoading, setIsLoading] = useState(true);
-  //uuid for the user
-  const [uUID, setUUID] = useState(null);
-  // list of filter options
-  const [filterOptions, setFilterOptions] = useState([
-    {name: 'My Timeline', value: false},
-    {
-      name: 'Rooms',
-      value: false,
-      options: null,
-    },
-    {
-      name: 'Times',
-      value: false,
-      options: null,
-    },
-  ]);
-
-  // // refresh the app when the bookmarks change
-  // const [refresh, setRefresh] = useState(false);
-  // useEffect(() => {
-  //   setRefresh(!refresh);
-  // }, [bookmarks]);
-
-  // context value
-  const value = {
-    speakers,
-    sessions,
-    bookmarks,
-    uuid,
-    filterOptions,
-    setSpeakers,
-    setSessions,
-    setBookmarks,
-    setUUID,
-    setFilterOptions,
-  };
-
-  // fetching speakers, creating objects from those speakers, then passing them in to the fetchsessions function that creates session objects with the proper speakers objects
   useEffect(() => {
-    checkUUID();
+    fetch(CustomData.DevelopersAssociationofGeorgiaAPI + '/events', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setEvents(data);
+      })
+      .catch(error => console.log(error));
   }, []);
 
-  useEffect(() => {
-    if (uUID === null) {
-      return;
-    } else {
-      fetchAllData(setSessions, setSpeakers, uUID);
+  const EventItem = props => {
+    const {unzippedPath, data} = props;
+
+    if (data === null) {
+      return (
+        <View style={styles.item}>
+          <Text>Loading...</Text>
+        </View>
+      );
     }
-  }, [uUID]);
 
-  const checkUUID = async () => {
-    // checks if uuid exists, if not then it creates one
-    const value = await AsyncStorage.getItem('@uuid');
-    if (value !== null) {
-      setUUID(value);
-      return value;
-    } else {
-      return createUUID();
-    }
-  };
-
-  const createUUID = async () => {
-    const newUUID = uuid.v4();
-    setUUID(newUUID);
-    await AsyncStorage.setItem('@uuid', newUUID);
-    return newUUID;
-  };
-
-  // load bookmarked sessions from db using asyncstorage when sesssions is not null
-  useEffect(() => {
-    let rooms = [];
-    let times = [];
-    if (sessions === null) {
-      return;
-    } else {
-      load();
-    }
-  }, [sessions]);
-
-  const load = async () => {
-    try {
-      // gets all keys from db
-      keys = await AsyncStorage.getAllKeys();
-      // loops through all values and add them to the bookmarks array
-      keys.map(key => {
-        const id = sessions.sessions.find(session => session.id === key);
-        if (id !== undefined) {
-          setBookmarks(bookmarks => [...bookmarks, id]);
-        }
-      });
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // checks if sessions is null, if it is then it returns
-    if (sessions === null) {
-      return;
-    } else {
-      // loops through all bookmarks and saves them to the db
-      bookmarks.map(session => {
-        AsyncStorage.setItem(session.id, session.id);
-      });
-    }
-  }, [bookmarks]);
-
-  const headerRight = () => {
     return (
-      <FilterList
-        filterOptions={filterOptions}
-        setFilterOptions={setFilterOptions}
-      />
+      <View style={styles.item}>
+        <TouchableOpacity onPress={() => setEventToRender(data)}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={{uri: 'file://' + unzippedPath + data.logo}}
+              style={styles.image}
+              resizeMode="contain"
+            />
+            <View style={{flex: 1, flexDirection: 'column', margin: 20}}>
+              <Text style={styles.title}>{data.name}</Text>
+              <Text style={styles.location}>{data.location}</Text>
+            </View>
+          </View>
+          <Text style={styles.description_box}>{data.description}</Text>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <Text style={styles.bottom_box}>{data.date}</Text>
+            <Text style={styles.bottom_box}>{data.time}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   };
 
-  const renderSchedule = () => {
-    if (filterOptions[0].value) {
-      return MyTimeline;
+  const DownloadEventItem = props => {
+    const url =
+      CustomData.DevelopersAssociationofGeorgiaAPI +
+      'download/' +
+      props.zip_path;
+
+    const fileNameWithExtension = props.zip_path.split('/').pop();
+    // Extracts "event_Atlcloudconf.zip"
+
+    // unzip file
+    const unzipFile = () => {
+      const fileNameWithoutExtension = fileNameWithExtension.slice(0, -4);
+      // Removes the last 4 characters (".zip")
+      const zippedPath =
+        RNFS.DocumentDirectoryPath + '/' + fileNameWithExtension;
+      unzip(zippedPath, RNFS.DocumentDirectoryPath)
+        .then(() => {
+          props.setUnzipped(() => !props.unzipped);
+          console.log(`unzip completed at ${props.unzippedPath}`);
+        })
+        .catch(error => {
+          console.log('unzip error', error);
+        });
+    };
+
+    // download file
+    const downloadFile = () =>
+      RNFS.downloadFile({
+        fromUrl: url,
+        toFile: RNFS.DocumentDirectoryPath + '/' + fileNameWithExtension,
+      })
+        .promise.then(path => {
+          console.log('File saved successfully: ' + path);
+        })
+        .then(() => {
+          // unzip file
+          unzipFile();
+        })
+        .catch(error => {
+          console.log('Error saving file: ' + error);
+        });
+
+    const handlePress = () => {
+      downloadFile();
+    };
+
+    return (
+      <View style={styles.item}>
+        <TouchableOpacity onPress={() => handlePress()}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={styles.title}>{props.name}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const ListConditionalRender = props => {
+    const [fileExists, setFileExists] = useState(false);
+    const fileNameWithExtension = props.zip_path.split('/').pop();
+    const fileNameWithoutExtension = fileNameWithExtension.slice(0, -4);
+    const unzippedPath =
+      RNFS.DocumentDirectoryPath + '/' + fileNameWithoutExtension;
+    const [unzipped, setUnzipped] = useState(false);
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+      const checkFileExists = async () => {
+        const exists = await RNFS.exists(unzippedPath);
+        if (exists) {
+          console.log(unzippedPath + ' exists');
+          setFileExists(true);
+        } else {
+          console.log(unzippedPath + ' does not exist');
+          setFileExists(false);
+        }
+      };
+      checkFileExists();
+    }, [unzipped]);
+
+    useEffect(() => {
+      if (fileExists) {
+        const openFirstJsonFileInDirectory = async () => {
+          try {
+            const files = await RNFS.readDir(unzippedPath);
+
+            // Filter for JSON files
+            const jsonFiles = files.filter(file =>
+              file.name.toLowerCase().endsWith('.json'),
+            );
+
+            if (jsonFiles.length > 0) {
+              const firstJsonFilePath = jsonFiles[0].path;
+
+              // Read the JSON file content
+              const fileContent = await RNFS.readFile(firstJsonFilePath);
+
+              // Parse the JSON content
+              const jsonData = JSON.parse(fileContent);
+
+              // Handle the jsonData as needed
+              console.log(jsonData);
+              setData(jsonData);
+            } else {
+              console.log('No JSON files found in the directory.');
+            }
+          } catch (error) {
+            console.log('Error occurred while reading the directory:', error);
+          }
+        };
+        openFirstJsonFileInDirectory();
+      }
+    }, [fileExists, unzipped]);
+
+    if (fileExists) {
+      return <EventItem unzippedPath={unzippedPath} data={data} />;
     } else {
-      return Schedule;
+      return (
+        <DownloadEventItem
+          zip_path={props.zip_path}
+          name={props.name}
+          date={props.date}
+          unzipped={unzipped}
+          setUnzipped={setUnzipped}
+          unzippedPath={unzippedPath}
+        />
+      );
     }
   };
 
-  // only shows app home page if bookmarks are done loading from db
-  if (isLoading) {
+  if (eventToRender) {
     return (
-      <View style={styles.container}>
-        <Text style={{color: 'white'}}>Loading...</Text>
-      </View>
+      <Event
+        event={eventToRender}
+        setEvent={setEventToRender}
+        customData={CustomData}
+      />
     );
   }
 
   return (
-    <SessionizeContext.Provider value={value}>
-      <NavigationContainer theme={MyTheme}>
-        <Drawer.Navigator
-          screenOptions={{headerTintColor: MyTheme.colors.primary}}>
-          <Drawer.Screen name="Overview" component={Overview} />
-          <Drawer.Screen name="Speakers" component={Speakers} />
-          <Drawer.Screen name="Sponsors" component={Sponsors} />
-          <Drawer.Screen
-            name="Schedule"
-            component={renderSchedule()}
-            options={{
-              title: 'Schedule',
-              headerRight: () => headerRight(),
-            }}
+    <View style={styles.container}>
+      <View
+        style={{
+          flex: 0.2,
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          padding: 20,
+        }}>
+        <Text style={styles.header}>Hello 👋</Text>
+        <Text style={styles.subheader}>
+          Which event would you like to view?
+        </Text>
+      </View>
+      <FlatList
+        data={events.events}
+        renderItem={({item}) => (
+          <ListConditionalRender
+            zip_path={item.zip_path}
+            name={item.name}
+            date={item.date}
           />
-          <Drawer.Screen name="Code of Conduct" component={CodeOfConduct} />
-        </Drawer.Navigator>
-      </NavigationContainer>
-    </SessionizeContext.Provider>
+        )}
+        style={{flex: 1}}
+        keyExtractor={item => item.name}
+      />
+    </View>
   );
 }
 
-const MyTheme = {
-  dark: true,
-  colors: {
-    primary: '#DBE9EE',
-    secondary: '#C4C4C4',
-    tertiary: '#4A6FA5',
-    background: '#166088',
-    card: '#166088',
-    text: 'white',
-    border: '#166088',
-    notification: '#00FFFF',
-  },
-};
+const colors =
+  Appearance.getColorScheme() === 'dark'
+    ? {
+        background: '#000000',
+        card: '#747481',
+        text: '#FFFFFF',
+        accent: '#DFDFE2',
+      }
+    : {
+        background: '#FFFFFF',
+        card: '#C9C9CF',
+        text: '#000000',
+        accent: '#DFDFE2',
+      };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: colors.background,
+  },
+  header: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  subheader: {
+    fontSize: 20,
+    fontWeight: 'light',
+  },
+  item: {
+    padding: 20,
+    marginVertical: 15,
+    marginHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: colors.card,
+    shadowColor: colors.text,
+    elevation: 5,
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+  },
+  title: {
+    flex: 1,
+    fontSize: 24,
+    fontWeight: 'bold',
+    flexWrap: 'wrap',
+  },
+  location: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: 'light',
+    flexWrap: 'wrap',
+    textAlign: 'left',
+  },
+  bottom_box: {
+    fontSize: 10,
+    fontWeight: 'light',
+    textAlign: 'center',
+    backgroundColor: colors.background,
+    borderRadius: 20,
+    padding: 7,
+    margin: 5,
+  },
+  description_box: {
+    fontSize: 10,
+    fontWeight: 'light',
+    textAlign: 'left',
+    margin: 5,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
   },
 });

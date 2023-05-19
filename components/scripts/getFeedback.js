@@ -1,9 +1,6 @@
-
-export default async function getFeedback(uuid) {
-  const CustomData = require('../../custom-data.json');
-
+export default async function getFeedback(customData, uuid) {
   try {
-    const response = await fetch(CustomData.flaskURL + uuid, {
+    const response = await fetch(customData.DevelopersAssociationofGeorgiaAPI + uuid, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -15,4 +12,4 @@ export default async function getFeedback(uuid) {
   } catch (error) {
     console.error(error);
   }
-};
+}

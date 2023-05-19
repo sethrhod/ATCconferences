@@ -1,11 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import SessionizeContext from '../SessionizeContext';
 
 export default function TimeScroll(props) {
 
-  const { colors } = useTheme();
-
+  const {event} = React.useContext(SessionizeContext);
   return props.sectionListData.map((time, index) => (
     <View style={styles.time_scroll} key={index}>
       <TouchableOpacity
@@ -19,7 +18,7 @@ export default function TimeScroll(props) {
           });
         }}
       >
-        <Text style={[styles.time_scroll_text, {color: colors.text}]}>{time.title}</Text>
+        <Text style={[styles.time_scroll_text, {color: event.colors.text}]}>{time.title}</Text>
       </TouchableOpacity>
     </View>
   ));

@@ -15,18 +15,14 @@ import SessionizeContext from '../SessionizeContext.js';
 import Session from './Session.js';
 import SessionWithFeedback from './SessionWithFeedback.js';
 import FeedbackForm from './FeedbackForm.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useTheme} from '@react-navigation/native';
 
 export default function SubmitFeedbackModal() {
-  const CustomData = require('../custom-data.json');
-
   const [selectedSession, setSelectedSession] = React.useState(null);
   const [modalVisible, setModalVisible] = React.useState(false);
 
   const {sessions} = useContext(SessionizeContext);
 
-  const {colors} = useTheme();
+  const {event} = useContext(SessionizeContext);
 
   const handlePress = item => {
     setModalVisible(true);
@@ -45,7 +41,7 @@ export default function SubmitFeedbackModal() {
         keyExtractor={item => item.id}
         style={{width: '100%'}}
         ListHeaderComponent={
-          <Text style={{textAlign: 'center', fontSize: 30, color: colors.text}}>
+          <Text style={{textAlign: 'center', fontSize: 30, color: event.colors.text}}>
             Sessions
           </Text>
         }
@@ -63,18 +59,20 @@ export default function SubmitFeedbackModal() {
           setSelectedSession(null);
         }}>
         <SafeAreaView
-          style={[styles.container, {backgroundColor: colors.background}]}>
+          style={[
+            styles.container,
+            {backgroundColor: event.colors.background},
+          ]}>
           <View style={styles.session}>
             <SessionWithFeedback session={selectedSession} />
           </View>
           <FeedbackForm
-            request={"POST"}
+            request={'POST'}
             selectedSession={selectedSession}
             setSelectedSession={setSelectedSession}
           />
           <TouchableOpacity
             style={{
-              backgroundColor: colors.card,
               padding: 10,
               margin: 10,
               borderRadius: 10,
@@ -84,7 +82,7 @@ export default function SubmitFeedbackModal() {
             }}>
             <Text
               style={{
-                color: colors.text,
+                color: event.colors.text,
               }}>
               Close
             </Text>

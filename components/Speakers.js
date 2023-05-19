@@ -2,10 +2,9 @@ import { StyleSheet, SafeAreaView, FlatList, View, Text, Image, Linking, Touchab
 import React, { useContext } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from "../SessionizeContext";
-import { useTheme } from "@react-navigation/native";
 
 const Item = (props) => (
-  <View style={[styles.item, {backgroundColor: props.colors.primary}]}>
+  <View style={[styles.item, {backgroundColor: props.colors.card}]}>
 
     {/*profile pic*/}
 
@@ -14,7 +13,7 @@ const Item = (props) => (
     {/*Name and links*/}
 
     <View style={{ maxWidth: 130, alignItems: 'center' }}>
-      <Text style={[styles.name, {color: props.colors.card}]}>{props.fullName}</Text>
+      <Text style={[styles.name, {color: props.colors.text}]}>{props.fullName}</Text>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap' }}>
         {props.links.map((link, index) => 
           {var title = link.title;
@@ -24,7 +23,7 @@ const Item = (props) => (
             return (
               <View key={index} style={{ justifyContent: 'center', padding: 5 }}>
                 <TouchableOpacity onPress={() => Linking.openURL(link.url)}>
-                  <Icon name={title.toLowerCase()} size={20} color={props.colors.card} item_container/>
+                  <Icon name={title.toLowerCase()} size={20} color={props.colors.text} item_container/>
                 </TouchableOpacity>
               </View>
           )}
@@ -35,23 +34,24 @@ const Item = (props) => (
     {/*bio*/}
 
     <View style={{ width: 120 }}>
-      <Text style={[styles.bio, {color: props.colors.card}]}>{props.tagLine}</Text>
+      <Text style={[styles.bio, {color: props.colors.text}]}>{props.tagLine}</Text>
     </View>
   </View>
 );
 
 export default function Speakers() {
 
-  const { colors } = useTheme();
+
+  const {event} = useContext(SessionizeContext);
 
   const {speakers} = useContext(SessionizeContext);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: event.colors.background}]}>
       <SafeAreaView style={styles.item_container}>
         <FlatList
           data={speakers}
-          renderItem={({ item }) => <Item fullName={item.fullName} uri={item.profilePicture} tagLine={item.tagLine} links={item.links} colors={colors} />}
+          renderItem={({ item }) => <Item fullName={item.fullName} uri={item.profilePicture} tagLine={item.tagLine} links={item.links} colors={event.colors} />}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{alignItems: 'stretch'}}
           style={{ width: '100%' }}
@@ -79,6 +79,14 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 8,
     marginHorizontal: 16,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: .25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   name: {
     fontSize: 17,

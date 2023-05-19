@@ -1,17 +1,12 @@
-import React, {useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Alert,
-} from 'react-native';
+import React, {useEffect, useContext} from 'react';
+import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CustomData from '../custom-data.json';
-import {useTheme} from '@react-navigation/native';
+import SessionizeContext from '../SessionizeContext';
 
 export default function FeedbackForm(props) {
-  const {colors} = useTheme();
+
+  const {event} = useContext(SessionizeContext);
+  const {customData} = useContext(SessionizeContext);
 
   const [text, setText] = React.useState(
     props.feedbackText ? props.feedbackText : '',
@@ -19,7 +14,7 @@ export default function FeedbackForm(props) {
 
   const submitFeedback = async (sessionID, text) => {
     const value = await AsyncStorage.getItem('@uuid');
-    fetch(CustomData.flaskURL + value, {
+    fetch(customData.DevelopersAssociationofGeorgiaAPI + value, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,7 +35,7 @@ export default function FeedbackForm(props) {
 
   const editFeedback = async (sessionID, text) => {
     const value = await AsyncStorage.getItem('@uuid');
-    fetch(CustomData.flaskURL + value, {
+    fetch(customData.flaskURL + value, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -90,11 +85,11 @@ export default function FeedbackForm(props) {
     }
     props.setFeedbackEntryVisible ? props.setFeedbackEntryVisible(false) : null;
     props.setEditView ? props.setEditView(false) : null;
-    };
+  };
 
   return (
     <View
-      style={[styles.feedback_input, {backgroundColor: colors.tertiary}]}>
+      style={[styles.feedback_input, {backgroundColor: event.colors.primary}]}>
       <TextInput
         onChangeText={text => setText(text)}
         multiline={true}
@@ -102,11 +97,11 @@ export default function FeedbackForm(props) {
         value={text}
         autoFocus={true}
         placeholder="Feedback"
-        placeholderTextColor={colors.secondary}
-        cursorColor={colors.text}
+        placeholderTextColor={event.colors.secondary}
+        cursorColor={event.colors.secondary}
         ref={inputRef}
         style={{
-          color: colors.text,
+          color: event.colors.text,
         }}
       />
     </View>
@@ -128,5 +123,5 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     marginTop: 0,
-  }
+  },
 });

@@ -7,32 +7,32 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useContext} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useTheme} from '@react-navigation/native';
+import SessionizeContext from '../SessionizeContext';
 
 export default function Overview(props) {
-  const {colors} = useTheme();
 
-  const CustomData = require('../custom-data.json');
+  const {event} = useContext(SessionizeContext);
 
-  const eventDate = new Date(CustomData.eventDate);
+  const eventDate = new Date(event.date);
 
   // a on press function that will open the registration page in a browser
   const onPress = () => {
-    Linking.openURL(CustomData.registrationURL);
+    Linking.openURL(event.registration);
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: event.colors.background}]}>
       {/* Event Title and Countdown */}
 
       <View style={styles.topcontainer}>
-        <Text style={{color: colors.text, fontSize: 35, fontWeight: 'bold'}}>
-          Atl Cloud Conf
+        <Text style={[ styles.title, {color: event.colors.text}]}>
+          {event.name}
         </Text>
         <Text
-          style={{color: colors.text, fontSize: 15, fontWeight: 'semibold'}}>
+          style={{color: event.colors.text, fontSize: 15, fontWeight: 'semibold'}}>
           {eventDate.toDateString()}
         </Text>
       </View>
@@ -40,7 +40,7 @@ export default function Overview(props) {
       {/* Rocket */}
 
       <View style={styles.midcontainer}>
-        <Image resizeMode="center" source={require('../assets/rocket.png')} />
+        {/* <Image resizeMode="center" source={require('../assets/rocket.png')} /> */}
       </View>
 
       {/* Register Button and Price Increase Text */}
@@ -49,13 +49,12 @@ export default function Overview(props) {
         <Icon.Button
           name={'ticket'}
           size={30}
-          backgroundColor={colors.background}
-          color={colors.notification}
+          backgroundColor={event.colors.background}
+          color={event.colors.primary}
           onPress={() => onPress()}>
-          {/* <FontAwesome5 name={'ticket-alt'} size={30} color={colors.notification} /> */}
           <Text
             style={{
-              color: colors.text,
+              color: event.colors.text,
               fontSize: 27,
               fontWeight: 'bold',
               padding: 10,
@@ -66,7 +65,7 @@ export default function Overview(props) {
         <View style={{width: 270}}>
           <Text
             style={{
-              color: colors.secondary,
+              color: event.colors.text,
               fontSize: 15,
               fontWeight: 'semibold',
               lineHeight: 16,
@@ -77,10 +76,6 @@ export default function Overview(props) {
           </Text>
         </View>
       </View>
-      <Image
-        style={styles.image}
-        source={require('../assets/bottom-image.png')}
-      />
     </View>
   );
 }
@@ -97,6 +92,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingBottom: 10,
   },
   midcontainer: {
     flex: 1,

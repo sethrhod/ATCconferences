@@ -13,17 +13,16 @@ import Session from './Session.js';
 import TimeScroll from './TimeScroll.js';
 import constructSectionListData from './scripts/constructScheduleSectionListData.js';
 import fetchSessions from './scripts/fetchSessions.js';
-import {useTheme} from '@react-navigation/native';
 
 export default function Schedule() {
-  const {colors} = useTheme();
-
+  const {event} = useContext(SessionizeContext);
+  const {customData} = useContext(SessionizeContext);
   const sectionListRef = React.useRef(null);
 
   const {sessions} = useContext(SessionizeContext);
   const {setSessions} = useContext(SessionizeContext);
   const {bookmarks} = useContext(SessionizeContext);
-  const {uuid} = useContext(SessionizeContext);
+  const {uUID} = useContext(SessionizeContext);
   const {filterOptions} = useContext(SessionizeContext);
   const {setFilterOptions} = useContext(SessionizeContext);
 
@@ -34,7 +33,7 @@ export default function Schedule() {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchSessions(sessions.all_speakers, setSessions, uuid);
+    fetchSessions(event, customData, sessions.all_speakers, setSessions, uUID);
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -140,7 +139,7 @@ export default function Schedule() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.noSessionsContainer}>
-          <Text style={[styles.noSessionsText, {color: colors.text}]}>
+          <Text style={[styles.noSessionsText, {color: event.colors.text}]}>
             No sessions found
           </Text>
         </View>
@@ -148,7 +147,7 @@ export default function Schedule() {
     );
   } else {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, {backgroundColor: event.colors.background}]}>
         <SectionList
           sections={sections}
           ref={sectionListRef}
@@ -175,7 +174,7 @@ export default function Schedule() {
           )}
           renderSectionHeader={({section: {title, index}}) => (
             <View style={styles.timeblock} key={index}>
-              <Text style={[styles.timeblock_text, {color: colors.text}]}>
+              <Text style={[styles.timeblock_text, {color: event.colors.text}]}>
                 {title}
               </Text>
             </View>

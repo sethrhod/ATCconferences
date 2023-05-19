@@ -1,7 +1,0 @@
-{
-  "eventDate": "2023-03-25T09:00:00",
-  "registrationURL": "https://www.eventbrite.com/e/atlanta-cloud-conference-2023-registration-445303012297",
-  "speakersURL": "https://sessionize.com/api/v2/curiktb3/view/Speakers",
-  "sessionsURL": "https://sessionize.com/api/v2/curiktb3/view/Sessions",
-  "flaskURL": "https://conferencebackend.azurewebsites.net/"
-}

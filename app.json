@@ -1,4 +1,5 @@
 {
   "name": "AtlCloudConf_MobileApp",
-  "displayName": "AtlCloudConf_MobileApp"
+  "displayName": "AtlCloudConf_MobileApp",
+  "DevelopersAssociationofGeorgiaAPI": "https://conferencebackend.azurewebsites.net/"
 }

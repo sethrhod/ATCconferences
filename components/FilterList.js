@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   View,
   Text,
@@ -10,11 +10,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useTheme} from '@react-navigation/native';
+import SessionizeContext from '../SessionizeContext';
 
 export default function FilterList(props) {
-  const {colors} = useTheme();
-
+  const {event} = useContext(SessionizeContext);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [filterView, setFilterView] = React.useState(null);
 
@@ -27,15 +26,13 @@ export default function FilterList(props) {
           margin: 10,
           justifyContent: 'space-between',
         }}>
-        <Text style={{color: colors.text, fontSize: 15}}>
-          {props.item.name}
-        </Text>
+        <Text style={[styles.filter_item_text, {color: props.item.value ? event.colors.secondary : event.colors.text}]}>{props.item.name}</Text>
         <Pressable
           style={{
             marginLeft: 10,
-            backgroundColor: colors.background,
             borderRadius: 5,
             padding: 5,
+            backgroundColor: props.item.value ? event.colors.secondary : event.colors.background,
           }}
           onPress={() => {
             let newFilterOptions = [...props.filterOptions];
@@ -47,7 +44,7 @@ export default function FilterList(props) {
             }
             props.setFilterOptions(newFilterOptions);
           }}>
-          <Text style={{color: colors.text, fontSize: 15}}>
+          <Text style={[styles.filter_item_text, {color: event.colors.text}]}>
             {props.item.value ? 'On' : 'Off'}
           </Text>
         </Pressable>
@@ -64,7 +61,7 @@ export default function FilterList(props) {
           margin: 10,
           justifyContent: 'space-between',
         }}>
-        <Text style={{color: colors.text, fontSize: 15}}>
+        <Text style={{color: event.colors.text, fontSize: 15}}>
           {props.item.name}
         </Text>
         <TouchableOpacity
@@ -72,7 +69,11 @@ export default function FilterList(props) {
           onPress={() => {
             setFilterView(props.index);
           }}>
-          <Icon name="chevron-circle-down" size={20} color={colors.text} />
+          <Icon
+            name="chevron-circle-down"
+            size={20}
+            color={event.colors.text}
+          />
         </TouchableOpacity>
       </View>
     );
@@ -90,8 +91,8 @@ export default function FilterList(props) {
         onPress={() => {
           setModalVisible(true);
         }}>
-        <Icon name="filter" size={20} color={colors.text} />
-        <Text style={{color: colors.text, fontSize: 20, marginLeft: 10}}>
+        <Icon name="filter" size={20} color={event.colors.text} />
+        <Text style={{color: event.colors.text, fontSize: 20, marginLeft: 10}}>
           Filter
         </Text>
       </TouchableOpacity>
@@ -105,8 +106,8 @@ export default function FilterList(props) {
             style={[
               styles.modalView,
               {
-                backgroundColor: colors.tertiary,
-                shadowColor: colors.background,
+                backgroundColor: event.colors.primary,
+                shadowColor: event.colors.background,
               },
             ]}>
             {filterView ? (
@@ -115,7 +116,7 @@ export default function FilterList(props) {
                   <Icon
                     name="chevron-circle-left"
                     size={20}
-                    color={colors.text}
+                    color={event.colors.text}
                   />
                 </TouchableOpacity>
                 <FlatList
@@ -151,7 +152,7 @@ export default function FilterList(props) {
             )}
           </View>
           <Pressable
-            style={{...styles.button, backgroundColor: colors.tertiary}}
+            style={{...styles.button, backgroundColor: event.colors.primary}}
             onPress={() => setModalVisible(false)}>
             <Text style={styles.textStyle}>Close</Text>
           </Pressable>
@@ -197,5 +198,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  filter_item_text: {
+    fontSize: 15,
   },
 });

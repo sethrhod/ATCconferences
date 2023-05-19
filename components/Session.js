@@ -1,44 +1,29 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Pressable,
-  Modal,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import React, {useEffect, useContext} from 'react';
 import SessionizeContext from '../SessionizeContext';
 import Feedback from './Feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useTheme} from '@react-navigation/native';
 import Moment from 'react-moment';
 import SessionModal from './SessionInfoModal';
 import FeedbackForm from './FeedbackForm';
 
 export default function Session(props) {
-  const {colors} = useTheme();
+  const {event} = useContext(SessionizeContext);
 
   // the state for the list of bookmarks
   const {bookmarks} = useContext(SessionizeContext);
   const {setBookmarks} = useContext(SessionizeContext);
 
   const speakers = props.session.speakers.map((speaker, index) => (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}
-      key={index}>
+    <View style={styles.speaker_box} key={index}>
       <Image
         key={index}
         style={styles.logo}
         source={{uri: speaker.profilePicture}}
       />
-      <Text style={[styles.name, {color: colors.card}]}>
+      <Text style={[styles.name, {color: event.colors.text}]}>
         {speaker.fullName}
       </Text>
     </View>
@@ -50,14 +35,27 @@ export default function Session(props) {
         <Moment
           element={Text}
           format="h:mm A"
-          style={[styles.time, {color: colors.card}]}>
+          style={[
+            styles.start_time,
+            {color: event.colors.text, backgroundColor: event.colors.accent},
+          ]}>
           {props.starts}
         </Moment>
-        <Text style={[styles.time, {color: colors.card}]}> - </Text>
+        <Text
+          style={[
+            styles.dash_time,
+            {color: event.colors.text, backgroundColor: event.colors.accent},
+          ]}>
+          {' '}
+          -{' '}
+        </Text>
         <Moment
           element={Text}
           format="h:mm A"
-          style={[styles.time, {color: colors.card}]}>
+          style={[
+            styles.end_time,
+            {color: event.colors.text, backgroundColor: event.colors.accent},
+          ]}>
           {props.ends}
         </Moment>
       </View>
@@ -99,10 +97,13 @@ export default function Session(props) {
   };
 
   const addToBookmarks = session => {
+    // add session to list if it doesn't already exist
     session.bookmarked = true;
     var list = [];
     bookmarks.forEach(bookmark => list.push(bookmark));
-    list.push(session);
+    if (!list.some(bookmark => bookmark.id === session.id)) {
+      list.push(session);
+    }
     setBookmarks(list);
     save(session);
   };
@@ -135,7 +136,7 @@ export default function Session(props) {
           flex: 1,
           borderRadius: 10,
           flexDirection: 'row',
-          backgroundColor: colors.secondary,
+          backgroundColor: event.colors.primary,
           margin: 10,
           padding: 10,
         }}>
@@ -143,41 +144,44 @@ export default function Session(props) {
           style={{
             flex: 1,
             borderRadius: 10,
-            backgroundColor: colors.secondary,
           }}
           onPress={() => addBookmark()}>
-          <Text style={[styles.left_swipe_titles, {color: colors.tertiary}]}>Add to Timeline</Text>
+          <Text style={styles.left_swipe_titles}>
+            Add to Timeline
+          </Text>
           {props.session.bookmarked ? (
-            <Icon name="bookmark" color={colors.tertiary} size={40} solid />
+            <Icon name="bookmark" size={40} solid />
           ) : (
-            <Icon name="bookmark" color={colors.tertiary} size={40} />
+            <Icon name="bookmark" size={40} />
           )}
         </Pressable>
         <Pressable
           style={{
             flex: 1,
             borderRadius: 10,
-            backgroundColor: colors.secondary,
           }}
           onPress={() => setFeedbackEntryVisible(!feedbackEntryVisible)}>
-          <Text style={[styles.left_swipe_titles, {color: colors.tertiary}]}>Add Feedback</Text>
-          <Icon name="plus-square" color={colors.tertiary} size={40} solid />
+          <Text style={styles.left_swipe_titles}>
+            Add Feedback
+          </Text>
+          <Icon name="plus-square" size={40} solid />
         </Pressable>
         <Pressable
           style={{
             flex: 1,
             borderRadius: 10,
-            backgroundColor: colors.secondary,
           }}
           onPress={() => setModalVisible(true)}>
-          <Text style={[styles.left_swipe_titles, {color: colors.tertiary}]}>Session Info</Text>
-          <Icon name="info-circle" color={colors.tertiary} size={40} solid />
+          <Text style={styles.left_swipe_titles}>
+            Session Info
+          </Text>
+          <Icon name="info-circle" size={40} solid />
         </Pressable>
       </View>
     );
   };
 
-  var bg = props.session.bookmarked ? colors.secondary : colors.primary;
+  var bg = props.session.bookmarked ? event.colors.accent : event.colors.card;
 
   return (
     <View style={styles.container}>
@@ -200,12 +204,12 @@ export default function Session(props) {
               alignContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={[styles.title, {width: 300, color: colors.card}]}>
+            <Text style={[styles.title, {width: 300, color: event.colors.text}]}>
               {props.session.title}
             </Text>
           </View>
-
-          <Times starts={props.starts} ends={props.ends} />
+          {/* // loop through speakers ids and return their profile pics */}
+          {speakers}
 
           <View
             style={{
@@ -220,29 +224,38 @@ export default function Session(props) {
               <View
                 style={{
                   flex: 1,
-                  height: '100%',
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
                 }}>
-                {/* // loop through speakers ids and return their profile pics */}
-                {speakers}
+                {/* // session time */}
+                <Times starts={props.starts} ends={props.ends} />
 
                 {/* // session room */}
-                <Text style={[styles.speaker_room, {color: colors.card}]}>
+                <Text
+                  style={[
+                    styles.speaker_room,
+                    {
+                      color: event.colors.text,
+                      backgroundColor: event.colors.accent,
+                    },
+                  ]}>
                   {props.session.room}
                 </Text>
               </View>
             ) : (
               // main-event session room
-              <View
-                style={{
-                  flex: 1,
-                  height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text style={{color: colors.card}}>{props.session.room}</Text>
+              <View style={styles.main_event_session}>
+                <Times starts={props.starts} ends={props.ends} />
+                <Text
+                  style={[
+                    styles.speaker_room,
+                    {
+                      color: event.colors.text,
+                      backgroundColor: event.colors.accent,
+                    },
+                  ]}>
+                  {props.session.room}
+                </Text>
               </View>
             )}
           </View>
@@ -267,7 +280,7 @@ export default function Session(props) {
           request="POST"
         />
       ) : null}
-      <Feedback 
+      <Feedback
         session={props.session}
         SwipeableRef={SwipeableRef}
         sectionListRef={props.sectionListRef}
@@ -276,7 +289,7 @@ export default function Session(props) {
         setSections={props.setSections}
         refreshing={props.refreshing}
         onRefresh={props.onRefresh}
-         />
+      />
     </View>
   );
 }
@@ -287,15 +300,27 @@ const styles = StyleSheet.create({
   },
   session: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 10,
+    alignItems: 'flex-start',
+    padding: 15,
     borderRadius: 10,
     margin: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  main_event_session: {
+    flex: 1,
+    height: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   title: {
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: 15,
+    margin: 5,
     fontWeight: 'bold',
   },
   name: {
@@ -304,18 +329,55 @@ const styles = StyleSheet.create({
   },
   speaker_room: {
     textAlign: 'center',
-    fontSize: 15,
+    fontSize: 12,
     fontWeight: 'semibold',
+    borderRadius: 10,
+    padding: 5,
+  },
+  speaker_box: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    padding: 5,
   },
   logo: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     borderRadius: 35,
     margin: 5,
   },
-  times: {
-    textAlign: 'center',
-    fontSize: 12,
+  start_time: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    borderRadius: 10,
+    padding: 5,
+    marginTop: 5,
+    marginLeft: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  dash_time: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginTop: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  end_time: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    borderRadius: 10,
+    padding: 5,
+    marginTop: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
   },
   time_scroll: {
     flex: 1,

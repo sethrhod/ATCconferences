@@ -1,8 +1,12 @@
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from "react-native";
+import React, { useContext } from "react";
+import SessionizeContext from "../SessionizeContext.js";
 
 export default function CodeOfConduct() {
+  const { event } = useContext(SessionizeContext);
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, {backgroundColor: event.colors.background}]}>
       <ScrollView contentContainerStyle={{alignItems: "center", justifyContent: "center", padding: 20}}>
         <Text style={styles.p}>
           All attendees, speakers, sponsors and volunteers at our conference are
@@ -69,12 +73,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 20,
-    color: "#DBE9EE"
   },
   p: {
     fontSize: 16,
     margin: 20,
     textAlign: "left",
-    color: "#C0D6DF"
   },
 });

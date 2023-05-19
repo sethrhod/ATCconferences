@@ -1,19 +1,22 @@
-import React, { useContext } from "react";
-import { SectionList, View, Button, RefreshControl, SafeAreaView } from "react-native";
-import { StyleSheet, Text } from "react-native";
-import SessionizeContext from "../SessionizeContext.js";
-import getNewTime from "./scripts/getNewTime.js"
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Session from "./Session.js";
-import { useTheme } from "@react-navigation/native";
-import Moment from "react-moment";
+import React, {useContext} from 'react';
+import {
+  SectionList,
+  View,
+  Button,
+  RefreshControl,
+  SafeAreaView,
+} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
+import SessionizeContext from '../SessionizeContext.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Session from './Session.js';
+import Moment from 'react-moment';
 
 export default function MyTimeline() {
-
-  const { colors } = useTheme();
-  const { bookmarks } = useContext(SessionizeContext);
-  const { setBookmarks } = useContext(SessionizeContext);
-  const { sessions } = useContext(SessionizeContext);
+  const {event} = useContext(SessionizeContext);
+  const {bookmarks} = useContext(SessionizeContext);
+  const {setBookmarks} = useContext(SessionizeContext);
+  const {sessions} = useContext(SessionizeContext);
 
   const sectionListRef = React.useRef(null);
 
@@ -27,21 +30,25 @@ export default function MyTimeline() {
   }, []);
 
   // a function that costructs a list of session data thats compatible with the SectionList component
-  const constructSectionListData = (bookmarks) => {
+  const constructSectionListData = bookmarks => {
     // create an empty array to store the data
     let data = [];
     // loop through the sessions
-    sessions.start_times.forEach((time) => {
+    sessions.start_times.forEach(time => {
       // create an empty object to store the data
       let obj = {};
       // set the title of the object to the start time of the session and add to the same hour sessions
-      obj.title = <Moment element={Text} format="h:mm A">{time}</Moment>;
+      obj.title = (
+        <Moment element={Text} format="h:mm A">
+          {time}
+        </Moment>
+      );
       // set the data of the object to the sessions that start at the same time
-      obj.data = bookmarks.filter((bookmark) => bookmark.startsAt === time);
+      obj.data = bookmarks.filter(bookmark => bookmark.startsAt === time);
 
       if (obj.data.length > 0) {
         // change the bookmarked state of the session to true
-        obj.data.forEach((session) => {
+        obj.data.forEach(session => {
           session.bookmarked = true;
         });
         // push the object to the data array
@@ -57,59 +64,68 @@ export default function MyTimeline() {
     try {
       await AsyncStorage.clear();
       setBookmarks([]);
-      console.log("cleared");
+      console.log('cleared');
     } catch (e) {
       // clear error
-      console.log("clear error");
+      console.log('clear error');
     }
   };
 
   const conditionalRender =
     bookmarks.length === 0 ? (
-      <View style={{ flex: 0.8, justifyContent: "center" }}>
-        <Text style={[styles.noSessions, {color : colors.text}]}>
+      <View
+        style={[
+          styles.no_sessions_container,
+          {backgroundColor: event.colors.background},
+        ]}>
+        <Text style={[styles.noSessions, {color: event.colors.text}]}>
           No sessions added
         </Text>
-        <Text style={[styles.addSome, {color : colors.text}]}>
+        <Text style={[styles.addSome, {color: event.colors.text}]}>
           Go to the Schedule page and add some!
         </Text>
       </View>
     ) : (
-      <SafeAreaView style={styles.container}>
-        <Button title="Clear My Timeline" onPress={() => clearAll()} />
+      <SafeAreaView
+        style={[styles.container, {backgroundColor: event.colors.background}]}>
+        <Button
+          color={event.colors.primary}
+          title="Clear My Timeline"
+          onPress={() => clearAll()}
+        />
 
         <SectionList
-        sections={constructSectionListData(bookmarks)}
-        ref={sectionListRef}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        style={{height: '100%', flex: 1, margin: 10, marginRight: 0}}
-        keyExtractor={item => item.id}
-        contentContainerStyle={{paddingBottom: 50}}
-        renderItem={({item, index, section}) => (
-          <Session
-            session={item}
-            key={index}
-            starts={item.startsAt}
-            ends={item.endsAt}
-            // starts={getNewTime(item.startsAt)}
-            // ends={getNewTime(item.endsAt)}
-            itemIndex={index}
-            sectionIndex={section.index}
-            sectionListRef={sectionListRef}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        )}
-        renderSectionHeader={({section: {title, index}}) => (
-          <View style={styles.timeblock} key={index}>
-            <Text style={[styles.timeblock_text, {color: colors.text}]}>
-              {title}
-            </Text>
-          </View>
-        )}
-      />
+          sections={constructSectionListData(bookmarks)}
+          ref={sectionListRef}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          style={{height: '100%', flex: 1, margin: 10, marginRight: 0}}
+          keyExtractor={item => item.id}
+          contentContainerStyle={{paddingBottom: 50}}
+          renderItem={({item, index, section}) => (
+            <Session
+              session={item}
+              key={index}
+              starts={item.startsAt}
+              ends={item.endsAt}
+              // starts={getNewTime(item.startsAt)}
+              // ends={getNewTime(item.endsAt)}
+              itemIndex={index}
+              sectionIndex={section.index}
+              sectionListRef={sectionListRef}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          )}
+          renderSectionHeader={({section: {title, index}}) => (
+            <View style={styles.timeblock} key={index}>
+              <Text style={[styles.timeblock_text, {color: event.colors.text}]}>
+                {title}
+              </Text>
+            </View>
+          )}
+        />
       </SafeAreaView>
     );
 
@@ -128,12 +144,16 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   noSessions: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 20,
   },
   addSome: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 15,
     marginTop: 10,
-  }
+  },
+  no_sessions_container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
 });

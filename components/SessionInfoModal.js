@@ -1,19 +1,11 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  Pressable,
-  ScrollView,
-  Image,
-} from 'react-native';
+import React, {useContext} from 'react';
+import {View, Text, Modal, Pressable, ScrollView, Image} from 'react-native';
 import {useTheme} from '@react-navigation/native';
-import FeedbackForm from './FeedbackForm';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import SessionizeContext from '../SessionizeContext';
 
 export default function SessionModal(props) {
-  const {colors} = useTheme();
+  const {event} = useContext(SessionizeContext);
 
   const CloseButton = () => {
     return (
@@ -22,7 +14,7 @@ export default function SessionModal(props) {
           margin: 10,
         }}
         onPress={() => props.setModalVisible(false)}>
-        <Icon name="times" color={colors.secondary} size={40} />
+        <Icon name="times" color={event.colors.secondary} size={40} />
       </Pressable>
     );
   };
@@ -41,13 +33,15 @@ export default function SessionModal(props) {
               style={{width: 50, height: 50}}
               source={{uri: speaker.profilePicture}}
             />
-            <Text style={{color: colors.text}}>{speaker.fullName}</Text>
+            <Text style={{color: event.colors.text}}>{speaker.fullName}</Text>
           </View>
         ))}
-        <Text style={{color: colors.text}}>{props.session.title}</Text>
-        <Text style={{color: colors.text}}>{props.session.room}</Text>
-        <Text style={{color: colors.text}}>{props.session.time}</Text>
-        <Text style={{color: colors.text}}>{props.session.description}</Text>
+        <Text style={{color: event.colors.text}}>{props.session.title}</Text>
+        <Text style={{color: event.colors.text}}>{props.session.room}</Text>
+        <Text style={{color: event.colors.text}}>{props.session.time}</Text>
+        <Text style={{color: event.colors.text}}>
+          {props.session.description}
+        </Text>
       </View>
     );
   };
@@ -61,7 +55,7 @@ export default function SessionModal(props) {
         style={{
           flex: 1,
           borderRadius: 10,
-          backgroundColor: colors.background,
+          backgroundColor: event.colors.primary,
           margin: 10,
           padding: 10,
         }}>

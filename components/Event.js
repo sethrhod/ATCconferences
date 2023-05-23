@@ -165,7 +165,9 @@ export default function Event(props) {
   };
 
   const ResetEvent = () => {
-    props.setEvent(null);
+    useEffect(() => {
+      props.setEvent(null);
+    }, []);
   };
 
   // only shows app home page if bookmarks are done loading from db

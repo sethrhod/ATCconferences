@@ -9,7 +9,7 @@ import {
 import React, {useContext, useEffect} from 'react';
 import Moment from 'react-moment';
 import SessionizeContext from '../SessionizeContext.js';
-import Session from './Session.js';
+import MemoizedSession from './Session.js';
 import TimeScroll from './TimeScroll.js';
 import constructSectionListData from './scripts/constructScheduleSectionListData.js';
 import fetchSessions from './scripts/fetchSessions.js';
@@ -158,7 +158,7 @@ export default function Schedule() {
           keyExtractor={item => item.id}
           contentContainerStyle={{paddingBottom: 50}}
           renderItem={({item, index, section}) => (
-            <Session
+            <MemoizedSession
               session={item}
               starts={item.startsAt}
               ends={item.endsAt}

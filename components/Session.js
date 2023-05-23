@@ -1,13 +1,14 @@
 import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
-import React, {useEffect, useContext} from 'react';
+import React, {useEffect, useContext, memo} from 'react';
 import SessionizeContext from '../SessionizeContext';
 import Feedback from './Feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import Moment from 'react-moment';
 import SessionModal from './SessionInfoModal';
 import FeedbackForm from './FeedbackForm';
+import LeftSwipeActionsMemo from './LeftSwipeActions';
+import Times from './Times';
 
 export default function Session(props) {
   const {event} = useContext(SessionizeContext);
@@ -28,39 +29,6 @@ export default function Session(props) {
       </Text>
     </View>
   ));
-
-  const Times = props => {
-    return (
-      <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-        <Moment
-          element={Text}
-          format="h:mm A"
-          style={[
-            styles.start_time,
-            {color: event.colors.text, backgroundColor: event.colors.accent},
-          ]}>
-          {props.starts}
-        </Moment>
-        <Text
-          style={[
-            styles.dash_time,
-            {color: event.colors.text, backgroundColor: event.colors.accent},
-          ]}>
-          {' '}
-          -{' '}
-        </Text>
-        <Moment
-          element={Text}
-          format="h:mm A"
-          style={[
-            styles.end_time,
-            {color: event.colors.text, backgroundColor: event.colors.accent},
-          ]}>
-          {props.ends}
-        </Moment>
-      </View>
-    );
-  };
 
   const SwipeableRef = React.useRef(null);
 
@@ -129,55 +97,16 @@ export default function Session(props) {
 
   const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
 
-  const LeftSwipeActions = () => {
+  const LeftSwipeAction = () => {
     return (
-      <View
-        style={{
-          flex: 1,
-          borderRadius: 10,
-          flexDirection: 'row',
-          backgroundColor: event.colors.primary,
-          margin: 10,
-          padding: 10,
-        }}>
-        <Pressable
-          style={{
-            flex: 1,
-            borderRadius: 10,
-          }}
-          onPress={() => addBookmark()}>
-          <Text style={styles.left_swipe_titles}>
-            Add to Timeline
-          </Text>
-          {props.session.bookmarked ? (
-            <Icon name="bookmark" size={40} solid />
-          ) : (
-            <Icon name="bookmark" size={40} />
-          )}
-        </Pressable>
-        <Pressable
-          style={{
-            flex: 1,
-            borderRadius: 10,
-          }}
-          onPress={() => setFeedbackEntryVisible(!feedbackEntryVisible)}>
-          <Text style={styles.left_swipe_titles}>
-            Add Feedback
-          </Text>
-          <Icon name="plus-square" size={40} solid />
-        </Pressable>
-        <Pressable
-          style={{
-            flex: 1,
-            borderRadius: 10,
-          }}
-          onPress={() => setModalVisible(true)}>
-          <Text style={styles.left_swipe_titles}>
-            Session Info
-          </Text>
-          <Icon name="info-circle" size={40} solid />
-        </Pressable>
-      </View>
+      <LeftSwipeActionsMemo
+        addBookmark={addBookmark}
+        session={props.session}
+        setFeedbackEntryVisible={setFeedbackEntryVisible}
+        feedbackEntryVisible={feedbackEntryVisible}
+        setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+      />
     );
   };
 
@@ -186,7 +115,7 @@ export default function Session(props) {
   return (
     <View style={styles.container}>
       <Swipeable
-        renderLeftActions={LeftSwipeActions}
+        renderLeftActions={() => LeftSwipeAction()}
         overshootLeft={false}
         leftThreshold={100}
         friction={2}
@@ -204,7 +133,8 @@ export default function Session(props) {
               alignContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={[styles.title, {width: 300, color: event.colors.text}]}>
+            <Text
+              style={[styles.title, {width: 300, color: event.colors.text}]}>
               {props.session.title}
             </Text>
           </View>
@@ -294,6 +224,8 @@ export default function Session(props) {
   );
 }
 
+export const MemoizedSession = memo(Session);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -347,47 +279,10 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     margin: 5,
   },
-  start_time: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    borderRadius: 10,
-    padding: 5,
-    marginTop: 5,
-    marginLeft: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-  },
-  dash_time: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    paddingTop: 5,
-    paddingBottom: 5,
-    marginTop: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  end_time: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    borderRadius: 10,
-    padding: 5,
-    marginTop: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-  },
   time_scroll: {
     flex: 1,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  left_swipe_titles: {
-    flex: 1,
-    fontWeight: '600',
-    fontSize: 12,
   },
 });

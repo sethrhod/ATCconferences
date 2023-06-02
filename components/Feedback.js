@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {useTheme} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedbackForm from './FeedbackForm';
 import SessionizeContext from '../SessionizeContext';
 

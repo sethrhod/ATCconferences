@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from '../SessionizeContext';
 
 export default function FilterList(props) {
@@ -111,7 +111,7 @@ export default function FilterList(props) {
               },
             ]}>
             {filterView ? (
-              <SafeAreaView>
+              <SafeAreaView style={styles.filter_options}>
                 <TouchableOpacity onPress={() => setFilterView(null)}>
                   <Icon
                     name="chevron-circle-left"
@@ -120,10 +120,6 @@ export default function FilterList(props) {
                   />
                 </TouchableOpacity>
                 <FlatList
-                  style={{
-                    borderRadius: 5,
-                    padding: 5,
-                  }}
                   data={props.filterOptions[filterView].options}
                   renderItem={({item, index}) => (
                     <FlatListItem
@@ -135,7 +131,6 @@ export default function FilterList(props) {
                     />
                   )}
                   keyExtractor={item => item.id}
-                  contentContainerStyle={{paddingBottom: 50}}
                 />
               </SafeAreaView>
             ) : (
@@ -165,13 +160,13 @@ export default function FilterList(props) {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    margin: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalView: {
-    margin: 20,
+    maxHeight: '75%',
     borderRadius: 20,
+    marginBottom: 20,
     padding: 25,
     shadowOffset: {
       width: 0,
@@ -186,6 +181,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 15,
     textAlign: 'center',
+  },
+  filter_options: {
+    flex: 1,
   },
   button: {
     borderRadius: 10,

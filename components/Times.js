@@ -1,39 +1,27 @@
 import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import Moment from 'react-moment';
 import SessionizeContext from '../SessionizeContext';
+import format_time from './scripts/formatTime';
 
 export default function Times(props) {
   const {event} = useContext(SessionizeContext);
 
   return (
-    <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-      <Moment
-        element={Text}
-        format="h:mm A"
-        style={[
-          styles.start_time,
-          {color: event.colors.text, backgroundColor: event.colors.accent},
-        ]}>
-        {props.starts}
-      </Moment>
+    <View style={{flexDirection: 'row'}}>
+      <Text style={[styles.start_time, {color: event.colors.text}]}>
+          {format_time(props.starts)}
+      </Text>
       <Text
         style={[
           styles.dash_time,
-          {color: event.colors.text, backgroundColor: event.colors.accent},
+          {color: event.colors.text},
         ]}>
         {' '}
         -{' '}
       </Text>
-      <Moment
-        element={Text}
-        format="h:mm A"
-        style={[
-          styles.end_time,
-          {color: event.colors.text, backgroundColor: event.colors.accent},
-        ]}>
-        {props.ends}
-      </Moment>
+      <Text style={[styles.end_time, {color: event.colors.text}]}>
+        {format_time(props.ends)}
+      </Text>
     </View>
   );
 }
@@ -42,33 +30,22 @@ const styles = StyleSheet.create({
   start_time: {
     fontSize: 10,
     fontWeight: 'bold',
-    borderRadius: 10,
-    padding: 5,
-    marginTop: 5,
-    marginLeft: 5,
+    margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
   },
   dash_time: {
     fontSize: 10,
     fontWeight: 'bold',
-    paddingTop: 5,
-    paddingBottom: 5,
-    marginTop: 5,
+    margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   end_time: {
     fontSize: 10,
     fontWeight: 'bold',
-    borderRadius: 10,
-    padding: 5,
-    marginTop: 5,
+    margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
   },
 });

@@ -7,14 +7,13 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useTheme} from '@react-navigation/native';
 import SessionizeContext from '../SessionizeContext';
 
 export default function Overview(props) {
 
-  const {event} = useContext(SessionizeContext);
+  const { event } = useContext(SessionizeContext);
 
   const eventDate = new Date(event.date);
 
@@ -24,15 +23,15 @@ export default function Overview(props) {
   };
 
   return (
-    <View style={[styles.container, {backgroundColor: event.colors.background}]}>
+    <View style={[styles.container, { backgroundColor: event.colors.background }]}>
       {/* Event Title and Countdown */}
 
       <View style={styles.topcontainer}>
-        <Text style={[ styles.title, {color: event.colors.text}]}>
+        <Text style={[styles.title, { color: event.colors.text }]}>
           {event.name}
         </Text>
         <Text
-          style={{color: event.colors.text, fontSize: 15, fontWeight: 'semibold'}}>
+          style={{ color: event.colors.text, fontSize: 15, fontWeight: '600' }}>
           {eventDate.toDateString()}
         </Text>
       </View>
@@ -40,7 +39,11 @@ export default function Overview(props) {
       {/* Rocket */}
 
       <View style={styles.midcontainer}>
-        {/* <Image resizeMode="center" source={require('../assets/rocket.png')} /> */}
+        <Image
+          source={{ uri: 'file://' + event.unzippedPath + event.logo }}
+          style={styles.image}
+          resizeMode="contain"
+        />
       </View>
 
       {/* Register Button and Price Increase Text */}
@@ -62,12 +65,12 @@ export default function Overview(props) {
             Register
           </Text>
         </Icon.Button>
-        <View style={{width: 270}}>
+        <View style={{ width: 270 }}>
           <Text
             style={{
               color: event.colors.text,
               fontSize: 15,
-              fontWeight: 'semibold',
+              fontWeight: '600',
               lineHeight: 16,
               textAlign: 'center',
               paddingTop: 25,
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
   bottomcontainer: {
     flex: 1,
@@ -111,7 +114,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   image: {
-    flex: 0.28,
+    flex: 1,
     width: windowWidth,
   },
 });

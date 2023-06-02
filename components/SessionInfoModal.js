@@ -8,7 +8,7 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from '../SessionizeContext';
 import Times from './Times';
 
@@ -68,7 +68,9 @@ export default function SessionModal(props) {
             ]}>
             {props.session.room}
           </Text>
-          <Times starts={props.session.startsAt} ends={props.session.endsAt} />
+          <View style={[styles.times_box, {backgroundColor: event.colors.accent}]}>
+            <Times starts={props.session.startsAt} ends={props.session.endsAt} />
+          </View>
         </View>
         <View
           style={[
@@ -102,9 +104,8 @@ export default function SessionModal(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderRadius: 10,
-    margin: 10,
     padding: 10,
+    paddingTop: 50,
   },
   profilePicture: {
     width: 75,
@@ -131,8 +132,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
+    overflow: 'hidden',
     padding: 5,
     marginTop: 5,
+  },
+  times_box: {
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginTop: 5,
+    marginLeft: 10,
   },
   description: {
     fontSize: 15,

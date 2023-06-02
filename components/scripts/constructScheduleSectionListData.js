@@ -1,5 +1,5 @@
-import Moment from 'react-moment';
 import {Text} from 'react-native';
+import format_time from './formatTime';
 
 // a function that costructs a list of session data thats compatible with the SectionList component
 const constructSectionListData = (sessions, bookmarks) => {
@@ -13,11 +13,8 @@ const constructSectionListData = (sessions, bookmarks) => {
     // create an empty object to store the data
     let obj = {};
     // set the title of the object to the start time of the session and add to the same hour sessions
-    obj.title = (
-      <Moment element={Text} format="h:mm A">
-        {time}
-      </Moment>
-    );
+    obj.title = format_time(time)
+    
     // set the data of the object to the sessions that start at the same time
     obj.data = sessions.sessions.filter(session => session.startsAt == time);
     obj.data.forEach(session => {

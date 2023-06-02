@@ -6,7 +6,6 @@ export default function TimeScroll(props) {
 
   const {event} = React.useContext(SessionizeContext);
   return props.sectionListData.map((time, index) => (
-    <View style={styles.time_scroll} key={index}>
       <TouchableOpacity
         onPress={() => {
           props.sectionListRef.current.scrollToLocation({
@@ -17,22 +16,18 @@ export default function TimeScroll(props) {
             viewPosition: 0,
           });
         }}
+        key={index}
       >
-        <Text style={[styles.time_scroll_text, {color: event.colors.text}]}>{time.title}</Text>
+        <Text style={styles.time}>
+          {time.title}
+        </Text>
       </TouchableOpacity>
-    </View>
   ));
 }
 
 const styles = StyleSheet.create({
-  time_scroll: {
-    flex: 1,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  time_scroll_text: {
+  time: {
     fontSize: 10,
-    textAlign: "center",
+    fontWeight: 'bold',
   }
 });

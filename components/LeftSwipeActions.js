@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View, Pressable} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from '../SessionizeContext';
 
 export default function LeftSwipeActions(props) {
@@ -50,7 +50,7 @@ export default function LeftSwipeActions(props) {
       </Pressable>
       <Pressable
         style={styles.Pressable}
-        onPress={() => props.setFeedbackEntryVisible(!feedbackEntryVisible)}>
+        onPress={() => props.setFeedbackEntryVisible(!props.feedbackEntryVisible)}>
         <Text style={[styles.left_swipe_titles, {fontSize: fontSize}]}>
           Add Feedback
         </Text>

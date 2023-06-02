@@ -10,7 +10,6 @@ import {StyleSheet, Text} from 'react-native';
 import SessionizeContext from '../SessionizeContext.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Session from './Session.js';
-import Moment from 'react-moment';
 
 export default function MyTimeline() {
   const {event} = useContext(SessionizeContext);
@@ -29,6 +28,13 @@ export default function MyTimeline() {
     }, 2000);
   }, []);
 
+  const format_time = time => {
+    const date = new Date(time);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${hours}:${minutes}`;
+  };
+
   // a function that costructs a list of session data thats compatible with the SectionList component
   const constructSectionListData = bookmarks => {
     // create an empty array to store the data
@@ -39,9 +45,9 @@ export default function MyTimeline() {
       let obj = {};
       // set the title of the object to the start time of the session and add to the same hour sessions
       obj.title = (
-        <Moment element={Text} format="h:mm A">
-          {time}
-        </Moment>
+        <Text style={[styles.time, {color: event.colors.text}]}>
+          {format_time(time)}
+        </Text>
       );
       // set the data of the object to the sessions that start at the same time
       obj.data = bookmarks.filter(bookmark => bookmark.startsAt === time);

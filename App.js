@@ -34,6 +34,19 @@ export default function App() {
   const EventItem = props => {
     const {unzippedPath, data} = props;
 
+    const handlePress = () => {
+      data.unzippedPath = unzippedPath;
+      setEventToRender(data);
+    };
+
+    const format_date = date => {
+      const date_object = new Date(date);
+      const month = date_object.toLocaleString('default', {month: 'long'});
+      const day = date_object.getDate();
+      const year = date_object.getFullYear();
+      return `${month} ${day}, ${year}`;
+    }
+
     if (data === null) {
       return (
         <View style={styles.item}>
@@ -44,7 +57,7 @@ export default function App() {
 
     return (
       <View style={styles.item}>
-        <TouchableOpacity onPress={() => setEventToRender(data)}>
+        <TouchableOpacity onPress={() => handlePress()}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <Image
               source={{uri: 'file://' + unzippedPath + data.logo}}
@@ -58,7 +71,7 @@ export default function App() {
           </View>
           <Text style={styles.description_box}>{data.description}</Text>
           <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            <Text style={styles.bottom_box}>{data.date}</Text>
+            <Text style={styles.bottom_box}>{format_date(data.date)}</Text>
             <Text style={styles.bottom_box}>{data.time}</Text>
           </View>
         </TouchableOpacity>
@@ -211,7 +224,7 @@ export default function App() {
       <View
         style={{
           flex: 0.2,
-          justifyContent: 'center',
+          justifyContent: 'flex-end',
           alignItems: 'flex-start',
           padding: 20,
         }}>
@@ -222,6 +235,7 @@ export default function App() {
       </View>
       <FlatList
         data={events.events}
+        style={{flex: 0.8}}
         renderItem={({item}) => (
           <ListConditionalRender
             zip_path={item.zip_path}
@@ -229,7 +243,6 @@ export default function App() {
             date={item.date}
           />
         )}
-        style={{flex: 1}}
         keyExtractor={item => item.name}
       />
     </View>
@@ -254,6 +267,7 @@ const colors =
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
     backgroundColor: colors.background,
   },
   header: {
@@ -262,7 +276,7 @@ const styles = StyleSheet.create({
   },
   subheader: {
     fontSize: 20,
-    fontWeight: 'light',
+    fontWeight: '600',
   },
   item: {
     padding: 20,
@@ -284,22 +298,23 @@ const styles = StyleSheet.create({
   location: {
     flex: 1,
     fontSize: 12,
-    fontWeight: 'light',
+    fontWeight: '600',
     flexWrap: 'wrap',
     textAlign: 'left',
   },
   bottom_box: {
     fontSize: 10,
-    fontWeight: 'light',
+    fontWeight: '600',
     textAlign: 'center',
     backgroundColor: colors.background,
-    borderRadius: 20,
+    borderRadius: 10,
+    overflow: 'hidden',
     padding: 7,
     margin: 5,
   },
   description_box: {
     fontSize: 10,
-    fontWeight: 'light',
+    fontWeight: '600',
     textAlign: 'left',
     margin: 5,
   },

@@ -7,12 +7,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
-import Moment from 'react-moment';
 import SessionizeContext from '../SessionizeContext.js';
 import MemoizedSession from './Session.js';
 import TimeScroll from './TimeScroll.js';
 import constructSectionListData from './scripts/constructScheduleSectionListData.js';
 import fetchSessions from './scripts/fetchSessions.js';
+import format_time from './scripts/formatTime.js';
 
 export default function Schedule() {
   const {event} = useContext(SessionizeContext);
@@ -53,7 +53,7 @@ export default function Schedule() {
             if (option.name === 'Rooms') {
               rooms.push(subOption.name);
             } else if (option.name === 'Times') {
-              times.push(subOption.name.props.children);
+              times.push(subOption.name);
             }
           }
         });
@@ -68,7 +68,7 @@ export default function Schedule() {
       section.data.forEach(item => {
         // if rooms and times are not empty, filter by both
         if (rooms.length > 0 && times.length > 0) {
-          if (rooms.includes(item.room) && times.includes(item.startsAt)) {
+          if (rooms.includes(item.room) && times.includes(format_time(item.startsAt))) {
             filteredData.push(item);
           }
           // if rooms is not empty, filter by rooms
@@ -78,7 +78,7 @@ export default function Schedule() {
           }
           // if times is not empty, filter by times
         } else if (times.length > 0) {
-          if (times.includes(item.startsAt)) {
+          if (times.includes(format_time(item.startsAt))) {
             filteredData.push(item);
           }
         }
@@ -113,11 +113,7 @@ export default function Schedule() {
     });
     // loops through all times and creates an object for each time
     times.map(time => {
-      let formattedTime = (
-        <Moment element={Text} format="h:mm A">
-          {time}
-        </Moment>
-      );
+      let formattedTime = format_time(time);
       timesObjects.push({name: formattedTime, value: false});
     });
     let newFilterOptions = filterOptions;
@@ -227,14 +223,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: 'white',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.9,
-    shadowRadius: 10,
+    justifyContent: 'space-evenly',
     elevation: 5,
   },
   noSessionsContainer: {

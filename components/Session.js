@@ -4,7 +4,6 @@ import SessionizeContext from '../SessionizeContext';
 import Feedback from './Feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import SessionModal from './SessionInfoModal';
 import FeedbackForm from './FeedbackForm';
 import LeftSwipeActionsMemo from './LeftSwipeActions';
@@ -156,9 +155,12 @@ export default function Session(props) {
                   flex: 1,
                   flexDirection: 'row',
                   alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}>
                 {/* // session time */}
-                <Times starts={props.starts} ends={props.ends} />
+                <View style={[styles.session_time, {backgroundColor: event.colors.accent}]}>
+                  <Times starts={props.starts} ends={props.ends} />
+                </View>
 
                 {/* // session room */}
                 <Text
@@ -175,7 +177,9 @@ export default function Session(props) {
             ) : (
               // main-event session room
               <View style={styles.main_event_session}>
-                <Times starts={props.starts} ends={props.ends} />
+                <View style={[styles.session_time, {backgroundColor: event.colors.accent}]}>
+                  <Times starts={props.starts} ends={props.ends} />
+                </View>
                 <Text
                   style={[
                     styles.speaker_room,
@@ -262,9 +266,15 @@ const styles = StyleSheet.create({
   speaker_room: {
     textAlign: 'center',
     fontSize: 12,
-    fontWeight: 'semibold',
+    fontWeight: '600',
     borderRadius: 10,
+    overflow: 'hidden',
     padding: 5,
+  },
+  session_time: {
+    borderRadius: 10,
+    overflow: 'hidden',
+    alignItems: 'center',
   },
   speaker_box: {
     flexDirection: 'row',

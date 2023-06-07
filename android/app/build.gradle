@@ -95,7 +95,7 @@ android {
 
     namespace "com.atlcloudconf_mobileapp"
     defaultConfig {
-        applicationId "com.atcconferences"
+        applicationId "com.qimata.atcconferences"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

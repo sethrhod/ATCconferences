@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* AtlCloudConf_MobileAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AtlCloudConf_MobileAppTests.m */; };
+		00E356F31AD99517003FC87E /* ATCConferencesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ATCConferencesTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2456B4FB05115E265DE8D2D7 /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1670369B1EEDED1E58EA47AF /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a */; };
-		543D704B5FBE34D2F1431A80 /* libPods-AtlCloudConf_MobileApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A9252E848704AA4B47BD447 /* libPods-AtlCloudConf_MobileApp.a */; };
+		1BE3478D6A14329E0F52BE45 /* libPods-ATCConferences.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 490026B696F24DCF83D9E73D /* libPods-ATCConferences.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		B5EDF347FC4526D0AA81F779 /* libPods-ATCConferences-ATCConferencesTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2DC20681E28FF0A6A9B3D1B /* libPods-ATCConferences-ATCConferencesTests.a */; };
 		D77345BF2A27E0F800042E86 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D77345AA2A27A66F00042E86 /* FontAwesome.ttf */; };
 		D77345C02A27E20500042E86 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D773459F2A27A66F00042E86 /* Fontisto.ttf */; };
 		D77345C12A27E20500042E86 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D77345A02A27A66F00042E86 /* Octicons.ttf */; };
@@ -38,27 +38,26 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = AtlCloudConf_MobileApp;
+			remoteInfo = "ATCConferences";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* AtlCloudConf_MobileAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AtlCloudConf_MobileAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* ATCConferencesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ATCConferencesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* AtlCloudConf_MobileAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AtlCloudConf_MobileAppTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* AtlCloudConf_MobileApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtlCloudConf_MobileApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = AtlCloudConf_MobileApp/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = AtlCloudConf_MobileApp/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AtlCloudConf_MobileApp/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AtlCloudConf_MobileApp/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = AtlCloudConf_MobileApp/main.m; sourceTree = "<group>"; };
-		1670369B1EEDED1E58EA47AF /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A9252E848704AA4B47BD447 /* libPods-AtlCloudConf_MobileApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AtlCloudConf_MobileApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		39A034B338B5DD2B1F5828B6 /* Pods-AtlCloudConf_MobileApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp.debug.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp.debug.xcconfig"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AtlCloudConf_MobileApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		83AFE27FB7290E0C8DFDA0DD /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		B64D110CAD424B0C61212DA3 /* Pods-AtlCloudConf_MobileApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp.release.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp.release.xcconfig"; sourceTree = "<group>"; };
-		C38221A4F06DB486FC269DAE /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* ATCConferencesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ATCConferencesTests.m"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* ATCConferences.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ATCConferences.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = "ATCConferences/AppDelegate.h"; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = "ATCConferences/AppDelegate.mm"; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "ATCConferences/Images.xcassets"; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "ATCConferences/Info.plist"; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "ATCConferences/main.m"; sourceTree = "<group>"; };
+		424B84B4E3F7E5A320280E38 /* Pods-ATCConferences-ATCConferencesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ATCConferences-ATCConferencesTests.debug.xcconfig"; path = "Target Support Files/Pods-ATCConferences-ATCConferencesTests/Pods-ATCConferences-ATCConferencesTests.debug.xcconfig"; sourceTree = "<group>"; };
+		490026B696F24DCF83D9E73D /* libPods-ATCConferences.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ATCConferences.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = "ATCConferences/LaunchScreen.storyboard"; sourceTree = "<group>"; };
+		ACC9FFE6DF1B2E4205E2F606 /* Pods-ATCConferences-ATCConferencesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ATCConferences-ATCConferencesTests.release.xcconfig"; path = "Target Support Files/Pods-ATCConferences-ATCConferencesTests/Pods-ATCConferences-ATCConferencesTests.release.xcconfig"; sourceTree = "<group>"; };
+		B9637C2899A4994551829C2A /* Pods-ATCConferences.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ATCConferences.debug.xcconfig"; path = "Target Support Files/Pods-ATCConferences/Pods-ATCConferences.debug.xcconfig"; sourceTree = "<group>"; };
+		D2DC20681E28FF0A6A9B3D1B /* libPods-ATCConferences-ATCConferencesTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ATCConferences-ATCConferencesTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D773459F2A27A66F00042E86 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		D77345A02A27A66F00042E86 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		D77345A12A27A66F00042E86 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -75,6 +74,7 @@
 		D77345AC2A27A66F00042E86 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		D77345AD2A27A66F00042E86 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		D77345AE2A27A66F00042E86 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		E4FA5348700B4B7D3BF61ECE /* Pods-ATCConferences.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ATCConferences.release.xcconfig"; path = "Target Support Files/Pods-ATCConferences/Pods-ATCConferences.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -83,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2456B4FB05115E265DE8D2D7 /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a in Frameworks */,
+				B5EDF347FC4526D0AA81F779 /* libPods-ATCConferences-ATCConferencesTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,20 +91,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				543D704B5FBE34D2F1431A80 /* libPods-AtlCloudConf_MobileApp.a in Frameworks */,
+				1BE3478D6A14329E0F52BE45 /* libPods-ATCConferences.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* AtlCloudConf_MobileAppTests */ = {
+		00E356EF1AD99517003FC87E /* ATCConferencesTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* AtlCloudConf_MobileAppTests.m */,
+				00E356F21AD99517003FC87E /* ATCConferencesTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = AtlCloudConf_MobileAppTests;
+			path = "ATCConferencesTests";
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -115,7 +115,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* AtlCloudConf_MobileApp */ = {
+		13B07FAE1A68108700A75B9A /* ATCConferences */ = {
 			isa = PBXGroup;
 			children = (
 				D773459E2A27A66F00042E86 /* Fonts */,
@@ -126,15 +126,15 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = AtlCloudConf_MobileApp;
+			name = "ATCConferences";
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				1A9252E848704AA4B47BD447 /* libPods-AtlCloudConf_MobileApp.a */,
-				1670369B1EEDED1E58EA47AF /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a */,
+				490026B696F24DCF83D9E73D /* libPods-ATCConferences.a */,
+				D2DC20681E28FF0A6A9B3D1B /* libPods-ATCConferences-ATCConferencesTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -149,9 +149,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* AtlCloudConf_MobileApp */,
+				13B07FAE1A68108700A75B9A /* ATCConferences */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* AtlCloudConf_MobileAppTests */,
+				00E356EF1AD99517003FC87E /* ATCConferencesTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -164,8 +164,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* AtlCloudConf_MobileApp.app */,
-				00E356EE1AD99517003FC87E /* AtlCloudConf_MobileAppTests.xctest */,
+				13B07F961A680F5B00A75B9A /* ATCConferences.app */,
+				00E356EE1AD99517003FC87E /* ATCConferencesTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -173,10 +173,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				39A034B338B5DD2B1F5828B6 /* Pods-AtlCloudConf_MobileApp.debug.xcconfig */,
-				B64D110CAD424B0C61212DA3 /* Pods-AtlCloudConf_MobileApp.release.xcconfig */,
-				C38221A4F06DB486FC269DAE /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig */,
-				83AFE27FB7290E0C8DFDA0DD /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig */,
+				B9637C2899A4994551829C2A /* Pods-ATCConferences.debug.xcconfig */,
+				E4FA5348700B4B7D3BF61ECE /* Pods-ATCConferences.release.xcconfig */,
+				424B84B4E3F7E5A320280E38 /* Pods-ATCConferences-ATCConferencesTests.debug.xcconfig */,
+				ACC9FFE6DF1B2E4205E2F606 /* Pods-ATCConferences-ATCConferencesTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -208,9 +208,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* AtlCloudConf_MobileAppTests */ = {
+		00E356ED1AD99517003FC87E /* ATCConferencesTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "AtlCloudConf_MobileAppTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ATCConferencesTests" */;
 			buildPhases = (
 				1EB2DCDC6CC607140E07EEED /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -224,14 +224,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = AtlCloudConf_MobileAppTests;
-			productName = AtlCloudConf_MobileAppTests;
-			productReference = 00E356EE1AD99517003FC87E /* AtlCloudConf_MobileAppTests.xctest */;
+			name = ATCConferencesTests;
+			productName = ATCConferencesTests;
+			productReference = 00E356EE1AD99517003FC87E /* ATCConferencesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* AtlCloudConf_MobileApp */ = {
+		13B07F861A680F5B00A75B9A /* ATCConferences */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "AtlCloudConf_MobileApp" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ATCConferences" */;
 			buildPhases = (
 				7947464E5F066EEDEEB6592B /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -246,9 +246,9 @@
 			);
 			dependencies = (
 			);
-			name = AtlCloudConf_MobileApp;
-			productName = AtlCloudConf_MobileApp;
-			productReference = 13B07F961A680F5B00A75B9A /* AtlCloudConf_MobileApp.app */;
+			name = "ATCConferences";
+			productName = "ATCConferences";
+			productReference = 13B07F961A680F5B00A75B9A /* ATCConferences.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -269,7 +269,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "AtlCloudConf_MobileApp" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ATCConferences" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -282,8 +282,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* AtlCloudConf_MobileApp */,
-				00E356ED1AD99517003FC87E /* AtlCloudConf_MobileAppTests */,
+				13B07F861A680F5B00A75B9A /* ATCConferences */,
+				00E356ED1AD99517003FC87E /* ATCConferencesTests */,
 			);
 		};
 /* End PBXProject section */
@@ -346,18 +346,35 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences-ATCConferencesTests/Pods-ATCConferences-ATCConferencesTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences-ATCConferencesTests/Pods-ATCConferences-ATCConferencesTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ATCConferences-ATCConferencesTests/Pods-ATCConferences-ATCConferencesTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1EB2DCDC6CC607140E07EEED /* [CP] Check Pods Manifest.lock */ = {
+		9488A21F39A7E5ABF816D341 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences/Pods-ATCConferences-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences/Pods-ATCConferences-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ATCConferences/Pods-ATCConferences-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		98E9804C47E68B6CDAD2629A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -372,7 +389,29 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ATCConferences-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B462A99F21E64E65450B1A10 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ATCConferences-ATCConferencesTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -385,6 +424,7 @@
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences-ATCConferencesTests/Pods-ATCConferences-ATCConferencesTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
@@ -392,13 +432,11 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AtlCloudConf_MobileApp-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences-ATCConferencesTests/Pods-ATCConferences-ATCConferencesTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ATCConferences-ATCConferencesTests/Pods-ATCConferences-ATCConferencesTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7B5D650453FB36CCF3CD7E96 /* [CP] Copy Pods Resources */ = {
@@ -424,15 +462,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences/Pods-ATCConferences-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences/Pods-ATCConferences-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ATCConferences/Pods-ATCConferences-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DCEE167C86A74CF4D448CB9C /* [CP] Embed Pods Frameworks */ = {
@@ -442,14 +480,17 @@
 			);
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences/Pods-ATCConferences-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ATCConferences/Pods-ATCConferences-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ATCConferences/Pods-ATCConferences-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -478,7 +519,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* AtlCloudConf_MobileAppTests.m in Sources */,
+				00E356F31AD99517003FC87E /* ATCConferencesTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,7 +537,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* AtlCloudConf_MobileApp */;
+			target = 13B07F861A680F5B00A75B9A /* ATCConferences */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -504,7 +545,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C38221A4F06DB486FC269DAE /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig */;
+			baseConfigurationReference = 424B84B4E3F7E5A320280E38 /* Pods-ATCConferences-ATCConferencesTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -512,7 +553,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = AtlCloudConf_MobileAppTests/Info.plist;
+				INFOPLIST_FILE = "ATCConferencesTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -524,20 +565,20 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.qimata.atcconferences";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AtlCloudConf_MobileApp.app/AtlCloudConf_MobileApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ATCConferences.app/ATCConferences";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83AFE27FB7290E0C8DFDA0DD /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig */;
+			baseConfigurationReference = ACC9FFE6DF1B2E4205E2F606 /* Pods-ATCConferences-ATCConferencesTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = AtlCloudConf_MobileAppTests/Info.plist;
+				INFOPLIST_FILE = "ATCConferencesTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -549,22 +590,23 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.qimata.atcconferences";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AtlCloudConf_MobileApp.app/AtlCloudConf_MobileApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ATCConferences.app/ATCConferences";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39A034B338B5DD2B1F5828B6 /* Pods-AtlCloudConf_MobileApp.debug.xcconfig */;
+			baseConfigurationReference = B9637C2899A4994551829C2A /* Pods-ATCConferences.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RSZSSGAP23;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = AtlCloudConf_MobileApp/Info.plist;
+				INFOPLIST_FILE = "ATCConferences/Info.plist";
+             INFOPLIST_KEY_CFBundleDisplayName = "ATC Conferences";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -575,9 +617,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = "org.reactjs.native.example.ATC-conferences";
-				PRODUCT_NAME = AtlCloudConf_MobileApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.qimata.atcconferences";
+				PRODUCT_NAME = "ATCConferences";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -586,13 +627,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B64D110CAD424B0C61212DA3 /* Pods-AtlCloudConf_MobileApp.release.xcconfig */;
+			baseConfigurationReference = E4FA5348700B4B7D3BF61ECE /* Pods-ATCConferences.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RSZSSGAP23;
-				INFOPLIST_FILE = AtlCloudConf_MobileApp/Info.plist;
+				INFOPLIST_FILE = "ATCConferences/Info.plist";
+             INFOPLIST_KEY_CFBundleDisplayName = "ATC Conferences";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -603,9 +644,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = "org.reactjs.native.example.ATC-conferences";
-				PRODUCT_NAME = AtlCloudConf_MobileApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.qimata.atcconferences";
+				PRODUCT_NAME = "ATCConferences";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -751,7 +791,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "AtlCloudConf_MobileAppTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ATCConferencesTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -760,7 +800,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "AtlCloudConf_MobileApp" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ATCConferences" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -769,7 +809,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "AtlCloudConf_MobileApp" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ATCConferences" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

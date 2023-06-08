@@ -11,9 +11,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1BE3478D6A14329E0F52BE45 /* libPods-AtlCloudConf_MobileApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 490026B696F24DCF83D9E73D /* libPods-AtlCloudConf_MobileApp.a */; };
+		2456B4FB05115E265DE8D2D7 /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1670369B1EEDED1E58EA47AF /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a */; };
+		543D704B5FBE34D2F1431A80 /* libPods-AtlCloudConf_MobileApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A9252E848704AA4B47BD447 /* libPods-AtlCloudConf_MobileApp.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		B5EDF347FC4526D0AA81F779 /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2DC20681E28FF0A6A9B3D1B /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a */; };
 		D77345BF2A27E0F800042E86 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D77345AA2A27A66F00042E86 /* FontAwesome.ttf */; };
 		D77345C02A27E20500042E86 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D773459F2A27A66F00042E86 /* Fontisto.ttf */; };
 		D77345C12A27E20500042E86 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D77345A02A27A66F00042E86 /* Octicons.ttf */; };
@@ -52,12 +52,13 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AtlCloudConf_MobileApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AtlCloudConf_MobileApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = AtlCloudConf_MobileApp/main.m; sourceTree = "<group>"; };
-		424B84B4E3F7E5A320280E38 /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		490026B696F24DCF83D9E73D /* libPods-AtlCloudConf_MobileApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AtlCloudConf_MobileApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1670369B1EEDED1E58EA47AF /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A9252E848704AA4B47BD447 /* libPods-AtlCloudConf_MobileApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AtlCloudConf_MobileApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		39A034B338B5DD2B1F5828B6 /* Pods-AtlCloudConf_MobileApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp.debug.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AtlCloudConf_MobileApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		ACC9FFE6DF1B2E4205E2F606 /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		B9637C2899A4994551829C2A /* Pods-AtlCloudConf_MobileApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp.debug.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp.debug.xcconfig"; sourceTree = "<group>"; };
-		D2DC20681E28FF0A6A9B3D1B /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		83AFE27FB7290E0C8DFDA0DD /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		B64D110CAD424B0C61212DA3 /* Pods-AtlCloudConf_MobileApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp.release.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp.release.xcconfig"; sourceTree = "<group>"; };
+		C38221A4F06DB486FC269DAE /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D773459F2A27A66F00042E86 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		D77345A02A27A66F00042E86 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		D77345A12A27A66F00042E86 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -74,7 +75,6 @@
 		D77345AC2A27A66F00042E86 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		D77345AD2A27A66F00042E86 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		D77345AE2A27A66F00042E86 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
-		E4FA5348700B4B7D3BF61ECE /* Pods-AtlCloudConf_MobileApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtlCloudConf_MobileApp.release.xcconfig"; path = "Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -83,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5EDF347FC4526D0AA81F779 /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a in Frameworks */,
+				2456B4FB05115E265DE8D2D7 /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,7 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BE3478D6A14329E0F52BE45 /* libPods-AtlCloudConf_MobileApp.a in Frameworks */,
+				543D704B5FBE34D2F1431A80 /* libPods-AtlCloudConf_MobileApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,8 +133,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				490026B696F24DCF83D9E73D /* libPods-AtlCloudConf_MobileApp.a */,
-				D2DC20681E28FF0A6A9B3D1B /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a */,
+				1A9252E848704AA4B47BD447 /* libPods-AtlCloudConf_MobileApp.a */,
+				1670369B1EEDED1E58EA47AF /* libPods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -173,10 +173,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B9637C2899A4994551829C2A /* Pods-AtlCloudConf_MobileApp.debug.xcconfig */,
-				E4FA5348700B4B7D3BF61ECE /* Pods-AtlCloudConf_MobileApp.release.xcconfig */,
-				424B84B4E3F7E5A320280E38 /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig */,
-				ACC9FFE6DF1B2E4205E2F606 /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig */,
+				39A034B338B5DD2B1F5828B6 /* Pods-AtlCloudConf_MobileApp.debug.xcconfig */,
+				B64D110CAD424B0C61212DA3 /* Pods-AtlCloudConf_MobileApp.release.xcconfig */,
+				C38221A4F06DB486FC269DAE /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig */,
+				83AFE27FB7290E0C8DFDA0DD /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -212,12 +212,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "AtlCloudConf_MobileAppTests" */;
 			buildPhases = (
-				B462A99F21E64E65450B1A10 /* [CP] Check Pods Manifest.lock */,
+				1EB2DCDC6CC607140E07EEED /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				C60B4B3375F9DCA540846E26 /* [CP] Embed Pods Frameworks */,
-				85BBFE387D9CE69700A4F026 /* [CP] Copy Pods Resources */,
+				DCEE167C86A74CF4D448CB9C /* [CP] Embed Pods Frameworks */,
+				066ED426DBD5A1FF626A7E48 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -233,14 +233,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "AtlCloudConf_MobileApp" */;
 			buildPhases = (
-				98E9804C47E68B6CDAD2629A /* [CP] Check Pods Manifest.lock */,
+				7947464E5F066EEDEEB6592B /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				DF69B5751CD2E1ACC424B90C /* [CP] Embed Pods Frameworks */,
-				9488A21F39A7E5ABF816D341 /* [CP] Copy Pods Resources */,
+				BD1BC8666387D9E24D13B69F /* [CP] Embed Pods Frameworks */,
+				7B5D650453FB36CCF3CD7E96 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -340,7 +340,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		85BBFE387D9CE69700A4F026 /* [CP] Copy Pods Resources */ = {
+		066ED426DBD5A1FF626A7E48 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -357,46 +357,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9488A21F39A7E5ABF816D341 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		98E9804C47E68B6CDAD2629A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AtlCloudConf_MobileApp-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B462A99F21E64E65450B1A10 /* [CP] Check Pods Manifest.lock */ = {
+		1EB2DCDC6CC607140E07EEED /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -418,24 +379,46 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C60B4B3375F9DCA540846E26 /* [CP] Embed Pods Frameworks */ = {
+		7947464E5F066EEDEEB6592B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AtlCloudConf_MobileApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DF69B5751CD2E1ACC424B90C /* [CP] Embed Pods Frameworks */ = {
+		7B5D650453FB36CCF3CD7E96 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BD1BC8666387D9E24D13B69F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -450,6 +433,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp/Pods-AtlCloudConf_MobileApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DCEE167C86A74CF4D448CB9C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests/Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -504,7 +504,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 424B84B4E3F7E5A320280E38 /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig */;
+			baseConfigurationReference = C38221A4F06DB486FC269DAE /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -532,7 +532,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ACC9FFE6DF1B2E4205E2F606 /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig */;
+			baseConfigurationReference = 83AFE27FB7290E0C8DFDA0DD /* Pods-AtlCloudConf_MobileApp-AtlCloudConf_MobileAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -557,11 +557,12 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B9637C2899A4994551829C2A /* Pods-AtlCloudConf_MobileApp.debug.xcconfig */;
+			baseConfigurationReference = 39A034B338B5DD2B1F5828B6 /* Pods-AtlCloudConf_MobileApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RSZSSGAP23;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AtlCloudConf_MobileApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -575,6 +576,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = "org.reactjs.native.example.ATC-conferences";
 				PRODUCT_NAME = AtlCloudConf_MobileApp;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -584,11 +586,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4FA5348700B4B7D3BF61ECE /* Pods-AtlCloudConf_MobileApp.release.xcconfig */;
+			baseConfigurationReference = B64D110CAD424B0C61212DA3 /* Pods-AtlCloudConf_MobileApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RSZSSGAP23;
 				INFOPLIST_FILE = AtlCloudConf_MobileApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -601,6 +604,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = "org.reactjs.native.example.ATC-conferences";
 				PRODUCT_NAME = AtlCloudConf_MobileApp;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

@@ -16,6 +16,7 @@ export default function MyTimeline() {
   const {bookmarks} = useContext(SessionizeContext);
   const {setBookmarks} = useContext(SessionizeContext);
   const {sessions} = useContext(SessionizeContext);
+  const {appearance} = useContext(SessionizeContext);
 
   const sectionListRef = React.useRef(null);
 
@@ -45,7 +46,7 @@ export default function MyTimeline() {
       let obj = {};
       // set the title of the object to the start time of the session and add to the same hour sessions
       obj.title = (
-        <Text style={[styles.time, {color: event.colors.text}]}>
+        <Text style={[styles.time, {color: event.colors[appearance].text}]}>
           {format_time(time)}
         </Text>
       );
@@ -82,20 +83,20 @@ export default function MyTimeline() {
       <View
         style={[
           styles.no_sessions_container,
-          {backgroundColor: event.colors.background},
+          {backgroundColor: event.colors[appearance].background},
         ]}>
-        <Text style={[styles.noSessions, {color: event.colors.text}]}>
+        <Text style={[styles.noSessions, {color: event.colors[appearance].text}]}>
           No sessions added
         </Text>
-        <Text style={[styles.addSome, {color: event.colors.text}]}>
+        <Text style={[styles.addSome, {color: event.colors[appearance].text}]}>
           Go to the Schedule page and add some!
         </Text>
       </View>
     ) : (
       <SafeAreaView
-        style={[styles.container, {backgroundColor: event.colors.background}]}>
+        style={[styles.container, {backgroundColor: event.colors[appearance].background}]}>
         <Button
-          color={event.colors.primary}
+          color={event.colors[appearance].primary}
           title="Clear My Timeline"
           onPress={() => clearAll()}
         />
@@ -126,7 +127,7 @@ export default function MyTimeline() {
           )}
           renderSectionHeader={({section: {title, index}}) => (
             <View style={styles.timeblock} key={index}>
-              <Text style={[styles.timeblock_text, {color: event.colors.text}]}>
+              <Text style={[styles.timeblock_text, {color: event.colors[appearance].text}]}>
                 {title}
               </Text>
             </View>

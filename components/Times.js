@@ -6,20 +6,22 @@ import format_time from './scripts/formatTime';
 export default function Times(props) {
   const {event} = useContext(SessionizeContext);
 
+  const {appearance} = useContext(SessionizeContext);
+
   return (
     <View style={{flexDirection: 'row'}}>
-      <Text style={[styles.start_time, {color: event.colors.text}]}>
+      <Text style={[styles.start_time, {color: event.colors[appearance].text}]}>
           {format_time(props.starts)}
       </Text>
       <Text
         style={[
           styles.dash_time,
-          {color: event.colors.text},
+          {color: event.colors[appearance].text},
         ]}>
         {' '}
         -{' '}
       </Text>
-      <Text style={[styles.end_time, {color: event.colors.text}]}>
+      <Text style={[styles.end_time, {color: event.colors[appearance].text}]}>
         {format_time(props.ends)}
       </Text>
     </View>

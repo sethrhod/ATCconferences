@@ -5,6 +5,9 @@ import SessionizeContext from '../SessionizeContext';
 export default function TimeScroll(props) {
 
   const {event} = React.useContext(SessionizeContext);
+
+  const {appearance} = React.useContext(SessionizeContext);
+  
   return props.sectionListData.map((time, index) => (
       <TouchableOpacity
         onPress={() => {
@@ -18,7 +21,7 @@ export default function TimeScroll(props) {
         }}
         key={index}
       >
-        <Text style={styles.time}>
+        <Text style={[styles.time, {color: event.colors[appearance].text}]}>
           {time.title}
         </Text>
       </TouchableOpacity>

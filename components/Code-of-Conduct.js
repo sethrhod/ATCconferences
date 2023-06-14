@@ -4,22 +4,23 @@ import SessionizeContext from "../SessionizeContext.js";
 
 export default function CodeOfConduct() {
   const { event } = useContext(SessionizeContext);
+  const { appearance } = useContext(SessionizeContext);
 
   return (
-    <SafeAreaView style={[styles.container, {backgroundColor: event.colors.background}]}>
+    <SafeAreaView style={[styles.container, {backgroundColor: event.colors[appearance].background}]}>
       <ScrollView contentContainerStyle={{alignItems: "center", justifyContent: "center", padding: 20}}>
-        <Text style={styles.p}>
+        <Text style={[styles.p, {color: event.colors[appearance].text}]}>
           All attendees, speakers, sponsors and volunteers at our conference are
           required to agree with the following code of conduct. Organisers will
           enforce this code throughout the event. We expect cooperation from all
           participants to help ensure a safe environment for everybody.
         </Text>
-        <Text style={styles.header}>Need Help?</Text>
-        <Text style={styles.p}>
+        <Text style={[styles.header, {color: event.colors[appearance].text}]}>Need Help?</Text>
+        <Text style={[styles.p, {color: event.colors[appearance].text}]}>
           You have our contact details in the emails we've sent you.
         </Text>
-        <Text style={styles.header}>The Quick Version</Text>
-        <Text style={styles.p}>
+        <Text style={[styles.header, {color: event.colors[appearance].text}]}>The Quick Version</Text>
+        <Text style={[styles.p, {color: event.colors[appearance].text}]}>
           Our conference is dedicated to providing a harassment-free conference
           experience for everyone, regardless of gender, gender identity and
           expression, age, sexual orientation, disability, physical appearance,
@@ -31,8 +32,8 @@ export default function CodeOfConduct() {
           or expelled from the conference without a refund at the discretion of
           the conference organisers.
         </Text>
-        <Text style={styles.header}>The Less Quick Version</Text>
-        <Text style={styles.p}>
+        <Text style={[styles.header, {color: event.colors[appearance].text}]}>The Less Quick Version</Text>
+        <Text style={[styles.p, {color: event.colors[appearance].text}]}>
           Harassment includes offensive verbal comments related to gender, gender
           identity and expression, age, sexual orientation, disability, physical
           appearance, body size, race, ethnicity, religion, technology choices,

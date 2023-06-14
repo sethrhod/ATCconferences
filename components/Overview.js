@@ -14,6 +14,7 @@ import SessionizeContext from '../SessionizeContext';
 export default function Overview(props) {
 
   const { event } = useContext(SessionizeContext);
+  const { appearance } = useContext(SessionizeContext);
 
   const eventDate = new Date(event.date);
 
@@ -23,15 +24,15 @@ export default function Overview(props) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: event.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: event.colors[appearance].background }]}>
       {/* Event Title and Countdown */}
 
       <View style={styles.topcontainer}>
-        <Text style={[styles.title, { color: event.colors.text }]}>
+        <Text style={[styles.title, { color: event.colors[appearance].text }]}>
           {event.name}
         </Text>
         <Text
-          style={{ color: event.colors.text, fontSize: 15, fontWeight: '600' }}>
+          style={{ color: event.colors[appearance].text, fontSize: 15, fontWeight: '600' }}>
           {eventDate.toDateString()}
         </Text>
       </View>
@@ -52,12 +53,12 @@ export default function Overview(props) {
         <Icon.Button
           name={'ticket'}
           size={30}
-          backgroundColor={event.colors.background}
-          color={event.colors.primary}
+          backgroundColor={event.colors[appearance].background}
+          color={event.colors[appearance].primary}
           onPress={() => onPress()}>
           <Text
             style={{
-              color: event.colors.text,
+              color: event.colors[appearance].text,
               fontSize: 27,
               fontWeight: 'bold',
               padding: 10,
@@ -68,7 +69,7 @@ export default function Overview(props) {
         <View style={{ width: 270 }}>
           <Text
             style={{
-              color: event.colors.text,
+              color: event.colors[appearance].text,
               fontSize: 15,
               fontWeight: '600',
               lineHeight: 16,

@@ -25,6 +25,7 @@ export default function Schedule() {
   const {uUID} = useContext(SessionizeContext);
   const {filterOptions} = useContext(SessionizeContext);
   const {setFilterOptions} = useContext(SessionizeContext);
+  const {appearance} = useContext(SessionizeContext);
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [sections, setSections] = React.useState(
@@ -135,7 +136,7 @@ export default function Schedule() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.noSessionsContainer}>
-          <Text style={[styles.noSessionsText, {color: event.colors.text}]}>
+          <Text style={[styles.noSessionsText, {color: event.colors[appearance].text}]}>
             No sessions found
           </Text>
         </View>
@@ -143,7 +144,7 @@ export default function Schedule() {
     );
   } else {
     return (
-      <SafeAreaView style={[styles.container, {backgroundColor: event.colors.background}]}>
+      <SafeAreaView style={[styles.container, {backgroundColor: event.colors[appearance].background}]}>
         <SectionList
           sections={sections}
           ref={sectionListRef}
@@ -170,7 +171,7 @@ export default function Schedule() {
           )}
           renderSectionHeader={({section: {title, index}}) => (
             <View style={styles.timeblock} key={index}>
-              <Text style={[styles.timeblock_text, {color: event.colors.text}]}>
+              <Text style={[styles.timeblock_text, {color: event.colors[appearance].text}]}>
                 {title}
               </Text>
             </View>

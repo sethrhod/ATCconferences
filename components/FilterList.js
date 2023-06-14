@@ -14,6 +14,7 @@ import SessionizeContext from '../SessionizeContext';
 
 export default function FilterList(props) {
   const {event} = useContext(SessionizeContext);
+  const {appearance} = useContext(SessionizeContext);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [filterView, setFilterView] = React.useState(null);
 
@@ -26,13 +27,13 @@ export default function FilterList(props) {
           margin: 10,
           justifyContent: 'space-between',
         }}>
-        <Text style={[styles.filter_item_text, {color: props.item.value ? event.colors.secondary : event.colors.text}]}>{props.item.name}</Text>
+        <Text style={[styles.filter_item_text, {color: props.item.value ? event.colors[appearance].secondary : null }]}>{props.item.name}</Text>
         <Pressable
           style={{
             marginLeft: 10,
             borderRadius: 5,
             padding: 5,
-            backgroundColor: props.item.value ? event.colors.secondary : event.colors.background,
+            backgroundColor: props.item.value ? event.colors[appearance].secondary : event.colors[appearance].background,
           }}
           onPress={() => {
             let newFilterOptions = [...props.filterOptions];
@@ -44,7 +45,7 @@ export default function FilterList(props) {
             }
             props.setFilterOptions(newFilterOptions);
           }}>
-          <Text style={[styles.filter_item_text, {color: event.colors.text}]}>
+          <Text style={[styles.filter_item_text, {color: event.colors[appearance].text}]}>
             {props.item.value ? 'On' : 'Off'}
           </Text>
         </Pressable>
@@ -61,7 +62,7 @@ export default function FilterList(props) {
           margin: 10,
           justifyContent: 'space-between',
         }}>
-        <Text style={{color: event.colors.text, fontSize: 15}}>
+        <Text style={{fontSize: 15}}>
           {props.item.name}
         </Text>
         <TouchableOpacity
@@ -72,7 +73,6 @@ export default function FilterList(props) {
           <Icon
             name="chevron-circle-down"
             size={20}
-            color={event.colors.text}
           />
         </TouchableOpacity>
       </View>
@@ -91,8 +91,8 @@ export default function FilterList(props) {
         onPress={() => {
           setModalVisible(true);
         }}>
-        <Icon name="filter" size={20} color={event.colors.text} />
-        <Text style={{color: event.colors.text, fontSize: 20, marginLeft: 10}}>
+        <Icon name="filter" size={20} color={event.colors[appearance].text} />
+        <Text style={{color: event.colors[appearance].text, fontSize: 20, marginLeft: 10}}>
           Filter
         </Text>
       </TouchableOpacity>
@@ -106,8 +106,8 @@ export default function FilterList(props) {
             style={[
               styles.modalView,
               {
-                backgroundColor: event.colors.primary,
-                shadowColor: event.colors.background,
+                backgroundColor: event.colors[appearance].primary,
+                shadowColor: event.colors[appearance].background,
               },
             ]}>
             {filterView ? (
@@ -116,7 +116,7 @@ export default function FilterList(props) {
                   <Icon
                     name="chevron-circle-left"
                     size={20}
-                    color={event.colors.text}
+        
                   />
                 </TouchableOpacity>
                 <FlatList
@@ -147,7 +147,7 @@ export default function FilterList(props) {
             )}
           </View>
           <Pressable
-            style={{...styles.button, backgroundColor: event.colors.primary}}
+            style={{...styles.button, backgroundColor: event.colors[appearance].primary}}
             onPress={() => setModalVisible(false)}>
             <Text style={styles.textStyle}>Close</Text>
           </Pressable>

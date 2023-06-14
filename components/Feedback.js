@@ -93,9 +93,9 @@ export default function Feedback(props) {
           leftThreshold={100}
           friction={2}
           overshootFriction={8}>
-          <View style={[styles.feedback, {backgroundColor: event.colors.primary}]}>
+          <View style={[styles.feedback, {backgroundColor: event.colors["appearance"].primary}]}>
             <TouchableOpacity onPress={() => setEditView(!editView)}>
-              <Text style={{color: event.colors.text}}>
+              <Text style={{color: event.colors["appearance"].text}}>
                 {props.session.feedback.feedback}
               </Text>
             </TouchableOpacity>

@@ -5,6 +5,7 @@ import SessionizeContext from '../SessionizeContext';
 
 export default function LeftSwipeActions(props) {
   const {event} = React.useContext(SessionizeContext);
+  const {appearance} = React.useContext(SessionizeContext);
   const leftSwipeBoxRef = React.useRef(null);
 
   const [fontSize, setFontSize] = React.useState(15);
@@ -27,7 +28,7 @@ export default function LeftSwipeActions(props) {
         flex: 1,
         borderRadius: 10,
         flexDirection: 'row',
-        backgroundColor: event.colors.primary,
+        backgroundColor: event.colors[appearance].primary,
         margin: 10,
         padding: 20,
       }}

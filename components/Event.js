@@ -46,6 +46,8 @@ export default function Event(props) {
   const [event, setEvent] = useState(props.event);
   //custom data
   const [customData, setCustomData] = useState(props.customData);
+  //phones appearance setting for dark or light mode
+  const [appearance, setAppearance] = useState(props.appearance);
 
   // // refresh the app when the bookmarks change
   // const [refresh, setRefresh] = useState(false);
@@ -62,6 +64,8 @@ export default function Event(props) {
     filterOptions,
     event,
     customData,
+    appearance,
+    setAppearance,
     setCustomData,
     setEvent,
     setSpeakers,
@@ -174,7 +178,7 @@ export default function Event(props) {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <Text style={{color: event.colors.text}}>Loading...</Text>
+        <Text style={{color: event.colors[appearance].text}}>Loading...</Text>
       </View>
     );
   }
@@ -185,18 +189,18 @@ export default function Event(props) {
         <Drawer.Navigator
           screenOptions={{
             headerStyle: {
-              backgroundColor: event.colors.background,
+              backgroundColor: event.colors[appearance].background,
             },
             headerTitleStyle: {
-              color: event.colors.text,
+              color: event.colors[appearance].text,
             },
             drawerStyle: {
-              backgroundColor: event.colors.background,
+              backgroundColor: event.colors[appearance].background,
             },
-            drawerInactiveTintColor: event.colors.text,
-            headerTintColor: event.colors.text,
-            drawerActiveBackgroundColor: event.colors.primary,
-            drawerActiveTintColor: event.colors.text,
+            drawerInactiveTintColor: event.colors[appearance].text,
+            headerTintColor: event.colors[appearance].text,
+            drawerActiveBackgroundColor: event.colors[appearance].primary,
+            drawerActiveTintColor: event.colors[appearance].text,
             headerShadowVisible: false,
           }}>
           <Drawer.Screen name="Overview" component={Overview} />

@@ -14,6 +14,7 @@ import Times from './Times';
 
 export default function SessionModal(props) {
   const {event} = useContext(SessionizeContext);
+  const {appearance} = useContext(SessionizeContext);
 
   const CloseButton = () => {
     return (
@@ -22,7 +23,7 @@ export default function SessionModal(props) {
           margin: 10,
         }}
         onPress={() => props.setModalVisible(false)}>
-        <Icon name="times" color={event.colors.secondary} size={40} />
+        <Icon name="times" color={event.colors[appearance].secondary} size={40} />
       </Pressable>
     );
   };
@@ -41,14 +42,14 @@ export default function SessionModal(props) {
               style={styles.profilePicture}
               source={{uri: speaker.profilePicture}}
             />
-            <Text style={[styles.fullName, {color: event.colors.text}]}>
+            <Text style={[styles.fullName, {color: event.colors[appearance].text}]}>
               {speaker.fullName}
             </Text>
           </View>
         ))}
         <View
-          style={[styles.title_box, {borderBottomColor: event.colors.text}]}>
-          <Text style={[styles.title, {color: event.colors.text}]}>
+          style={[styles.title_box, {borderBottomColor: event.colors[appearance].text}]}>
+          <Text style={[styles.title, {color: event.colors[appearance].text}]}>
             {props.session.title}
           </Text>
         </View>
@@ -62,13 +63,13 @@ export default function SessionModal(props) {
             style={[
               styles.room,
               {
-                color: event.colors.text,
-                backgroundColor: event.colors.accent,
+                color: event.colors[appearance].text,
+                backgroundColor: event.colors[appearance].accent,
               },
             ]}>
             {props.session.room}
           </Text>
-          <View style={[styles.times_box, {backgroundColor: event.colors.accent}]}>
+          <View style={[styles.times_box, {backgroundColor: event.colors[appearance].accent}]}>
             <Times starts={props.session.startsAt} ends={props.session.endsAt} />
           </View>
         </View>
@@ -76,10 +77,10 @@ export default function SessionModal(props) {
           style={[
             styles.description_box,
             {
-              borderBottomColor: event.colors.text,
+              borderBottomColor: event.colors[appearance].text,
             },
           ]}>
-          <Text style={[styles.description, {color: event.colors.text}]}>
+          <Text style={[styles.description, {color: event.colors[appearance].text}]}>
             {props.session.description}
           </Text>
         </View>
@@ -93,7 +94,7 @@ export default function SessionModal(props) {
       transparent={true}
       visible={props.modalVisible}>
       <ScrollView
-        style={[styles.container, {backgroundColor: event.colors.primary}]}>
+        style={[styles.container, {backgroundColor: event.colors[appearance].primary}]}>
         <CloseButton />
         <SessionInfo />
       </ScrollView>

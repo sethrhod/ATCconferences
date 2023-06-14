@@ -215,6 +215,7 @@ export default function App() {
         event={eventToRender}
         setEvent={setEventToRender}
         customData={CustomData}
+        appearance={Appearance.getColorScheme()}
       />
     );
   }
@@ -252,9 +253,9 @@ export default function App() {
 const colors =
   Appearance.getColorScheme() === 'dark'
     ? {
-        background: '#000000',
-        card: '#747481',
-        text: '#FFFFFF',
+        background: '#121212',
+        card: '#2c2c2c',
+        text: '#F4F4F5',
         accent: '#DFDFE2',
       }
     : {
@@ -271,10 +272,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
+    color: colors.text,
     fontSize: 30,
     fontWeight: 'bold',
   },
   subheader: {
+    color: colors.text,
     fontSize: 20,
     fontWeight: '600',
   },
@@ -294,6 +297,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     flexWrap: 'wrap',
+    color: colors.text,
   },
   location: {
     flex: 1,
@@ -301,12 +305,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     flexWrap: 'wrap',
     textAlign: 'left',
+    color: colors.text,
   },
   bottom_box: {
     fontSize: 10,
     fontWeight: '600',
     textAlign: 'center',
-    backgroundColor: colors.background,
+    backgroundColor: colors.accent,
     borderRadius: 10,
     overflow: 'hidden',
     padding: 7,
@@ -317,6 +322,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'left',
     margin: 5,
+    color: colors.text,
   },
   image: {
     width: 100,

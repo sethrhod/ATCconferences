@@ -22,6 +22,8 @@ export default function SubmitFeedbackModal() {
 
   const {sessions} = useContext(SessionizeContext);
 
+  const {appearance} = useContext(SessionizeContext);
+
   const {event} = useContext(SessionizeContext);
 
   const handlePress = item => {
@@ -41,7 +43,7 @@ export default function SubmitFeedbackModal() {
         keyExtractor={item => item.id}
         style={{width: '100%'}}
         ListHeaderComponent={
-          <Text style={{textAlign: 'center', fontSize: 30, color: event.colors.text}}>
+          <Text style={{textAlign: 'center', fontSize: 30, color: event.colors[appearance].text}}>
             Sessions
           </Text>
         }
@@ -61,7 +63,7 @@ export default function SubmitFeedbackModal() {
         <SafeAreaView
           style={[
             styles.container,
-            {backgroundColor: event.colors.background},
+            {backgroundColor: event.colors[appearance].background},
           ]}>
           <View style={styles.session}>
             <SessionWithFeedback session={selectedSession} />
@@ -82,7 +84,7 @@ export default function SubmitFeedbackModal() {
             }}>
             <Text
               style={{
-                color: event.colors.text,
+                color: event.colors[appearance].text,
               }}>
               Close
             </Text>

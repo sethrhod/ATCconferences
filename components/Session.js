@@ -11,6 +11,7 @@ import Times from './Times';
 
 export default function Session(props) {
   const {event} = useContext(SessionizeContext);
+  const {appearance} = useContext(SessionizeContext);
 
   // the state for the list of bookmarks
   const {bookmarks} = useContext(SessionizeContext);
@@ -23,7 +24,7 @@ export default function Session(props) {
         style={styles.logo}
         source={{uri: speaker.profilePicture}}
       />
-      <Text style={[styles.name, {color: event.colors.text}]}>
+      <Text style={[styles.name, {color: event.colors[appearance].text}]}>
         {speaker.fullName}
       </Text>
     </View>
@@ -109,7 +110,7 @@ export default function Session(props) {
     );
   };
 
-  var bg = props.session.bookmarked ? event.colors.accent : event.colors.card;
+  var bg = props.session.bookmarked ? event.colors[appearance].accent : event.colors[appearance].card;
 
   return (
     <View style={styles.container}>
@@ -133,7 +134,7 @@ export default function Session(props) {
               alignItems: 'center',
             }}>
             <Text
-              style={[styles.title, {width: 300, color: event.colors.text}]}>
+              style={[styles.title, {width: 300, color: event.colors[appearance].text}]}>
               {props.session.title}
             </Text>
           </View>
@@ -158,7 +159,7 @@ export default function Session(props) {
                   justifyContent: 'space-between',
                 }}>
                 {/* // session time */}
-                <View style={[styles.session_time, {backgroundColor: event.colors.accent}]}>
+                <View style={[styles.session_time, {backgroundColor: event.colors[appearance].accent}]}>
                   <Times starts={props.starts} ends={props.ends} />
                 </View>
 
@@ -167,8 +168,8 @@ export default function Session(props) {
                   style={[
                     styles.speaker_room,
                     {
-                      color: event.colors.text,
-                      backgroundColor: event.colors.accent,
+                      color: event.colors[appearance].text,
+                      backgroundColor: event.colors[appearance].accent,
                     },
                   ]}>
                   {props.session.room}
@@ -177,15 +178,15 @@ export default function Session(props) {
             ) : (
               // main-event session room
               <View style={styles.main_event_session}>
-                <View style={[styles.session_time, {backgroundColor: event.colors.accent}]}>
+                <View style={[styles.session_time, {backgroundColor: event.colors[appearance].accent}]}>
                   <Times starts={props.starts} ends={props.ends} />
                 </View>
                 <Text
                   style={[
                     styles.speaker_room,
                     {
-                      color: event.colors.text,
-                      backgroundColor: event.colors.accent,
+                      color: event.colors[appearance].text,
+                      backgroundColor: event.colors[appearance].accent,
                     },
                   ]}>
                   {props.session.room}

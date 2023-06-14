@@ -7,6 +7,7 @@ export default function FeedbackForm(props) {
 
   const {event} = useContext(SessionizeContext);
   const {customData} = useContext(SessionizeContext);
+  const {appearance} = useContext(SessionizeContext);
 
   const [text, setText] = React.useState(
     props.feedbackText ? props.feedbackText : '',
@@ -89,7 +90,7 @@ export default function FeedbackForm(props) {
 
   return (
     <View
-      style={[styles.feedback_input, {backgroundColor: event.colors.primary}]}>
+      style={[styles.feedback_input, {backgroundColor: event.colors[appearance].primary}]}>
       <TextInput
         onChangeText={text => setText(text)}
         multiline={true}
@@ -97,11 +98,11 @@ export default function FeedbackForm(props) {
         value={text}
         autoFocus={true}
         placeholder="Feedback"
-        placeholderTextColor={event.colors.secondary}
-        cursorColor={event.colors.secondary}
+        placeholderTextColor={event.colors[appearance].secondary}
+        cursorColor={event.colors[appearance].secondary}
         ref={inputRef}
         style={{
-          color: event.colors.text,
+          color: event.colors[appearance].text,
         }}
       />
     </View>

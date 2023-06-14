@@ -6,9 +6,10 @@ import getNewTime from "./scripts/getNewTime.js";
 export default function SessionWithFeedback(props) {
 
   const {event} = useContext(SessionizeContext);
+  const {appearance} = useContext(SessionizeContext);
 
   return (
-    <View style={[styles.session, { backgroundColor: event.colors.foreground }]}>
+    <View style={[styles.session, { backgroundColor: event.colors[appearance].foreground }]}>
       <View style={styles.session_left}>
         <Text style={styles.session_time}>
           {getNewTime(props.session.startsAt)}-{" "}

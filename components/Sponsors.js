@@ -17,6 +17,8 @@ export default function Sponsors() {
 
   const {event} = useContext(SessionizeContext);
 
+  const {appearance} = useContext(SessionizeContext);
+
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
@@ -57,7 +59,7 @@ export default function Sponsors() {
   };
 
   const SubItem = props => (
-    <View style={[styles.sub_item, {backgroundColor: event.colors.foreground}]}>
+    <View style={[styles.sub_item, {backgroundColor: event.colors[appearance].foreground}]}>
       <TouchableHighlight onPress={() => Linking.openURL(props.sponsors.url)}>
         <View style={styles.logo_container}>
           <Image style={styles.logo} source={{uri: props.sponsors.uri}} />
@@ -99,7 +101,7 @@ export default function Sponsors() {
   );
 
   return (
-    <SafeAreaView style={[styles.item_container, {backgroundColor: event.colors.background}]}>
+    <SafeAreaView style={[styles.item_container, {backgroundColor: event.colors[appearance].background}]}>
       <FlatList
         data={data}
         renderItem={({item}) => <Item item={item} />}

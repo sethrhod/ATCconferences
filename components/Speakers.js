@@ -8,6 +8,8 @@ export default function Speakers() {
 
   const { speakers } = useContext(SessionizeContext);
 
+  const { appearance } = useContext(SessionizeContext);
+
   const Item = memo((props) => {
 
     const isNameValid = (name) => {
@@ -15,7 +17,7 @@ export default function Speakers() {
     }
 
     return (
-      <View style={[styles.item, { backgroundColor: props.colors.card }]}>
+      <View style={[styles.item, { backgroundColor: event.colors[appearance].card }]}>
 
         {/*profile pic*/}
 
@@ -24,7 +26,7 @@ export default function Speakers() {
         {/*Name and links*/}
 
         <View style={{ maxWidth: 130, alignItems: 'center' }}>
-          <Text style={[styles.name, { color: props.colors.text }]}>{props.fullName}</Text>
+          <Text style={[styles.name, { color: event.colors[appearance].text }]}>{props.fullName}</Text>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap' }}>
             {props.links.map((link, index) => {
               var title = link.title;
@@ -35,7 +37,7 @@ export default function Speakers() {
                 <View key={index} style={{ justifyContent: 'center', padding: 5 }}>
                   <TouchableOpacity onPress={() => Linking.openURL(link.url)}>
                     {
-                      Icon.hasIcon(title.toLowerCase()) ? <Icon name={title.toLowerCase()} size={20} color={props.colors.text} item_container /> : null
+                      Icon.hasIcon(title.toLowerCase()) ? <Icon name={title.toLowerCase()} size={20} color={event.colors[appearance].text} item_container /> : null
                     }
                   </TouchableOpacity>
                 </View>
@@ -48,7 +50,7 @@ export default function Speakers() {
         {/*bio*/}
 
         <View style={{ width: 120 }}>
-          <Text style={[styles.bio, { color: props.colors.text }]}>{props.tagLine}</Text>
+          <Text style={[styles.bio, { color: event.colors[appearance].text }]}>{props.tagLine}</Text>
         </View>
       </View>
 
@@ -56,7 +58,7 @@ export default function Speakers() {
   });
 
   return (
-    <View style={[styles.container, { backgroundColor: event.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: event.colors[appearance].background }]}>
       <SafeAreaView style={styles.item_container}>
         <FlatList
           data={speakers}

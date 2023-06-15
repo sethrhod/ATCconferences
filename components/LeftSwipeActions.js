@@ -15,12 +15,20 @@ export default function LeftSwipeActions(props) {
     if (leftSwipeBoxRef.current) {
       leftSwipeBoxRef.current.measure((x, y, width, height, pageX, pageY) => {
         if (height !== undefined) {
-          setFontSize(height / 9);
-          setIconsize(height / 3);
+          setFontSize(height / 12);
+          setIconsize(height / 4);
         }
       });
     }
-  }, []);
+  }, [props.imageMounted]);
+
+  const checkFontValue = () => {
+    if (typeof fontSize === 'number' && fontSize > 9 && fontSize < 20) {
+      return fontSize;
+    } else {
+      return 11;
+    }
+  };
 
   return (
     <View
@@ -35,12 +43,12 @@ export default function LeftSwipeActions(props) {
       ref={leftSwipeBoxRef}
       onLayout={event => {
         if (event.nativeEvent.layout.height !== undefined) {
-          setFontSize(event.nativeEvent.layout.height / 9);
-          setIconsize(event.nativeEvent.layout.height / 3);
+          setFontSize(event.nativeEvent.layout.height / 12);
+          setIconsize(event.nativeEvent.layout.height / 4);
         }
       }}>
       <Pressable style={styles.Pressable} onPress={() => props.addBookmark()}>
-        <Text style={[styles.left_swipe_titles, {fontSize: fontSize}]}>
+        <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
           Add to Timeline
         </Text>
         {props.session.bookmarked ? (
@@ -52,7 +60,7 @@ export default function LeftSwipeActions(props) {
       <Pressable
         style={styles.Pressable}
         onPress={() => props.setFeedbackEntryVisible(!props.feedbackEntryVisible)}>
-        <Text style={[styles.left_swipe_titles, {fontSize: fontSize}]}>
+        <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
           Add Feedback
         </Text>
         <Icon name="plus-square" size={iconsize} solid />
@@ -60,7 +68,7 @@ export default function LeftSwipeActions(props) {
       <Pressable
         style={styles.Pressable}
         onPress={() => props.setModalVisible(true)}>
-        <Text style={[styles.left_swipe_titles, {fontSize: fontSize}]}>
+        <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
           Session Info
         </Text>
         <Icon name="info-circle" size={iconsize} solid />
@@ -73,9 +81,9 @@ export const LeftSwipeActionsMemo = React.memo(LeftSwipeActions);
 
 const styles = StyleSheet.create({
   left_swipe_titles: {
-    justifyContent: 'flex-end',
     fontWeight: 'bold',
     textAlign: 'left',
+    flexWrap: 'nowrap'
   },
   Pressable: {
     flex: 1,

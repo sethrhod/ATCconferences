@@ -17,12 +17,15 @@ export default function Session(props) {
   const {bookmarks} = useContext(SessionizeContext);
   const {setBookmarks} = useContext(SessionizeContext);
 
+  const [imageMounted, setImageMounted] = React.useState(false);
+
   const speakers = props.session.speakers.map((speaker, index) => (
     <View style={styles.speaker_box} key={index}>
       <Image
         key={index}
         style={styles.logo}
         source={{uri: speaker.profilePicture}}
+        onLayout={() => setImageMounted(true)}
       />
       <Text style={[styles.name, {color: event.colors[appearance].text}]}>
         {speaker.fullName}
@@ -106,6 +109,7 @@ export default function Session(props) {
         feedbackEntryVisible={feedbackEntryVisible}
         setModalVisible={setModalVisible}
         modalVisible={modalVisible}
+        imageMounted={imageMounted}
       />
     );
   };

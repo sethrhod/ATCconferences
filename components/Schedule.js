@@ -151,8 +151,8 @@ export default function Schedule() {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
-          style={{height: '100%', flex: 1, margin: 10, marginRight: 0}}
-          keyExtractor={item => item.id}
+          style={{height: '100%', flex: 1, margin: 10}}
+          keyExtractor={(item, index) => item + index}
           contentContainerStyle={{paddingBottom: 50}}
           renderItem={({item, index, section}) => (
             <MemoizedSession
@@ -177,12 +177,13 @@ export default function Schedule() {
             </View>
           )}
         />
-        <View style={styles.time_scroll_container}>
+        {/* <View style={styles.time_scroll_container}>
           <TimeScroll
             sectionListData={sections}
             sectionListRef={sectionListRef}
+            scrollToTime={scrollToTime}
           />
-        </View>
+        </View> */}
       </SafeAreaView>
     );
   }

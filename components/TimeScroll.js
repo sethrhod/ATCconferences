@@ -4,22 +4,11 @@ import SessionizeContext from '../SessionizeContext';
 
 export default function TimeScroll(props) {
 
-  const {event} = React.useContext(SessionizeContext);
-
-  const {appearance} = React.useContext(SessionizeContext);
+  const {event, appearance} = React.useContext(SessionizeContext);
   
   return props.sectionListData.map((time, index) => (
       <TouchableOpacity
-        onPress={() => {
-          props.sectionListRef.current.scrollToLocation({
-            animated: true,
-            itemIndex: 0,
-            sectionIndex: index,
-            viewOffset: 0,
-            viewPosition: 0,
-          });
-        }}
-        key={index}
+      onPress={() => props.scrollToTime(index)}
       >
         <Text style={[styles.time, {color: event.colors[appearance].text}]}>
           {time.title}

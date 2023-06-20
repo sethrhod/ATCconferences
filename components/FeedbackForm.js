@@ -67,8 +67,6 @@ export default function FeedbackForm(props) {
     });
   }, []);
 
-  const [ignoreBlur, setIgnoreBlur] = React.useState(false);
-
   const handleBlur = () => {
     if (text !== '') {
       // add feedback to session object to update list without refreshing
@@ -122,7 +120,5 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
     padding: 10,
-    marginBottom: 20,
-    marginTop: 0,
   },
 });

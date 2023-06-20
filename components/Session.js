@@ -4,6 +4,7 @@ import SessionizeContext from '../SessionizeContext';
 import Feedback from './Feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import SessionModal from './SessionInfoModal';
 import FeedbackForm from './FeedbackForm';
 import LeftSwipeActionsMemo from './LeftSwipeActions';
@@ -125,7 +126,26 @@ export default function Session(props) {
         friction={2}
         overshootFriction={8}
         ref={SwipeableRef}>
-        <View style={[styles.session, {backgroundColor: bg}]}>
+        <Pressable
+          style={[styles.session, { backgroundColor: bg }]}
+          onPress={() => {
+            setModalVisible(true);
+
+            if (SwipeableRef.current) {
+              SwipeableRef.current.close();
+            }
+          }}
+          // on press in darken the background
+          onPressIn={() => {
+            bg = event.colors[appearance].accent;
+          }}>
+
+          {/* drag icon */}
+          <View style={styles.icon}>
+            <Icon name='drag-indicator' size={30} color={event.colors[appearance].text} />
+          </View>
+
+          <View style={styles.session_info}>
           {/* // session title */}
 
           <View
@@ -138,7 +158,7 @@ export default function Session(props) {
               alignItems: 'center',
             }}>
             <Text
-              style={[styles.title, {width: 300, color: event.colors[appearance].text}]}>
+              style={[styles.title, { width: 300, color: event.colors[appearance].text }]}>
               {props.session.title}
             </Text>
           </View>
@@ -163,7 +183,7 @@ export default function Session(props) {
                   justifyContent: 'space-between',
                 }}>
                 {/* // session time */}
-                <View style={[styles.session_time, {backgroundColor: event.colors[appearance].accent}]}>
+                <View style={[styles.session_time, { backgroundColor: event.colors[appearance].accent }]}>
                   <Times starts={props.starts} ends={props.ends} />
                 </View>
 
@@ -182,7 +202,7 @@ export default function Session(props) {
             ) : (
               // main-event session room
               <View style={styles.main_event_session}>
-                <View style={[styles.session_time, {backgroundColor: event.colors[appearance].accent}]}>
+                <View style={[styles.session_time, { backgroundColor: event.colors[appearance].accent }]}>
                   <Times starts={props.starts} ends={props.ends} />
                 </View>
                 <Text
@@ -198,12 +218,19 @@ export default function Session(props) {
               </View>
             )}
           </View>
-        </View>
+          </View>
+        </Pressable>
       </Swipeable>
       <SessionModal
         session={props.session}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        SwipeableRef={SwipeableRef}
+        sectionListRef={props.sectionListRef}
+        itemIndex={props.itemIndex}
+        sectionIndex={props.sectionIndex}
+        setSections={props.setSections}
+        onRefresh={props.onRefresh}
       />
       {feedbackEntryVisible ? (
         <FeedbackForm
@@ -241,8 +268,11 @@ const styles = StyleSheet.create({
   },
   session: {
     flex: 1,
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 15,
+    paddingLeft: 0,
     borderRadius: 10,
     margin: 10,
     shadowColor: '#000',
@@ -250,6 +280,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 5,
+  },
+  session_info: {
+    flex: 1,
+    alignItems: 'flex-start',
   },
   main_event_session: {
     flex: 1,
@@ -293,6 +327,10 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 35,
     margin: 5,
+  },
+  icon: {
+    margin: 5,
+    marginRight: 0,
   },
   time_scroll: {
     flex: 1,

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -7,23 +7,33 @@ import {
   ScrollView,
   Image,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from '../SessionizeContext';
+import FeedbackForm from './FeedbackForm';
+import Feedback from './Feedback';
 import Times from './Times';
 
 export default function SessionModal(props) {
   const {event} = useContext(SessionizeContext);
   const {appearance} = useContext(SessionizeContext);
 
+  const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
+
   const CloseButton = () => {
+    const handlePress = () => {
+      props.setModalVisible(false);
+      setFeedbackEntryVisible(false);
+    };
+
     return (
       <Pressable
         style={{
           margin: 10,
         }}
-        onPress={() => props.setModalVisible(false)}>
-        <Icon name="times" color={event.colors[appearance].secondary} size={40} />
+        onPress={() => handlePress()}>
+        <Icon name="times" color={event.colors[appearance].primary} size={40} />
       </Pressable>
     );
   };
@@ -42,17 +52,14 @@ export default function SessionModal(props) {
               style={styles.profilePicture}
               source={{uri: speaker.profilePicture}}
             />
-            <Text style={[styles.fullName, {color: event.colors[appearance].text}]}>
+            <Text style={[styles.fullName, {color: "white"}]}>
               {speaker.fullName}
             </Text>
           </View>
         ))}
-        <View
-          style={[styles.title_box, {borderBottomColor: event.colors[appearance].text}]}>
-          <Text style={[styles.title, {color: event.colors[appearance].text}]}>
+          <Text style={[styles.title, {color: "white"}]}>
             {props.session.title}
           </Text>
-        </View>
         <View
           style={{
             flexDirection: 'row',
@@ -77,10 +84,10 @@ export default function SessionModal(props) {
           style={[
             styles.description_box,
             {
-              borderBottomColor: event.colors[appearance].text,
+              borderBottomColor: "white",
             },
           ]}>
-          <Text style={[styles.description, {color: event.colors[appearance].text}]}>
+          <Text style={[styles.description, {color: "white"}]}>
             {props.session.description}
           </Text>
         </View>
@@ -88,16 +95,81 @@ export default function SessionModal(props) {
     );
   };
 
+  const scrollViewRef = useRef(null);
+  const [marginBottom, setMarginBottom] = React.useState(100);
+
+  useEffect(() => {
+    if (feedbackEntryVisible) {
+      const windowHeight = Dimensions.get('window').height;
+      setMarginBottom(windowHeight * 0.5);
+    } else {
+      setMarginBottom(100);
+    }
+  }, [feedbackEntryVisible]);
+
+  useEffect(() => {
+    const scrollToEnd = async () => {
+      if (scrollViewRef.current)
+        {scrollViewRef.current.scrollToEnd()}
+    };
+    scrollToEnd();
+  }, [marginBottom]);
+
+  const handlePress = () => {
+    setFeedbackEntryVisible(!feedbackEntryVisible);
+  }
+
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={props.modalVisible}>
-      <ScrollView
-        style={[styles.container, {backgroundColor: event.colors[appearance].primary}]}>
+      <View style={[styles.container, {backgroundColor: event.colors[appearance].secondary}]}>
         <CloseButton />
-        <SessionInfo />
-      </ScrollView>
+        <ScrollView 
+          style={styles.scroll_view}
+          ref={scrollViewRef}>
+          <SessionInfo />
+          <View style={[styles.feedback_entry, {marginBottom: marginBottom}]}>
+          <Pressable
+              style={styles.feedback_button}
+              onPress={() => handlePress()}>
+              <Text style={[styles.feedback_button_text, {color: "white"}]}>
+                Leave Feedback
+              </Text>
+              <Icon name="plus-square" size={30} color={"white"} />
+          </Pressable>
+          {feedbackEntryVisible ? (
+            <View style={styles.feedback}>
+              <FeedbackForm
+                session={props.session}
+                feedbackEntryVisible={feedbackEntryVisible}
+                setFeedbackEntryVisible={setFeedbackEntryVisible}
+                SwipeableRef={props.SwipeableRef}
+                sectionListRef={props.sectionListRef}
+                itemIndex={props.itemIndex}
+                sectionIndex={props.sectionIndex}
+                setSections={props.setSections}
+                onRefresh={props.onRefresh}
+                request="POST"
+              />
+            </View>
+          ) : null}
+          <View style={styles.feedback}>
+            <Feedback
+              session={props.session}
+              SwipeableRef={props.SwipeableRef}
+              sectionListRef={props.sectionListRef}
+              itemIndex={props.itemIndex}
+              sectionIndex={props.sectionIndex}
+              setSections={props.setSections}
+              refreshing={props.refreshing}
+              onRefresh={props.onRefresh}
+            />
+          </View>
+        </View>
+        </ScrollView>
+      </View>
     </Modal>
   );
 }
@@ -123,9 +195,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     margin: 10,
   },
-  title_box: {
-    borderBottomWidth: 1,
-  },
   room: {
     textAlign: 'center',
     fontSize: 10,
@@ -135,20 +204,35 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     padding: 5,
-    marginTop: 5,
   },
   times_box: {
     borderRadius: 10,
     overflow: 'hidden',
-    marginTop: 5,
     marginLeft: 10,
   },
   description: {
     fontSize: 15,
-    margin: 10,
+    margin: 20,
   },
   description_box: {
-    borderBottomWidth: 1,
     marginBottom: 20,
   },
+  scroll_view: {
+    flex: 0.70,
+  },
+  feedback_entry: {
+    flex: 0.30,
+    padding: 10,
+  },
+  feedback_button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  feedback_button_text: {
+    marginRight: 10
+  },
+  feedback: {
+    flex: 1
+  }
 });

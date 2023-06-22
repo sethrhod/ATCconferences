@@ -45,7 +45,7 @@ export default function App() {
       const day = date_object.getDate();
       const year = date_object.getFullYear();
       return `${month} ${day}, ${year}`;
-    }
+    };
 
     if (data === null) {
       return (

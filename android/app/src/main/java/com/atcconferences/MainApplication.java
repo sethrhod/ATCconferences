@@ -1,4 +1,4 @@
-package com.atlcloudconf_mobileapp;
+package com.atcconferences;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

@@ -6,33 +6,50 @@ import {
   Dimensions,
   TouchableOpacity,
   Linking,
+  Pressable,
 } from 'react-native';
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SessionizeContext from '../SessionizeContext';
+import CodeOfConduct from './CodeofConduct';
 
 export default function Overview(props) {
+  const {event} = useContext(SessionizeContext);
+  const {appearance} = useContext(SessionizeContext);
 
-  const { event } = useContext(SessionizeContext);
-  const { appearance } = useContext(SessionizeContext);
+  const [codeOfConduct, setCodeOfConduct] = React.useState(false);
 
   const eventDate = new Date(event.date);
 
   // a on press function that will open the registration page in a browser
-  const onPress = () => {
+  const handlePress = () => {
     Linking.openURL(event.registration);
   };
 
+  // conditional rendering for the code of conduct view
+  if (codeOfConduct) {
+    return <CodeOfConduct setCodeOfConduct={setCodeOfConduct} />;
+  }
+
   return (
-    <View style={[styles.container, { backgroundColor: event.colors[appearance].background }]}>
-      {/* Event Title and Countdown */}
+    <View
+      style={[
+        styles.container,
+        {backgroundColor: event.colors[appearance].background},
+      ]}>
+      {/* Event Title */}
 
       <View style={styles.topcontainer}>
-        <Text style={[styles.title, { color: event.colors[appearance].text }]}>
+        <Text style={[styles.title, {color: event.colors[appearance].text}]}>
           {event.name}
         </Text>
         <Text
-          style={{ color: event.colors[appearance].text, fontSize: 15, fontWeight: '600' }}>
+          style={{
+            color: event.colors[appearance].text,
+            fontSize: 15,
+            fontWeight: '600',
+          }}>
           {eventDate.toDateString()}
         </Text>
       </View>
@@ -41,7 +58,7 @@ export default function Overview(props) {
 
       <View style={styles.midcontainer}>
         <Image
-          source={{ uri: 'file://' + event.unzippedPath + event.logo }}
+          source={{uri: 'file://' + event.unzippedPath + event.logo}}
           style={styles.image}
           resizeMode="contain"
         />
@@ -50,35 +67,40 @@ export default function Overview(props) {
       {/* Register Button and Price Increase Text */}
 
       <View style={styles.bottomcontainer}>
-        <Icon.Button
-          name={'ticket'}
-          size={30}
-          backgroundColor={event.colors[appearance].background}
-          color={event.colors[appearance].primary}
-          onPress={() => onPress()}>
+        <Pressable style={styles.button} onPress={() => handlePress()}>
+          <Icon
+            name={'ticket'}
+            size={25}
+            color={event.colors[appearance].primary}
+          />
           <Text
-            style={{
-              color: event.colors[appearance].text,
-              fontSize: 27,
-              fontWeight: 'bold',
-              padding: 10,
-            }}>
+            style={[
+              styles.button_text,
+              {color: event.colors[appearance].text},
+            ]}>
             Register
           </Text>
-        </Icon.Button>
-        <View style={{ width: 270 }}>
+        </Pressable>
+        <View style={{width: 270}}>
           <Text
-            style={{
-              color: event.colors[appearance].text,
-              fontSize: 15,
-              fontWeight: '600',
-              lineHeight: 16,
-              textAlign: 'center',
-              paddingTop: 25,
-            }}>
+            style={[styles.price_info, {color: event.colors[appearance].text}]}>
             Price increases to $20.00 on Mar 11th. 2023.
           </Text>
         </View>
+        <Pressable style={styles.button} onPress={() => setCodeOfConduct(!codeOfConduct)}>
+          <FontAwesome5
+            name="balance-scale"
+            size={23}
+            color={event.colors[appearance].primary}
+          />
+          <Text
+            style={[
+              styles.button_text,
+              {color: event.colors[appearance].text},
+            ]}>
+            Code of Conduct
+          </Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -99,20 +121,32 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: 'bold',
     textAlign: 'center',
+    fontWeight: 'bold',
     paddingBottom: 10,
   },
   midcontainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 40,
   },
   bottomcontainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button_text: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    padding: 10,
+  },
+  price_info: {
+    fontSize: 12,
+    textAlign: 'center',
   },
   image: {
     flex: 1,

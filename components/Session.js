@@ -3,7 +3,7 @@ import React, {useEffect, useContext, memo} from 'react';
 import SessionizeContext from '../SessionizeContext';
 import Feedback from './Feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {Swipeable, GestureHandlerRootView }from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SessionModal from './SessionInfoModal';
 import FeedbackForm from './FeedbackForm';
@@ -119,13 +119,14 @@ export default function Session(props) {
 
   return (
     <View style={styles.container}>
-      <Swipeable
-        renderLeftActions={() => LeftSwipeAction()}
-        overshootLeft={false}
-        leftThreshold={100}
-        friction={2}
-        overshootFriction={8}
-        ref={SwipeableRef}>
+      <GestureHandlerRootView style={styles.container}>
+        <Swipeable
+          renderLeftActions={() => LeftSwipeAction()}
+          overshootLeft={false}
+          leftThreshold={100}
+          friction={2}
+          overshootFriction={8}
+          ref={SwipeableRef}>
         <Pressable
           style={[styles.session, { backgroundColor: bg }]}
           onPress={() => {
@@ -221,6 +222,7 @@ export default function Session(props) {
           </View>
         </Pressable>
       </Swipeable>
+      </GestureHandlerRootView>
       <SessionModal
         session={props.session}
         modalVisible={modalVisible}

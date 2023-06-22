@@ -1,22 +1,23 @@
-import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {Pressable, StyleSheet, Text, View, Dimensions} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {NavigationContainer} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import uuid from 'react-native-uuid';
 import Overview from './Overview';
 import Speakers from './Speakers';
 import Sponsors from './Sponsors';
 import Schedule from './Schedule';
 import MyTimeline from './My-timeline';
-import CodeOfConduct from './Code-of-Conduct';
+import CodeOfConduct from './CodeofConduct';
 import SessionizeContext from '../SessionizeContext.js';
 import fetchAllData from './scripts/fetchAllData';
 import FilterList from './FilterList';
 
 export default function Event(props) {
-  const Drawer = createDrawerNavigator();
+  const Tab = createBottomTabNavigator();
 
   //speaker objects
   const [speakers, setSpeakers] = useState(null);
@@ -151,12 +152,32 @@ export default function Event(props) {
     }
   }, [bookmarks]);
 
-  const headerRight = () => {
+  const headerRightSchedule = () => {
     return (
-      <FilterList
-        filterOptions={filterOptions}
-        setFilterOptions={setFilterOptions}
-      />
+      <View style={styles.header_right_schedule}>
+        <FilterList
+          filterOptions={filterOptions}
+          setFilterOptions={setFilterOptions}
+        />
+      </View>
+    );
+  };
+
+  const headerRightChangeEvent = () => {
+    return (
+      <Pressable
+        onPress={() => {
+          props.setEvent(null);
+        }}
+        style={{marginRight: 10, flexDirection: 'row', alignItems: 'center'}}>
+        <FontAwesome5
+          name="exchange-alt"
+          size={20}
+          color={event.colors[appearance].text}
+          marginLeft={10}
+        />
+        <Text style={{color: event.colors[appearance].text, fontSize: 20, marginLeft: 10}}>Event</Text>
+      </Pressable>
     );
   };
 
@@ -168,12 +189,6 @@ export default function Event(props) {
     }
   };
 
-  const ResetEvent = () => {
-    useEffect(() => {
-      props.setEvent(null);
-    }, []);
-  };
-
   // only shows app home page if bookmarks are done loading from db
   if (isLoading) {
     return (
@@ -183,10 +198,12 @@ export default function Event(props) {
     );
   }
 
+  const windowHeight = Dimensions.get('window').height;
+
   return (
     <SessionizeContext.Provider value={value}>
       <NavigationContainer>
-        <Drawer.Navigator
+        <Tab.Navigator
           screenOptions={{
             headerStyle: {
               backgroundColor: event.colors[appearance].background,
@@ -194,26 +211,64 @@ export default function Event(props) {
             headerTitleStyle: {
               color: event.colors[appearance].text,
             },
-            drawerStyle: {
-              backgroundColor: event.colors[appearance].background,
-            },
-            drawerInactiveTintColor: event.colors[appearance].text,
             headerTintColor: event.colors[appearance].text,
-            drawerActiveBackgroundColor: event.colors[appearance].primary,
-            drawerActiveTintColor: event.colors[appearance].text,
+            tabBarActiveTintColor: event.colors[appearance].primary,
             headerShadowVisible: false,
+            headerRight: () => headerRightChangeEvent(),
+            // change tab bar background color and remove shadow
+            tabBarStyle: {
+              borderTopWidth: 0,
+              backgroundColor: event.colors[appearance].background,
+              height: windowHeight * 0.08,
+              paddingTop: 5,
+            },
+            tabBarLabelStyle: {
+              fontSize: 12,
+              paddingBottom: 5,
+            },
           }}>
-          <Drawer.Screen name="Overview" component={Overview} />
-          <Drawer.Screen name="Speakers" component={Speakers} />
-          <Drawer.Screen name="Sponsors" component={Sponsors} />
-          <Drawer.Screen
+          <Tab.Screen
+            name="Overview"
+            component={Overview}
+            options={{
+              tabBarIcon: ({color, size}) => (
+                <FontAwesome5 name="home" size={size} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Speakers"
+            component={Speakers}
+            options={{
+              tabBarIcon: ({color, size}) => (
+                <FontAwesome5 name="users" size={size} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Sponsors"
+            component={Sponsors}
+            options={{
+              tabBarIcon: ({color, size}) => (
+                <FontAwesome5
+                  name="hand-holding-heart"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
             name="Schedule"
             component={renderSchedule()}
-            options={{headerRight: () => headerRight()}}
+            options={{
+              headerRight: () => headerRightSchedule(),
+              tabBarIcon: ({color, size}) => (
+                <Icon name="calendar" size={size} color={color} />
+              ),
+            }}
           />
-          <Drawer.Screen name="Change Event" component={ResetEvent} />
-          <Drawer.Screen name="Code of Conduct" component={CodeOfConduct} />
-        </Drawer.Navigator>
+        </Tab.Navigator>
       </NavigationContainer>
     </SessionizeContext.Provider>
   );
@@ -225,5 +280,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  header_right_schedule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10,
   },
 });

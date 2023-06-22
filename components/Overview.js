@@ -81,12 +81,6 @@ export default function Overview(props) {
             Register
           </Text>
         </Pressable>
-        <View style={{width: 270}}>
-          <Text
-            style={[styles.price_info, {color: event.colors[appearance].text}]}>
-            Price increases to $20.00 on Mar 11th. 2023.
-          </Text>
-        </View>
         <Pressable style={styles.button} onPress={() => setCodeOfConduct(!codeOfConduct)}>
           <FontAwesome5
             name="balance-scale"
@@ -133,8 +127,10 @@ const styles = StyleSheet.create({
   bottomcontainer: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   button: {
+    margin: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -143,10 +139,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     padding: 10,
-  },
-  price_info: {
-    fontSize: 12,
-    textAlign: 'center',
   },
   image: {
     flex: 1,

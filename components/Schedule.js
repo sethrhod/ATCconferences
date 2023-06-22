@@ -198,7 +198,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   timeblock: {
-    margin: 10,
+    flex: 1,
+    padding: 10,
   },
   session: {
     flex: 1,

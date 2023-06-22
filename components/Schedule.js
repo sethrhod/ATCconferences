@@ -9,7 +9,6 @@ import {
 import React, {useContext, useEffect} from 'react';
 import SessionizeContext from '../SessionizeContext.js';
 import MemoizedSession from './Session.js';
-import TimeScroll from './TimeScroll.js';
 import constructSectionListData from './scripts/constructScheduleSectionListData.js';
 import fetchSessions from './scripts/fetchSessions.js';
 import format_time from './scripts/formatTime.js';
@@ -170,7 +169,7 @@ export default function Schedule() {
             />
           )}
           renderSectionHeader={({section: {title, index}}) => (
-            <View style={styles.timeblock} key={index}>
+            <View style={[styles.timeblock, {backgroundColor: event.colors[appearance].background}]} key={index}>
               <Text style={[styles.timeblock_text, {color: event.colors[appearance].text}]}>
                 {title}
               </Text>

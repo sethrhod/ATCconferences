@@ -1,17 +1,16 @@
 import React, {useContext, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {useTheme} from '@react-navigation/native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedbackForm from './FeedbackForm';
 import SessionizeContext from '../SessionizeContext';
 
 export default function Feedback(props) {
-
   const {uUID} = useContext(SessionizeContext);
   const {customData} = useContext(SessionizeContext);
   const {event} = useContext(SessionizeContext);
-  
+  const {appearance} = useContext(SessionizeContext);
+
   const [editView, setEditView] = React.useState(false);
 
   useEffect(() => {
@@ -40,7 +39,10 @@ export default function Feedback(props) {
 
   // remove feedback from session object to update list without refreshing
   const handlePress = () => {
-    deleteFeedback(props.session.feedback.sessionid, props.session.feedback.feedback);
+    deleteFeedback(
+      props.session.feedback.sessionid,
+      props.session.feedback.feedback,
+    );
     props.session.feedback = undefined;
     setEditView(!editView);
   };
@@ -86,21 +88,27 @@ export default function Feedback(props) {
       );
     } else {
       return (
-        <Swipeable
-          ref={DeleteSwipeableRef}
-          renderLeftActions={() => <Delete />}
-          overshootLeft={false}
-          leftThreshold={100}
-          friction={2}
-          overshootFriction={8}>
-          <View style={[styles.feedback, {backgroundColor: event.colors["appearance"].primary}]}>
-            <TouchableOpacity onPress={() => setEditView(!editView)}>
-              <Text style={{color: event.colors["appearance"].text}}>
-                {props.session.feedback.feedback}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Swipeable>
+        <GestureHandlerRootView style={styles.container}>
+          <Swipeable
+            ref={DeleteSwipeableRef}
+            renderLeftActions={() => <Delete />}
+            overshootLeft={false}
+            leftThreshold={100}
+            friction={2}
+            overshootFriction={8}>
+            <View
+              style={[
+                styles.feedback,
+                {backgroundColor: event.colors[appearance].primary},
+              ]}>
+              <TouchableOpacity onPress={() => setEditView(!editView)}>
+                <Text style={{color: event.colors[appearance].text}}>
+                  {props.session.feedback.feedback}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Swipeable>
+        </GestureHandlerRootView>
       );
     }
   }

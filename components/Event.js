@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Pressable, StyleSheet, Text, View, Dimensions} from 'react-native';
+import {Pressable, StyleSheet, Text, View, Dimensions, Platform} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
@@ -199,6 +199,8 @@ export default function Event(props) {
   }
 
   const windowHeight = Dimensions.get('window').height;
+  const screenHeight = Dimensions.get('screen').height;
+  const statusBarHeight = Platform.OS === 'ios' ? Dimensions.get('statusBarHeight') : windowHeight - screenHeight;
 
   return (
     <SessionizeContext.Provider value={value}>
@@ -219,7 +221,7 @@ export default function Event(props) {
             tabBarStyle: {
               borderTopWidth: 0,
               backgroundColor: event.colors[appearance].background,
-              height: windowHeight * 0.08,
+              height: Platform.OS === 'ios' ? 90 : 60,
               paddingTop: 5,
             },
             tabBarLabelStyle: {

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Pressable, StyleSheet, Text, View, Dimensions, Platform} from 'react-native';
+import {Pressable, StyleSheet, Text, View, Platform} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
@@ -11,7 +11,6 @@ import Speakers from './Speakers';
 import Sponsors from './Sponsors';
 import Schedule from './Schedule';
 import MyTimeline from './My-timeline';
-import CodeOfConduct from './CodeofConduct';
 import SessionizeContext from '../SessionizeContext.js';
 import fetchAllData from './scripts/fetchAllData';
 import FilterList from './FilterList';
@@ -197,10 +196,6 @@ export default function Event(props) {
       </View>
     );
   }
-
-  const windowHeight = Dimensions.get('window').height;
-  const screenHeight = Dimensions.get('screen').height;
-  const statusBarHeight = Platform.OS === 'ios' ? Dimensions.get('statusBarHeight') : windowHeight - screenHeight;
 
   return (
     <SessionizeContext.Provider value={value}>

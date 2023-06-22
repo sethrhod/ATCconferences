@@ -1,6 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "group:AppIcons"
+      name = "AppIcons">
+      <Group
+         location = "group:Assets.xcassets"
+         name = "Assets.xcassets">
+         <Group
+            location = "group:AppIcon.appiconset"
+            name = "AppIcon.appiconset">
+            <FileRef
+               location = "group:1024.png">
+            </FileRef>
+            <FileRef
+               location = "group:76.png">
+            </FileRef>
+            <FileRef
+               location = "group:60.png">
+            </FileRef>
+            <FileRef
+               location = "group:58.png">
+            </FileRef>
+            <FileRef
+               location = "group:167.png">
+            </FileRef>
+            <FileRef
+               location = "group:72.png">
+            </FileRef>
+            <FileRef
+               location = "group:29.png">
+            </FileRef>
+            <FileRef
+               location = "group:100.png">
+            </FileRef>
+            <FileRef
+               location = "group:114.png">
+            </FileRef>
+            <FileRef
+               location = "group:120.png">
+            </FileRef>
+            <FileRef
+               location = "group:20.png">
+            </FileRef>
+            <FileRef
+               location = "group:Contents.json">
+            </FileRef>
+            <FileRef
+               location = "group:180.png">
+            </FileRef>
+            <FileRef
+               location = "group:57.png">
+            </FileRef>
+            <FileRef
+               location = "group:80.png">
+            </FileRef>
+            <FileRef
+               location = "group:40.png">
+            </FileRef>
+            <FileRef
+               location = "group:87.png">
+            </FileRef>
+            <FileRef
+               location = "group:50.png">
+            </FileRef>
+            <FileRef
+               location = "group:144.png">
+            </FileRef>
+            <FileRef
+               location = "group:152.png">
+            </FileRef>
+         </Group>
+      </Group>
+      <FileRef
+         location = "group:appstore.png">
+      </FileRef>
+      <FileRef
+         location = "group:playstore.png">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:ATCconferences.xcodeproj">
    </FileRef>

@@ -64,7 +64,7 @@ export default function Feedback(props) {
         }}
         onPress={() => handlePress()}>
         <Text style={{marginRight: 10}}>Delete</Text>
-        <Icon name="trash" size={20} />
+        <Icon name="trash" size={20} color={event.colors[appearance].primary}/>
       </TouchableOpacity>
     );
   };

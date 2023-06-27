@@ -59,13 +59,13 @@ export default function SpeakerWithSessions() {
               </Text>
             </View>
             <Text
-              style={[styles.title, {color: event.colors[appearance].text}]}>
+              style={[styles.title, {color: event.colors[appearance].text, marginTop: 20, marginLeft: 20 }]}>
               Sessions
             </Text>
           </View>
         }
         keyExtractor={item => item.id}
-        style={styles.flat_list}
+        style={[styles.flat_list, {backgroundColor: event.colors[appearance].background}]}
         contentContainerStyle={{paddingBottom: 30}}
       />
     </SafeAreaView>

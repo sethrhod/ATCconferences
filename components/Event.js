@@ -237,6 +237,7 @@ export default function Event(props) {
             name="Speakers"
             component={Speakers}
             options={{
+              headerShown: false,
               tabBarIcon: ({color, size}) => (
                 <FontAwesome5 name="users" size={size} color={color} />
               ),

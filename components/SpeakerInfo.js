@@ -35,7 +35,7 @@ export default function SpeakerInfo(props) {
 
       {/*Name and links*/}
 
-      <View style={{maxWidth: 130, alignItems: 'center'}}>
+      <View style={styles.middle_box}>
         <Text
           style={[
             styles.name,
@@ -44,12 +44,7 @@ export default function SpeakerInfo(props) {
           {props.speaker.fullName}
         </Text>
         <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-          }}>
+          style={styles.logos}>
           {props.speaker.links.map((link, index) => {
             var title = link.title;
             // an if statement to catch the company website link and change the icon to a briefcase
@@ -83,7 +78,7 @@ export default function SpeakerInfo(props) {
 
       {/*bio*/}
 
-      <View style={{width: 120}}>
+      <View style={styles.right_box}>
         <Text
           style={[
             styles.bio,
@@ -119,6 +114,26 @@ const styles = StyleSheet.create({
   },
   bio: {
     fontSize: 12,
+    textAlign: 'left',
+  },
+  middle_box: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    marginLeft: 10,
+  },
+  logos: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  right_box: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     flexWrap: 'wrap',
   },
 });

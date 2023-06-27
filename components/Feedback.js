@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedbackForm from './FeedbackForm';
-import SessionizeContext from '../SessionizeContext';
+import SessionizeContext from './context/SessionizeContext';
 
 export default function Feedback(props) {
   const {uUID} = useContext(SessionizeContext);
@@ -13,8 +13,14 @@ export default function Feedback(props) {
 
   const [editView, setEditView] = React.useState(false);
 
+  const DeleteSwipeableRef = React.useRef(null);
+
   useEffect(() => {
     setEditView(false);
+
+    if (DeleteSwipeableRef.current) {
+      DeleteSwipeableRef.current.close();
+    }
   }, [props.refreshing]);
 
   const deleteFeedback = async (sessionID, feedbackText) => {
@@ -47,8 +53,6 @@ export default function Feedback(props) {
     setEditView(!editView);
   };
 
-  const DeleteSwipeableRef = React.useRef(null);
-
   const Delete = () => {
     return (
       <TouchableOpacity
@@ -61,10 +65,18 @@ export default function Feedback(props) {
           borderRadius: 10,
           marginBottom: 20,
           marginTop: 0,
+          backgroundColor: event.colors[appearance].background,
         }}
         onPress={() => handlePress()}>
-        <Text style={{marginRight: 10}}>Delete</Text>
-        <Icon name="trash" size={20} color={event.colors[appearance].primary}/>
+        <Text
+          style={{
+            fontSize: 17,
+            marginRight: 10,
+            color: event.colors[appearance].text,
+          }}>
+          Delete
+        </Text>
+        <Icon name="trash" size={20} color={event.colors[appearance].primary} />
       </TouchableOpacity>
     );
   };

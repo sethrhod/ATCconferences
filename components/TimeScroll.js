@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import SessionizeContext from '../SessionizeContext';
+import SessionizeContext from './context/SessionizeContext';
 
 export default function TimeScroll(props) {
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useContext} from 'react';
 import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import SessionizeContext from '../SessionizeContext';
+import SessionizeContext from './context/SessionizeContext';
 
 export default function FeedbackForm(props) {
 
@@ -36,7 +36,7 @@ export default function FeedbackForm(props) {
 
   const editFeedback = async (sessionID, text) => {
     const value = await AsyncStorage.getItem('@uuid');
-    fetch(customData.flaskURL + value, {
+    fetch(customData.DevelopersAssociationofGeorgiaAPI + value, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

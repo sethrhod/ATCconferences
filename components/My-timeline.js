@@ -7,17 +7,22 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {StyleSheet, Text} from 'react-native';
-import SessionizeContext from '../SessionizeContext.js';
+import SessionizeContext from './context/SessionizeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Session from './Session.js';
 import format_time from './scripts/formatTime.js';
 
 export default function MyTimeline() {
-  const {event} = useContext(SessionizeContext);
-  const {bookmarks} = useContext(SessionizeContext);
-  const {setBookmarks} = useContext(SessionizeContext);
-  const {sessions} = useContext(SessionizeContext);
-  const {appearance} = useContext(SessionizeContext);
+  const {
+    customData,
+    event,
+    uUID,
+    setSessions,
+    bookmarks,
+    setBookmarks,
+    sessions,
+    appearance,
+  } = useContext(SessionizeContext);
 
   const sectionListRef = React.useRef(null);
 
@@ -39,7 +44,7 @@ export default function MyTimeline() {
       // create an empty object to store the data
       let obj = {};
       // set the title of the object to the start time of the session and add to the same hour sessions
-      obj.title = format_time(time)
+      obj.title = format_time(time);
       // set the data of the object to the sessions that start at the same time
       obj.data = bookmarks.filter(bookmark => bookmark.startsAt === time);
 
@@ -75,7 +80,8 @@ export default function MyTimeline() {
           styles.no_sessions_container,
           {backgroundColor: event.colors[appearance].background},
         ]}>
-        <Text style={[styles.noSessions, {color: event.colors[appearance].text}]}>
+        <Text
+          style={[styles.noSessions, {color: event.colors[appearance].text}]}>
           No sessions added
         </Text>
         <Text style={[styles.addSome, {color: event.colors[appearance].text}]}>
@@ -84,7 +90,10 @@ export default function MyTimeline() {
       </View>
     ) : (
       <SafeAreaView
-        style={[styles.container, {backgroundColor: event.colors[appearance].background}]}>
+        style={[
+          styles.container,
+          {backgroundColor: event.colors[appearance].background},
+        ]}>
         <Button
           color={event.colors[appearance].primary}
           title="Clear My Timeline"
@@ -117,7 +126,11 @@ export default function MyTimeline() {
           )}
           renderSectionHeader={({section: {title, index}}) => (
             <View style={styles.timeblock} key={index}>
-              <Text style={[styles.timeblock_text, {color: event.colors[appearance].text}]}>
+              <Text
+                style={[
+                  styles.timeblock_text,
+                  {color: event.colors[appearance].text},
+                ]}>
                 {title}
               </Text>
             </View>

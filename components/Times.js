@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import SessionizeContext from '../SessionizeContext';
+import SessionizeContext from './context/SessionizeContext';
 import format_time from './scripts/formatTime';
 
 export default function Times(props) {

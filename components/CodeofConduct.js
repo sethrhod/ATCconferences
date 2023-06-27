@@ -7,12 +7,11 @@ import {
   Pressable,
 } from 'react-native';
 import React, {useContext} from 'react';
-import SessionizeContext from '../SessionizeContext.js';
+import SessionizeContext from './context/SessionizeContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function CodeOfConduct(props) {
-  const {event} = useContext(SessionizeContext);
-  const {appearance} = useContext(SessionizeContext);
+  const {event, appearance} = useContext(SessionizeContext);
 
   const handleBack = () => {
     props.setCodeOfConduct(false);
@@ -24,19 +23,14 @@ export default function CodeOfConduct(props) {
         styles.container,
         {backgroundColor: event.colors[appearance].background},
       ]}>
-      <Pressable style={[styles.backButton, {backgroundColor: event.colors[appearance].secondary}]} onPress={() => handleBack()}>
-        <Icon
-          name="chevron-left"
-          size={20}
-          color={"white"}
-        />
-        <Text
-          style={[
-            styles.backButtonText,
-            {color: "white"},
-          ]}>
-          Back
-        </Text>
+      <Pressable
+        style={[
+          styles.backButton,
+          {backgroundColor: event.colors[appearance].secondary},
+        ]}
+        onPress={() => handleBack()}>
+        <Icon name="chevron-left" size={20} color={'white'} />
+        <Text style={[styles.backButtonText, {color: 'white'}]}>Back</Text>
       </Pressable>
       <ScrollView
         contentContainerStyle={{

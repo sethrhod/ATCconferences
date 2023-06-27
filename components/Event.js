@@ -11,7 +11,7 @@ import Speakers from './Speakers';
 import Sponsors from './Sponsors';
 import Schedule from './Schedule';
 import MyTimeline from './My-timeline';
-import SessionizeContext from '../SessionizeContext.js';
+import SessionizeContext from './context/SessionizeContext';
 import fetchAllData from './scripts/fetchAllData';
 import FilterList from './FilterList';
 

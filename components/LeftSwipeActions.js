@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import SessionizeContext from '../SessionizeContext';
+import SessionizeContext from './context/SessionizeContext';
 
 export default function LeftSwipeActions(props) {
   const {event} = React.useContext(SessionizeContext);

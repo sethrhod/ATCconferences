@@ -11,12 +11,11 @@ import {
 import React, {useContext} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import SessionizeContext from '../SessionizeContext';
+import SessionizeContext from './context/SessionizeContext';
 import CodeOfConduct from './CodeofConduct';
 
 export default function Overview(props) {
-  const {event} = useContext(SessionizeContext);
-  const {appearance} = useContext(SessionizeContext);
+  const {event, appearance} = useContext(SessionizeContext);
 
   const [codeOfConduct, setCodeOfConduct] = React.useState(false);
 

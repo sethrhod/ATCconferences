@@ -7,24 +7,25 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
-import SessionizeContext from '../SessionizeContext.js';
+import SessionizeContext from './context/SessionizeContext';
 import MemoizedSession from './Session.js';
 import constructSectionListData from './scripts/constructScheduleSectionListData.js';
 import fetchSessions from './scripts/fetchSessions.js';
 import format_time from './scripts/formatTime.js';
 
 export default function Schedule() {
-  const {event} = useContext(SessionizeContext);
-  const {customData} = useContext(SessionizeContext);
+  const {
+    customData,
+    event,
+    appearance,
+    sessions,
+    setSessions,
+    bookmarks,
+    uUID,
+    filterOptions,
+    setFilterOptions,
+  } = useContext(SessionizeContext);
   const sectionListRef = React.useRef(null);
-
-  const {sessions} = useContext(SessionizeContext);
-  const {setSessions} = useContext(SessionizeContext);
-  const {bookmarks} = useContext(SessionizeContext);
-  const {uUID} = useContext(SessionizeContext);
-  const {filterOptions} = useContext(SessionizeContext);
-  const {setFilterOptions} = useContext(SessionizeContext);
-  const {appearance} = useContext(SessionizeContext);
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [sections, setSections] = React.useState(
@@ -68,7 +69,10 @@ export default function Schedule() {
       section.data.forEach(item => {
         // if rooms and times are not empty, filter by both
         if (rooms.length > 0 && times.length > 0) {
-          if (rooms.includes(item.room) && times.includes(format_time(item.startsAt))) {
+          if (
+            rooms.includes(item.room) &&
+            times.includes(format_time(item.startsAt))
+          ) {
             filteredData.push(item);
           }
           // if rooms is not empty, filter by rooms
@@ -135,7 +139,11 @@ export default function Schedule() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.noSessionsContainer}>
-          <Text style={[styles.noSessionsText, {color: event.colors[appearance].text}]}>
+          <Text
+            style={[
+              styles.noSessionsText,
+              {color: event.colors[appearance].text},
+            ]}>
             No sessions found
           </Text>
         </View>
@@ -143,7 +151,11 @@ export default function Schedule() {
     );
   } else {
     return (
-      <SafeAreaView style={[styles.container, {backgroundColor: event.colors[appearance].background}]}>
+      <SafeAreaView
+        style={[
+          styles.container,
+          {backgroundColor: event.colors[appearance].background},
+        ]}>
         <SectionList
           sections={sections}
           ref={sectionListRef}
@@ -169,8 +181,17 @@ export default function Schedule() {
             />
           )}
           renderSectionHeader={({section: {title, index}}) => (
-            <View style={[styles.timeblock, {backgroundColor: event.colors[appearance].background}]} key={index}>
-              <Text style={[styles.timeblock_text, {color: event.colors[appearance].text}]}>
+            <View
+              style={[
+                styles.timeblock,
+                {backgroundColor: event.colors[appearance].background},
+              ]}
+              key={index}>
+              <Text
+                style={[
+                  styles.timeblock_text,
+                  {color: event.colors[appearance].text},
+                ]}>
                 {title}
               </Text>
             </View>

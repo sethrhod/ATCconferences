@@ -11,7 +11,7 @@ import {
   Modal,
   TouchableOpacity,
 } from 'react-native';
-import SessionizeContext from '../SessionizeContext.js';
+import SessionizeContext from './context/SessionizeContext';
 import Session from './Session.js';
 import SessionWithFeedback from './SessionWithFeedback.js';
 import FeedbackForm from './FeedbackForm.js';

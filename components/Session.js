@@ -1,9 +1,9 @@
 import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import React, {useEffect, useContext, memo} from 'react';
-import SessionizeContext from '../SessionizeContext';
+import SessionizeContext from './context/SessionizeContext';
 import Feedback from './Feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Swipeable, GestureHandlerRootView }from 'react-native-gesture-handler';
+import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SessionModal from './SessionInfoModal';
 import FeedbackForm from './FeedbackForm';
@@ -115,7 +115,9 @@ export default function Session(props) {
     );
   };
 
-  var bg = props.session.bookmarked ? event.colors[appearance].accent : event.colors[appearance].card;
+  var bg = props.session.bookmarked
+    ? event.colors[appearance].accent
+    : event.colors[appearance].card;
 
   return (
     <View style={styles.container}>
@@ -127,101 +129,115 @@ export default function Session(props) {
           friction={2}
           overshootFriction={8}
           ref={SwipeableRef}>
-        <Pressable
-          style={[styles.session, { backgroundColor: bg }]}
-          onPress={() => {
-            setModalVisible(true);
+          <Pressable
+            style={[styles.session, {backgroundColor: bg}]}
+            onPress={() => {
+              setModalVisible(true);
 
-            if (SwipeableRef.current) {
-              SwipeableRef.current.close();
-            }
-          }}
-          // on press in darken the background
-          onPressIn={() => {
-            bg = event.colors[appearance].accent;
-          }}>
-
-          {/* drag icon */}
-          <View style={styles.icon}>
-            <Icon name='drag-indicator' size={30} color={event.colors[appearance].text} />
-          </View>
-
-          <View style={styles.session_info}>
-          {/* // session title */}
-
-          <View
-            style={{
-              flex: 1,
-              height: '100%',
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              alignContent: 'center',
-              alignItems: 'center',
+              if (SwipeableRef.current) {
+                SwipeableRef.current.close();
+              }
+            }}
+            // on press in darken the background
+            onPressIn={() => {
+              bg = event.colors[appearance].accent;
             }}>
-            <Text
-              style={[styles.title, { width: 300, color: event.colors[appearance].text }]}>
-              {props.session.title}
-            </Text>
-          </View>
-          {/* // loop through speakers ids and return their profile pics */}
-          {speakers}
+            {/* drag icon */}
+            <View style={styles.icon}>
+              <Icon
+                name="drag-indicator"
+                size={30}
+                color={event.colors[appearance].text}
+              />
+            </View>
 
-          <View
-            style={{
-              flex: 1,
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-            }}>
-            {/* // check if there are speakers */}
-            {props.session.speakers.length > 0 ? (
+            <View style={styles.session_info}>
+              {/* // session title */}
+
               <View
                 style={{
                   flex: 1,
+                  height: '100%',
                   flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  alignContent: 'center',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
                 }}>
-                {/* // session time */}
-                <View style={[styles.session_time, { backgroundColor: event.colors[appearance].accent }]}>
-                  <Times starts={props.starts} ends={props.ends} />
-                </View>
+                <Text
+                  style={[
+                    styles.title,
+                    {width: 300, color: event.colors[appearance].text},
+                  ]}>
+                  {props.session.title}
+                </Text>
+              </View>
+              {/* // loop through speakers ids and return their profile pics */}
+              {speakers}
 
-                {/* // session room */}
-                <Text
-                  style={[
-                    styles.speaker_room,
-                    {
-                      color: event.colors[appearance].text,
-                      backgroundColor: event.colors[appearance].accent,
-                    },
-                  ]}>
-                  {props.session.room}
-                </Text>
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-end',
+                }}>
+                {/* // check if there are speakers */}
+                {props.session.speakers.length > 0 ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                    {/* // session time */}
+                    <View
+                      style={[
+                        styles.session_time,
+                        {backgroundColor: event.colors[appearance].accent},
+                      ]}>
+                      <Times starts={props.starts} ends={props.ends} />
+                    </View>
+
+                    {/* // session room */}
+                    <Text
+                      style={[
+                        styles.speaker_room,
+                        {
+                          color: event.colors[appearance].text,
+                          backgroundColor: event.colors[appearance].accent,
+                        },
+                      ]}>
+                      {props.session.room}
+                    </Text>
+                  </View>
+                ) : (
+                  // main-event session room
+                  <View style={styles.main_event_session}>
+                    <View
+                      style={[
+                        styles.session_time,
+                        {backgroundColor: event.colors[appearance].accent},
+                      ]}>
+                      <Times starts={props.starts} ends={props.ends} />
+                    </View>
+                    <Text
+                      style={[
+                        styles.speaker_room,
+                        {
+                          color: event.colors[appearance].text,
+                          backgroundColor: event.colors[appearance].accent,
+                        },
+                      ]}>
+                      {props.session.room}
+                    </Text>
+                  </View>
+                )}
               </View>
-            ) : (
-              // main-event session room
-              <View style={styles.main_event_session}>
-                <View style={[styles.session_time, { backgroundColor: event.colors[appearance].accent }]}>
-                  <Times starts={props.starts} ends={props.ends} />
-                </View>
-                <Text
-                  style={[
-                    styles.speaker_room,
-                    {
-                      color: event.colors[appearance].text,
-                      backgroundColor: event.colors[appearance].accent,
-                    },
-                  ]}>
-                  {props.session.room}
-                </Text>
-              </View>
-            )}
-          </View>
-          </View>
-        </Pressable>
-      </Swipeable>
+            </View>
+          </Pressable>
+        </Swipeable>
       </GestureHandlerRootView>
       <SessionModal
         session={props.session}

@@ -9,7 +9,7 @@ import {
   TouchableHighlight,
   Linking,
 } from 'react-native';
-import SessionizeContext from '../SessionizeContext.js';
+import SessionizeContext from './context/SessionizeContext';
 import Session from './Session';
 
 export default function Sponsors() {

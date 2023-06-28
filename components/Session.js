@@ -106,6 +106,8 @@ export default function Session(props) {
         setFeedbackEntryVisible={setFeedbackEntryVisible}
         feedbackEntryVisible={feedbackEntryVisible}
         imageMounted={imageMounted}
+        navigation={props.navigation}
+        swipeableRef={SwipeableRef}
       />
     );
   };
@@ -139,7 +141,7 @@ export default function Session(props) {
               bg = event.colors[appearance].accent;
             }}>
             {/* drag icon */}
-            <View style={styles.icon}>
+            <View>
               <Icon
                 name="drag-indicator"
                 size={30}
@@ -190,8 +192,11 @@ export default function Session(props) {
                     {/* // session time */}
                     <View
                       style={[
-                        styles.session_time,
-                        {backgroundColor: event.colors[appearance].accent},
+                        styles.bottom_text,
+                        {
+                          color: event.colors[appearance].text,
+                          backgroundColor: event.colors[appearance].accent,
+                        },
                       ]}>
                       <Times starts={props.starts} ends={props.ends} />
                     </View>
@@ -199,7 +204,7 @@ export default function Session(props) {
                     {/* // session room */}
                     <Text
                       style={[
-                        styles.speaker_room,
+                        styles.bottom_text,
                         {
                           color: event.colors[appearance].text,
                           backgroundColor: event.colors[appearance].accent,
@@ -213,14 +218,17 @@ export default function Session(props) {
                   <View style={styles.main_event_session}>
                     <View
                       style={[
-                        styles.session_time,
-                        {backgroundColor: event.colors[appearance].accent},
+                        styles.bottom_text,
+                        {
+                          color: event.colors[appearance].text,
+                          backgroundColor: event.colors[appearance].accent,
+                        },
                       ]}>
                       <Times starts={props.starts} ends={props.ends} />
                     </View>
                     <Text
                       style={[
-                        styles.speaker_room,
+                        styles.bottom_text,
                         {
                           color: event.colors[appearance].text,
                           backgroundColor: event.colors[appearance].accent,
@@ -268,44 +276,45 @@ export const MemoizedSession = memo(Session);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 5,
   },
   session: {
     flex: 1,
+    minHeight: 90,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     padding: 15,
-    paddingLeft: 0,
-    borderRadius: 10,
-    margin: 10,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 0},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    elevation: 5,
+    paddingLeft: 10,
+    margin: 5,
+    borderRadius: 5,
+    overflow: 'hidden',
   },
   session_info: {
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'flex-start',
+    marginLeft: 10,
   },
   main_event_session: {
     flex: 1,
-    height: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   title: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '600',
     textAlign: 'left',
-    fontSize: 15,
-    margin: 5,
-    fontWeight: 'bold',
+    flexWrap: 'wrap',
   },
   name: {
     fontSize: 12,
     textAlign: 'center',
   },
-  speaker_room: {
+  bottom_text: {
     textAlign: 'center',
     fontSize: 12,
     fontWeight: '600',
@@ -313,32 +322,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 5,
   },
-  session_time: {
-    borderRadius: 10,
-    overflow: 'hidden',
-    alignItems: 'center',
-  },
   speaker_box: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 10,
-    padding: 5,
+    margin: 10,
+    marginLeft: 0,
   },
   logo: {
     width: 30,
     height: 30,
-    borderRadius: 35,
-    margin: 5,
-  },
-  icon: {
-    margin: 5,
-    marginRight: 0,
-  },
-  time_scroll: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    borderRadius: 15,
+    marginRight: 5,
+  }
 });

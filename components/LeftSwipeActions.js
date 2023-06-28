@@ -4,8 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from './context/SessionizeContext';
 
 export default function LeftSwipeActions(props) {
-  const {event} = React.useContext(SessionizeContext);
-  const {appearance} = React.useContext(SessionizeContext);
+  const {event, appearance, setSelectedSession} = React.useContext(SessionizeContext);
   const leftSwipeBoxRef = React.useRef(null);
 
   const [fontSize, setFontSize] = React.useState(15);
@@ -30,14 +29,15 @@ export default function LeftSwipeActions(props) {
     }
   };
 
+
   return (
     <View
       style={{
         flex: 1,
-        borderRadius: 10,
+        borderRadius: 5,
         flexDirection: 'row',
         backgroundColor: event.colors[appearance].primary,
-        margin: 10,
+        margin: 5,
         padding: 20,
       }}
       ref={leftSwipeBoxRef}
@@ -49,7 +49,7 @@ export default function LeftSwipeActions(props) {
       }}>
       <Pressable style={styles.Pressable} onPress={() => props.addBookmark()}>
         <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
-          Add to Timeline
+          Add to Schedule
         </Text>
         {props.session.bookmarked ? (
           <Icon name="bookmark" size={iconsize} solid />
@@ -67,7 +67,14 @@ export default function LeftSwipeActions(props) {
       </Pressable>
       <Pressable
         style={styles.Pressable}
-        onPress={() => props.setModalVisible(true)}>
+        onPress={() => {
+          setSelectedSession(props.session);
+          props.navigation.navigate('SessionInfo');
+
+          if (props.swipeableRef.current) {
+            props.swipeableRef.current.close();
+          }
+        }}>
         <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
           Session Info
         </Text>
@@ -81,9 +88,12 @@ export const LeftSwipeActionsMemo = React.memo(LeftSwipeActions);
 
 const styles = StyleSheet.create({
   left_swipe_titles: {
-    fontWeight: 'bold',
+    flex: 1,
+    fontWeight: '600',
+    padding: 5,
+    paddingLeft: 0,
     textAlign: 'left',
-    flexWrap: 'nowrap'
+    flexWrap: 'wrap',
   },
   Pressable: {
     flex: 1,

@@ -6,10 +6,7 @@ import FeedbackForm from './FeedbackForm';
 import SessionizeContext from './context/SessionizeContext';
 
 export default function Feedback(props) {
-  const {uUID} = useContext(SessionizeContext);
-  const {customData} = useContext(SessionizeContext);
-  const {event} = useContext(SessionizeContext);
-  const {appearance} = useContext(SessionizeContext);
+  const { uUID, event, appearance, customData } = useContext(SessionizeContext);
 
   const [editView, setEditView] = React.useState(false);
 
@@ -56,27 +53,15 @@ export default function Feedback(props) {
   const Delete = () => {
     return (
       <TouchableOpacity
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'row',
-          margin: 10,
-          borderRadius: 10,
-          marginBottom: 20,
-          marginTop: 0,
-          backgroundColor: event.colors[appearance].background,
-        }}
+        style={[styles.delete_feedback, {backgroundColor: event.colors[appearance].accent}]}
         onPress={() => handlePress()}>
         <Text
-          style={{
-            fontSize: 17,
-            marginRight: 10,
-            color: event.colors[appearance].text,
-          }}>
+          style={[styles.delete_feedback_text, {color: event.colors[appearance].text}]}>
           Delete
         </Text>
-        <Icon name="trash" size={20} color={event.colors[appearance].primary} />
+        <View style={styles.delete_feedback_icon}>
+          <Icon name="trash" size={20} color={event.colors[appearance].primary} />
+        </View>
       </TouchableOpacity>
     );
   };
@@ -103,7 +88,7 @@ export default function Feedback(props) {
         <GestureHandlerRootView style={styles.container}>
           <Swipeable
             ref={DeleteSwipeableRef}
-            renderLeftActions={() => <Delete />}
+            renderLeftActions={() => Delete()}
             overshootLeft={false}
             leftThreshold={100}
             friction={2}
@@ -224,5 +209,20 @@ const styles = StyleSheet.create({
   dropdown_icon: {
     flex: 0.1,
     textAlign: 'center',
+  },
+  delete_feedback: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    borderRadius: 10,
+    marginBottom: 20,
+    marginTop: 0,
+  },
+  delete_feedback_text: {
+    marginRight: 10,
+  },
+  delete_feedback_icon: {
   },
 });

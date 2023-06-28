@@ -95,11 +95,11 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    borderRadius: 5,
+    width: '90%',
     padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 15,
   },
   logo: {
     width: 50,

@@ -30,23 +30,23 @@ export default function Times(props) {
 
 const styles = StyleSheet.create({
   start_time: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    margin: 5,
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '600',
     alignItems: 'center',
     justifyContent: 'center',
   },
   dash_time: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    margin: 5,
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '600',
     alignItems: 'center',
     justifyContent: 'center',
   },
   end_time: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    margin: 5,
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '600',
     alignItems: 'center',
     justifyContent: 'center',
   },

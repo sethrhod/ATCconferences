@@ -6,7 +6,7 @@ import {
   RefreshControl,
   SafeAreaView,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import SessionizeContext from './context/SessionizeContext';
@@ -14,7 +14,7 @@ import MemoizedSession from './Session.js';
 import constructSectionListData from './scripts/constructScheduleSectionListData.js';
 import fetchSessions from './scripts/fetchSessions.js';
 import format_time from './scripts/formatTime.js';
-import SessionModal from './SessionInfo';
+import SessionInfo from './SessionInfo';
 import FilterList from './FilterList';
 
 export default function Sessions(props) {
@@ -92,7 +92,7 @@ export default function Sessions(props) {
         }
       });
       if (filteredData.length > 0) {
-        filteredSections.push({title: section.title, data: filteredData});
+        filteredSections.push({ title: section.title, data: filteredData });
       }
     });
     return filteredSections;
@@ -117,12 +117,12 @@ export default function Sessions(props) {
     let timesObjects = [];
     // loops through all rooms and creates an object for each room
     rooms.map(room => {
-      roomsObjects.push({name: room, value: false});
+      roomsObjects.push({ name: room, value: false });
     });
     // loops through all times and creates an object for each time
     times.map(time => {
       let formattedTime = format_time(time);
-      timesObjects.push({name: formattedTime, value: false});
+      timesObjects.push({ name: formattedTime, value: false });
     });
     let newFilterOptions = filterOptions;
     // sets the options for the times filter
@@ -158,7 +158,7 @@ export default function Sessions(props) {
             <Text
               style={[
                 styles.noSessionsText,
-                {color: event.colors[appearance].text},
+                { color: event.colors[appearance].text },
               ]}>
               No sessions found
             </Text>
@@ -170,7 +170,7 @@ export default function Sessions(props) {
         <SafeAreaView
           style={[
             styles.container,
-            {backgroundColor: event.colors[appearance].background},
+            { backgroundColor: event.colors[appearance].background },
           ]}>
           <SectionList
             sections={sections}
@@ -178,10 +178,10 @@ export default function Sessions(props) {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-            style={{height: '100%', flex: 1}}
+            style={styles.section_list}
             keyExtractor={(item, index) => item + index}
-            contentContainerStyle={{paddingBottom: 30, padding: 5}}
-            renderItem={({item, index, section}) => (
+            contentContainerStyle={{ paddingBottom: 30, padding: 5 }}
+            renderItem={({ item, index, section }) => (
               <MemoizedSession
                 session={item}
                 starts={item.startsAt}
@@ -197,17 +197,17 @@ export default function Sessions(props) {
                 navigation={props.navigation}
               />
             )}
-            renderSectionHeader={({section: {title, index}}) => (
+            renderSectionHeader={({ section: { title, index } }) => (
               <View
                 style={[
                   styles.timeblock,
-                  {backgroundColor: event.colors[appearance].background},
+                  { backgroundColor: event.colors[appearance].background },
                 ]}
                 key={index}>
                 <Text
                   style={[
                     styles.timeblock_text,
-                    {color: event.colors[appearance].text},
+                    { color: event.colors[appearance].text },
                   ]}>
                   {title}
                 </Text>
@@ -244,7 +244,7 @@ export default function Sessions(props) {
           headerShadowVisible: false,
         }}
         />
-        <Stack.Screen name="SessionInfo" component={SessionModal} options={{
+        <Stack.Screen name="SessionInfo" component={SessionInfo} options={{
           headerTitle: "Session Info",
           headerStyle: {
             backgroundColor: event.colors[appearance].background,
@@ -271,8 +271,8 @@ const styles = StyleSheet.create({
   },
   timeblock: {
     flex: 1,
-    padding: 10,
-    },
+    padding: 15,
+  },
   session: {
     flex: 1,
     alignItems: 'center',
@@ -308,5 +308,9 @@ const styles = StyleSheet.create({
   noSessionsText: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  section_list: {
+    height: '100%',
+    flex: 1,
   },
 });

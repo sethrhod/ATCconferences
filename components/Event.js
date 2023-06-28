@@ -201,12 +201,12 @@ export default function Event(props) {
             tabBarStyle: {
               borderTopWidth: 0,
               backgroundColor: event.colors[appearance].background,
-              height: Platform.OS === 'ios' ? 90 : 60,
+              height: Platform.OS === 'ios' ? 70 : 60,
               paddingTop: 5,
             },
             tabBarLabelStyle: {
               fontSize: 12,
-              paddingBottom: 5,
+              paddingBottom: 10,
             },
           }}>
           <Tab.Screen
@@ -232,6 +232,7 @@ export default function Event(props) {
             name="Sponsors"
             component={Sponsors}
             options={{
+              headerShown: false,
               tabBarIcon: ({ color, size }) => (
                 <FontAwesome5
                   name="hand-holding-heart"
@@ -248,7 +249,7 @@ export default function Event(props) {
             options={{
               headerShown: false,
               tabBarIcon: ({ color, size }) => (
-                <Icon name="calendar" size={size} color={color} />
+                <FontAwesome5 name="calendar" size={size} color={color} />
               ),
             }}
           />
@@ -256,8 +257,9 @@ export default function Event(props) {
             name="Schedule"
             component={Schedule}
             options={{
+              headerShown: false,
               tabBarIcon: ({ color, size }) => (
-                <Icon name="calendar" size={size} color={color} />
+                <FontAwesome5 name="clock" size={size} color={color} />
               ),
               headerRight: null,
             }}

@@ -86,7 +86,17 @@ export default function Speakers() {
               headerShadowVisible: false,
             }}
           />
-          <Stack.Screen name="SessionInfo" component={SessionModal} />
+          <Stack.Screen name="SessionInfo" component={SessionModal} options={{
+          headerTitle: "Session Info",
+          headerStyle: {
+            backgroundColor: event.colors[appearance].background,
+          },
+          headerTitleStyle: {
+            color: event.colors[appearance].text,
+          },
+          headerTintColor: event.colors[appearance].text,
+          headerShadowVisible: false,
+        }}  />
         </Stack.Navigator>
       </NavigationContainer>
     </SpeakerContext.Provider>
@@ -106,7 +116,7 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderRadius: 15,
+    borderRadius: 5,
     width: '90%',
     padding: 10,
     marginVertical: 8,

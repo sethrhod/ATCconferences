@@ -59,12 +59,16 @@ export default function FeedbackForm(props) {
   const inputRef = React.useRef();
 
   useEffect(() => {
+    if (props.sectionListRef) {
     props.sectionListRef.current.scrollToLocation({
       itemIndex: props.itemIndex,
       sectionIndex: props.sectionIndex,
       viewPosition: 0,
       viewOffset: -50,
+      animated: true,
     });
+    inputRef.current.focus();
+    }
   }, []);
 
   const handleBlur = () => {
@@ -77,7 +81,9 @@ export default function FeedbackForm(props) {
       };
       if (props.request === 'POST') {
         submitFeedback(props.session.id, text);
-        props.SwipeableRef.current.close();
+        if (props.SwipeableRef) {
+          props.SwipeableRef.current.close();
+        }
       } else if (props.request === 'PUT') {
         editFeedback(props.session.id, text);
       }

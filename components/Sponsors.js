@@ -9,15 +9,14 @@ import {
   TouchableHighlight,
   Linking,
 } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
 import SessionizeContext from './context/SessionizeContext';
+import SessionInfo from './SessionInfo';
 import Session from './Session';
 
 export default function Sponsors() {
-  const {sessions} = useContext(SessionizeContext);
-
-  const {event} = useContext(SessionizeContext);
-
-  const {appearance} = useContext(SessionizeContext);
+  const {event, appearance, sessions} = useContext(SessionizeContext);
 
   const [data, setData] = React.useState(null);
 
@@ -52,6 +51,7 @@ export default function Sponsors() {
             key={index}
             starts={session.startsAt}
             ends={session.endsAt}
+            navigation={props.navigation}
           />
         ))}
       </View>
@@ -65,7 +65,7 @@ export default function Sponsors() {
           <Image style={styles.logo} source={{uri: props.sponsors.uri}} />
         </View>
       </TouchableHighlight>
-      <SponsorsSession sponsors={props.sponsors} />
+      <SponsorsSession sponsors={props.sponsors} navigation={props.navigation} />
     </View>
   );
 
@@ -93,23 +93,55 @@ export default function Sponsors() {
       </Text>
       <FlatList
         data={props.item.sponsors}
-        renderItem={({item}) => <SubItem sponsors={item} />}
+        renderItem={({item}) => <SubItem sponsors={item} navigation={props.navigation} />}
         contentContainerStyle={{alignItems: 'stretch'}}
         style={{width: '100%'}}
       />
     </View>
   );
 
+  const SponsorsList = props => {
+    return (
+      <SafeAreaView style={[styles.item_container, { backgroundColor: event.colors[appearance].background }]}>
+        <FlatList
+          data={data}
+          renderItem={({ item }) => <Item item={item} navigation={props.navigation} />}
+          contentContainerStyle={{ alignItems: 'stretch' }}
+          style={{ width: '100%' }}
+        />
+      </SafeAreaView>
+    );
+  };
+
+  const Stack = createNativeStackNavigator();
+
   return (
-    <SafeAreaView style={[styles.item_container, {backgroundColor: event.colors[appearance].background}]}>
-      <FlatList
-        data={data}
-        renderItem={({item}) => <Item item={item} />}
-        contentContainerStyle={{alignItems: 'stretch'}}
-        style={{width: '100%'}}
-      />
-    </SafeAreaView>
-  );
+    <NavigationContainer independent={true}>
+      <Stack.Navigator>
+        <Stack.Screen name="Sponsors" component={SponsorsList} options={{
+          headerStyle: {
+            backgroundColor: event.colors[appearance].background,
+          },
+          headerTitleStyle: {
+            color: event.colors[appearance].text,
+          },
+          headerTintColor: event.colors[appearance].text,
+          headerShadowVisible: false,
+        }} />
+        <Stack.Screen name="SessionInfo" component={SessionInfo} options={{
+          headerTitle: "Session Info",
+          headerStyle: {
+            backgroundColor: event.colors[appearance].background,
+          },
+          headerTitleStyle: {
+            color: event.colors[appearance].text,
+          },
+          headerTintColor: event.colors[appearance].text,
+          headerShadowVisible: false,
+        }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -144,12 +176,13 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   sub_item: {
-    borderRadius: 20,
+    borderRadius: 5,
     padding: 10,
-    marginVertical: 10,
+    margin: 10,
     shadowColor: '#000',
     elevation: 5,
     shadowOpacity: 0.5,
     shadowRadius: 5,
+    shadowOffset: {width: 1, height: 1},
   },
 });

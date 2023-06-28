@@ -15,30 +15,14 @@ import FeedbackForm from './FeedbackForm';
 import Feedback from './Feedback';
 import Times from './Times';
 
-export default function SessionModal(props) {
+export default function SessionInfo(props) {
   const { event, appearance, selectedSession } = useContext(SessionizeContext);
 
   const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
 
-  const CloseButton = () => {
-    const handlePress = () => {
-      setFeedbackEntryVisible(false);
-    };
-
-    return (
-      <Pressable
-        style={{
-          margin: 10,
-        }}
-        onPress={() => handlePress()}>
-        <Icon name="times" color={event.colors[appearance].primary} size={40} />
-      </Pressable>
-    );
-  };
-
   const SessionInfo = () => {
     return (
-      <View>
+      <View style={styles.session_info}>
         {selectedSession.speakers.map((speaker, index) => (
           <View
             key={index}
@@ -50,23 +34,19 @@ export default function SessionModal(props) {
               style={styles.profilePicture}
               source={{ uri: speaker.profilePicture }}
             />
-            <Text style={[styles.fullName, {color: event.colors[appearance].text}]}>
+            <Text style={[styles.fullName, { color: event.colors[appearance].text }]}>
               {speaker.fullName}
             </Text>
           </View>
         ))}
-        <Text style={[styles.title, {color: event.colors[appearance].text}]}>
+        <Text style={[styles.title, { color: event.colors[appearance].text }]}>
           {selectedSession.title}
         </Text>
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginLeft: 10,
-          }}>
+          style={styles.session_info_boxes}>
           <Text
             style={[
-              styles.room,
+              styles.bottom_text,
               {
                 color: event.colors[appearance].text,
                 backgroundColor: event.colors[appearance].accent,
@@ -76,13 +56,13 @@ export default function SessionModal(props) {
           </Text>
           <View
             style={[
-              styles.times_box,
-              { backgroundColor: event.colors[appearance].accent },
+              styles.bottom_text,
+              {
+                color: event.colors[appearance].text,
+                backgroundColor: event.colors[appearance].accent,
+              },
             ]}>
-            <Times
-              starts={selectedSession.startsAt}
-              ends={selectedSession.endsAt}
-            />
+            <Times starts={selectedSession.startsAt} ends={selectedSession.endsAt} />
           </View>
         </View>
         <View
@@ -92,7 +72,7 @@ export default function SessionModal(props) {
               borderBottomColor: 'white',
             },
           ]}>
-          <Text style={[styles.description, {color: event.colors[appearance].text}]}>
+          <Text style={[styles.description, { color: event.colors[appearance].text }]}>
             {selectedSession.description}
           </Text>
         </View>
@@ -100,10 +80,14 @@ export default function SessionModal(props) {
     );
   };
 
+  const handlePress = () => {
+    setFeedbackEntryVisible(!feedbackEntryVisible);
+  };
+
   const LeaveFeedbackButton = () => {
     return (
       <Pressable style={styles.feedback_button} onPress={() => handlePress()}>
-        <Text style={[styles.feedback_button_text, {color: event.colors[appearance].text}]}>
+        <Text style={[styles.feedback_button_text, { color: event.colors[appearance].text }]}>
           Leave Feedback
         </Text>
         <Icon name="plus-square" size={30} color={event.colors[appearance].text} />
@@ -129,51 +113,49 @@ export default function SessionModal(props) {
         scrollViewRef.current.scrollToEnd();
       }
     };
-    scrollToEnd();
+    if (feedbackEntryVisible) {
+      scrollToEnd();
+    } 
   }, [marginBottom]);
 
-  const handlePress = () => {
-    setFeedbackEntryVisible(!feedbackEntryVisible);
-  };
-
   return (
-      <ScrollView style={[styles.scroll_view, {backgroundColor: event.colors[appearance].background}]} ref={scrollViewRef}>
-        <SessionInfo />
-        <View style={[styles.feedback_entry, { marginBottom: marginBottom }]}>
-          {/* conditional render for leave feedback button based on if feedback laready exists or not or if selectedSession exists */}
-          {selectedSession && selectedSession.feedback === null ? (
-            <LeaveFeedbackButton />
-          ) : null}
-          {feedbackEntryVisible ? (
-            <View style={styles.feedback}>
-              <FeedbackForm
-                session={selectedSession}
-                feedbackEntryVisible={feedbackEntryVisible}
-                setFeedbackEntryVisible={setFeedbackEntryVisible}
-                SwipeableRef={props.SwipeableRef}
-                sectionListRef={props.sectionListRef}
-                itemIndex={props.itemIndex}
-                sectionIndex={props.sectionIndex}
-                setSections={props.setSections}
-                onRefresh={props.onRefresh}
-                request="POST"
-              />
-            </View>
-          ) : null}
+    <ScrollView style={[styles.scroll_view, { backgroundColor: event.colors[appearance].background }]} ref={scrollViewRef}>
+      <SessionInfo />
+      <View style={[styles.feedback_entry, { marginBottom: marginBottom }]}>
+        {/* conditional render for leave feedback button based on if feedback already exists or not but checks that selectedSession exists first */}
+        {selectedSession.feedback === undefined ? (
+          <LeaveFeedbackButton />
+        ) : null}
+        {feedbackEntryVisible ? (
           <View style={styles.feedback}>
-            <Feedback
+            <FeedbackForm
               session={selectedSession}
+              feedbackEntryVisible={feedbackEntryVisible}
+              setFeedbackEntryVisible={setFeedbackEntryVisible}
               SwipeableRef={props.SwipeableRef}
               sectionListRef={props.sectionListRef}
               itemIndex={props.itemIndex}
               sectionIndex={props.sectionIndex}
               setSections={props.setSections}
-              refreshing={props.refreshing}
               onRefresh={props.onRefresh}
+              request="POST"
             />
           </View>
+        ) : null}
+        <View style={styles.feedback}>
+          <Feedback
+            session={selectedSession}
+            SwipeableRef={props.SwipeableRef}
+            sectionListRef={props.sectionListRef}
+            itemIndex={props.itemIndex}
+            sectionIndex={props.sectionIndex}
+            setSections={props.setSections}
+            refreshing={props.refreshing}
+            onRefresh={props.onRefresh}
+          />
         </View>
-      </ScrollView>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -182,6 +164,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     paddingTop: 50,
+  },
+  session_info: {
+    flex: 0.3,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   profilePicture: {
     width: 75,
@@ -237,5 +224,23 @@ const styles = StyleSheet.create({
   },
   feedback: {
     flex: 1,
+  },
+  bottom_text: {
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '600',
+    borderRadius: 10,
+    overflow: 'hidden',
+    padding: 5,
+    margin: 10,
+    marginBottom: 0,
+    marginTop: 0,
+  },
+  session_info_boxes: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
   },
 });

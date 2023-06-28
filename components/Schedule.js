@@ -5,14 +5,19 @@ import {
   Button,
   RefreshControl,
   SafeAreaView,
+  Pressable,
 } from 'react-native';
 import {StyleSheet, Text} from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
 import SessionizeContext from './context/SessionizeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Session from './Session.js';
+import MemoizedSession from './Session.js';
 import format_time from './scripts/formatTime.js';
+import SessionInfo from './SessionInfo';
+import SessionSectionList from './SessionSectionList';
 
-export default function Schedule() {
+export default function Schedule(props) {
   const {
     customData,
     event,
@@ -23,17 +28,6 @@ export default function Schedule() {
     sessions,
     appearance,
   } = useContext(SessionizeContext);
-
-  const sectionListRef = React.useRef(null);
-
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
 
   // a function that costructs a list of session data thats compatible with the SectionList component
   const constructSectionListData = bookmarks => {
@@ -73,7 +67,27 @@ export default function Schedule() {
     }
   };
 
-  const conditionalRender =
+  const ClearAllButton = () => {
+    return (
+      <Pressable
+      style={[
+        styles.clear_all,
+        { backgroundColor: event.colors[appearance].background },
+      ]}
+      onPress={clearAll}>
+      <Text
+        style={[
+          styles.clear_all_text,
+          { color: event.colors[appearance].text },
+        ]}>
+        Clear All
+      </Text>
+    </Pressable>
+    );
+  };
+
+  const ConditionalRender = (props) => {
+  return (
     bookmarks.length === 0 ? (
       <View
         style={[
@@ -89,58 +103,46 @@ export default function Schedule() {
         </Text>
       </View>
     ) : (
-      <SafeAreaView
-        style={[
-          styles.container,
-          {backgroundColor: event.colors[appearance].background},
-        ]}>
-        <Button
-          color={event.colors[appearance].primary}
-          title="Clear My Schedule"
-          onPress={() => clearAll()}
-        />
+      <SessionSectionList
+        navigation={props.navigation}
+        data={constructSectionListData(bookmarks)}
+      />
+    )
+  );}
 
-        <SectionList
-          sections={constructSectionListData(bookmarks)}
-          ref={sectionListRef}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          style={{height: '100%', flex: 1, margin: 10, marginRight: 0}}
-          keyExtractor={item => item.id}
-          contentContainerStyle={{paddingBottom: 50}}
-          renderItem={({item, index, section}) => (
-            <Session
-              session={item}
-              key={index}
-              starts={item.startsAt}
-              ends={item.endsAt}
-              // starts={getNewTime(item.startsAt)}
-              // ends={getNewTime(item.endsAt)}
-              itemIndex={index}
-              sectionIndex={section.index}
-              sectionListRef={sectionListRef}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          )}
-          renderSectionHeader={({section: {title, index}}) => (
-            <View style={styles.timeblock} key={index}>
-              <Text
-                style={[
-                  styles.timeblock_text,
-                  {color: event.colors[appearance].text},
-                ]}>
-                {title}
-              </Text>
-            </View>
-          )}
-        />
-      </SafeAreaView>
-    );
+  const Stack = createNativeStackNavigator();
 
-  return conditionalRender;
+  return (
+    <NavigationContainer independent={true}>
+      <Stack.Navigator>
+        <Stack.Screen name="Schedule" component={ConditionalRender} options={{
+          headerTitle: "Schedule",
+          headerRight: () => <ClearAllButton />,
+          headerStyle: {
+            backgroundColor: event.colors[appearance].background,
+          },
+          headerTitleStyle: {
+            color: event.colors[appearance].text,
+          },
+          headerTintColor: event.colors[appearance].text,
+          headerShadowVisible: false,
+        }} />
+        <Stack.Screen name="SessionInfo" component={SessionInfo} options={{
+          headerTitle: "Session Info",
+          headerStyle: {
+            backgroundColor: event.colors[appearance].background,
+          },
+          headerTitleStyle: {
+            color: event.colors[appearance].text,
+          },
+          headerTintColor: event.colors[appearance].text,
+          headerShadowVisible: false,
+        }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -165,5 +167,64 @@ const styles = StyleSheet.create({
   no_sessions_container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  section_list: {
+    height: '100%',
+    flex: 1,
+  },
+  timeblock_text: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  timeblock: {
+    flex: 1,
+    padding: 15,
+  },
+  session: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderRadius: 10,
+    margin: 10,
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  times: {
+    textAlign: 'center',
+    fontSize: 12,
+  },
+  time_scroll_container: {
+    borderRadius: 30,
+    maxWidth: 30,
+    margin: 10,
+    marginLeft: 0,
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    elevation: 5,
+  },
+  noSessionsContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noSessionsText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  section_list: {
+    height: '100%',
+    flex: 1,
+  },
+  clear_all: {
+    padding: 10,
+  },
+  clear_all_text: {
+    fontSize: 15,
+    fontWeight: 'bold',
   },
 });

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Appearance,
 } from 'react-native';
-import {unzip} from 'react-native-zip-archive';
+import { unzip } from 'react-native-zip-archive';
 import Event from './components/Event';
 import RNFS from 'react-native-fs';
 
@@ -32,7 +32,7 @@ export default function App() {
   }, []);
 
   const EventItem = props => {
-    const {unzippedPath, data} = props;
+    const { unzippedPath, data } = props;
 
     const handlePress = () => {
       data.unzippedPath = unzippedPath;
@@ -41,7 +41,7 @@ export default function App() {
 
     const format_date = date => {
       const date_object = new Date(date);
-      const month = date_object.toLocaleString('default', {month: 'long'});
+      const month = date_object.toLocaleString('default', { month: 'long' });
       const day = date_object.getDate();
       const year = date_object.getFullYear();
       return `${month} ${day}, ${year}`;
@@ -58,19 +58,19 @@ export default function App() {
     return (
       <View style={styles.item}>
         <TouchableOpacity onPress={() => handlePress()}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <Image
-              source={{uri: 'file://' + unzippedPath + data.logo}}
+              source={{ uri: 'file://' + unzippedPath + data.logo }}
               style={styles.image}
               resizeMode="contain"
             />
-            <View style={{flex: 1, flexDirection: 'column', margin: 20}}>
+            <View style={{ flex: 1, flexDirection: 'column', margin: 20 }}>
               <Text style={styles.title}>{data.name}</Text>
               <Text style={styles.location}>{data.location}</Text>
             </View>
           </View>
           <Text style={styles.description_box}>{data.description}</Text>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
             <Text style={styles.bottom_box}>{format_date(data.date)}</Text>
             <Text style={styles.bottom_box}>{data.time}</Text>
           </View>
@@ -128,7 +128,7 @@ export default function App() {
     return (
       <View style={styles.item}>
         <TouchableOpacity onPress={() => handlePress()}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={styles.title}>{props.name}</Text>
           </View>
         </TouchableOpacity>
@@ -236,8 +236,8 @@ export default function App() {
       </View>
       <FlatList
         data={events.events}
-        style={{flex: 0.8}}
-        renderItem={({item}) => (
+        style={{ flex: 0.8 }}
+        renderItem={({ item }) => (
           <ListConditionalRender
             zip_path={item.zip_path}
             name={item.name}
@@ -248,22 +248,22 @@ export default function App() {
       />
     </View>
   );
-}
+};
 
 const colors =
   Appearance.getColorScheme() === 'dark'
     ? {
-        background: '#121212',
-        card: '#2c2c2c',
-        text: '#F4F4F5',
-        accent: '#DFDFE2',
-      }
+      background: '#121212',
+      card: '#2c2c2c',
+      text: '#F4F4F5',
+      accent: '#DFDFE2',
+    }
     : {
-        background: '#FFFFFF',
-        card: '#C9C9CF',
-        text: '#000000',
-        accent: '#DFDFE2',
-      };
+      background: '#FFFFFF',
+      card: '#C9C9CF',
+      text: '#000000',
+      accent: '#DFDFE2',
+    };
 
 const styles = StyleSheet.create({
   container: {

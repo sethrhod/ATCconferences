@@ -48,12 +48,7 @@ export default function FilterList(props) {
           }}
           onPress={() => {
             let newFilterOptions = [...props.filterOptions];
-            if (props.item.name === 'My Timeline') {
-              newFilterOptions[0].value = !newFilterOptions[0].value;
-            } else {
-              newFilterOptions[filterView].options[props.itemIndex].value =
-                !newFilterOptions[filterView].options[props.itemIndex].value;
-            }
+            newFilterOptions[filterView].options[props.itemIndex].value = !newFilterOptions[filterView].options[props.itemIndex].value;
             props.setFilterOptions(newFilterOptions);
           }}>
           <Text
@@ -146,12 +141,6 @@ export default function FilterList(props) {
               </SafeAreaView>
             ) : (
               <View>
-                <FlatListItem
-                  item={props.filterOptions[0]}
-                  index={0}
-                  filterOptions={props.filterOptions}
-                  setFilterOptions={props.setFilterOptions}
-                />
                 <FilterOptionsList item={props.filterOptions[1]} index={1} />
                 <FilterOptionsList item={props.filterOptions[2]} index={2} />
               </View>

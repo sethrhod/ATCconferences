@@ -1,16 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import {Pressable, StyleSheet, Text, View, Platform} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, { useState, useEffect } from 'react';
+import { Pressable, StyleSheet, Text, View, Platform } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import uuid from 'react-native-uuid';
 import Overview from './Overview';
 import Speakers from './Speakers';
 import Sponsors from './Sponsors';
+import Sessions from './Sessions';
 import Schedule from './Schedule';
-import MyTimeline from './My-timeline';
 import SessionizeContext from './context/SessionizeContext';
 import fetchAllData from './scripts/fetchAllData';
 import FilterList from './FilterList';
@@ -30,7 +30,7 @@ export default function Event(props) {
   const [uUID, setUUID] = useState(null);
   // list of filter options
   const [filterOptions, setFilterOptions] = useState([
-    {name: 'My Timeline', value: false},
+    { name: 'My Timeline', value: false },
     {
       name: 'Rooms',
       value: false,
@@ -48,6 +48,8 @@ export default function Event(props) {
   const [customData, setCustomData] = useState(props.customData);
   //phones appearance setting for dark or light mode
   const [appearance, setAppearance] = useState(props.appearance);
+  // selected session for the session info view
+  const [selectedSession, setSelectedSession] = useState(null);
 
   // // refresh the app when the bookmarks change
   // const [refresh, setRefresh] = useState(false);
@@ -65,6 +67,8 @@ export default function Event(props) {
     event,
     customData,
     appearance,
+    selectedSession,
+    setSelectedSession,
     setAppearance,
     setCustomData,
     setEvent,
@@ -151,48 +155,29 @@ export default function Event(props) {
     }
   }, [bookmarks]);
 
-  const headerRightSchedule = () => {
-    return (
-      <View style={styles.header_right_schedule}>
-        <FilterList
-          filterOptions={filterOptions}
-          setFilterOptions={setFilterOptions}
-        />
-      </View>
-    );
-  };
-
   const headerRightChangeEvent = () => {
     return (
       <Pressable
         onPress={() => {
           props.setEvent(null);
         }}
-        style={{marginRight: 10, flexDirection: 'row', alignItems: 'center'}}>
+        style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center' }}>
         <FontAwesome5
           name="exchange-alt"
           size={20}
           color={event.colors[appearance].text}
           marginLeft={10}
         />
-        <Text style={{color: event.colors[appearance].text, fontSize: 20, marginLeft: 10}}>Event</Text>
+        <Text style={{ color: event.colors[appearance].text, fontSize: 20, marginLeft: 10 }}>Event</Text>
       </Pressable>
     );
-  };
-
-  const renderSchedule = () => {
-    if (filterOptions[0].value) {
-      return MyTimeline;
-    } else {
-      return Schedule;
-    }
   };
 
   // only shows app home page if bookmarks are done loading from db
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <Text style={{color: event.colors[appearance].text}}>Loading...</Text>
+        <Text style={{ color: event.colors[appearance].text }}>Loading...</Text>
       </View>
     );
   }
@@ -228,7 +213,7 @@ export default function Event(props) {
             name="Overview"
             component={Overview}
             options={{
-              tabBarIcon: ({color, size}) => (
+              tabBarIcon: ({ color, size }) => (
                 <FontAwesome5 name="home" size={size} color={color} />
               ),
             }}
@@ -238,7 +223,7 @@ export default function Event(props) {
             component={Speakers}
             options={{
               headerShown: false,
-              tabBarIcon: ({color, size}) => (
+              tabBarIcon: ({ color, size }) => (
                 <FontAwesome5 name="users" size={size} color={color} />
               ),
             }}
@@ -247,23 +232,34 @@ export default function Event(props) {
             name="Sponsors"
             component={Sponsors}
             options={{
-              tabBarIcon: ({color, size}) => (
+              tabBarIcon: ({ color, size }) => (
                 <FontAwesome5
                   name="hand-holding-heart"
                   size={size}
                   color={color}
                 />
               ),
+              headerRight: null,
+            }}
+          />
+          <Tab.Screen
+            name="Sessions"
+            component={Sessions}
+            options={{
+              headerShown: false,
+              tabBarIcon: ({ color, size }) => (
+                <Icon name="calendar" size={size} color={color} />
+              ),
             }}
           />
           <Tab.Screen
             name="Schedule"
-            component={renderSchedule()}
+            component={Schedule}
             options={{
-              headerRight: () => headerRightSchedule(),
-              tabBarIcon: ({color, size}) => (
+              tabBarIcon: ({ color, size }) => (
                 <Icon name="calendar" size={size} color={color} />
               ),
+              headerRight: null,
             }}
           />
         </Tab.Navigator>

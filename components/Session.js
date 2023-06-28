@@ -5,14 +5,13 @@ import Feedback from './Feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import SessionModal from './SessionInfoModal';
+import SessionModal from './SessionInfo';
 import FeedbackForm from './FeedbackForm';
 import LeftSwipeActionsMemo from './LeftSwipeActions';
 import Times from './Times';
 
 export default function Session(props) {
-  const {event} = useContext(SessionizeContext);
-  const {appearance} = useContext(SessionizeContext);
+  const {event, appearance, setSelectedSession} = useContext(SessionizeContext);
 
   // the state for the list of bookmarks
   const {bookmarks} = useContext(SessionizeContext);
@@ -97,8 +96,6 @@ export default function Session(props) {
     }
   }, [props.refreshing]);
 
-  const [modalVisible, setModalVisible] = React.useState(false);
-
   const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
 
   const LeftSwipeAction = () => {
@@ -108,8 +105,6 @@ export default function Session(props) {
         session={props.session}
         setFeedbackEntryVisible={setFeedbackEntryVisible}
         feedbackEntryVisible={feedbackEntryVisible}
-        setModalVisible={setModalVisible}
-        modalVisible={modalVisible}
         imageMounted={imageMounted}
       />
     );
@@ -132,7 +127,8 @@ export default function Session(props) {
           <Pressable
             style={[styles.session, {backgroundColor: bg}]}
             onPress={() => {
-              setModalVisible(true);
+              setSelectedSession(props.session);
+              props.navigation.navigate('SessionInfo');
 
               if (SwipeableRef.current) {
                 SwipeableRef.current.close();
@@ -239,17 +235,6 @@ export default function Session(props) {
           </Pressable>
         </Swipeable>
       </GestureHandlerRootView>
-      <SessionModal
-        session={props.session}
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        SwipeableRef={SwipeableRef}
-        sectionListRef={props.sectionListRef}
-        itemIndex={props.itemIndex}
-        sectionIndex={props.sectionIndex}
-        setSections={props.setSections}
-        onRefresh={props.onRefresh}
-      />
       {feedbackEntryVisible ? (
         <FeedbackForm
           session={props.session}

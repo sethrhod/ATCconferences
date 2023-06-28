@@ -17,13 +17,10 @@ import SessionizeContext from './context/SessionizeContext';
 import SpeakerContext from './context/SpeakerContext';
 import SpeakerInfo from './SpeakerInfo';
 import SpeakerWithSessions from './SpeakerWithSessions';
+import SessionModal from './SessionInfo';
 
 export default function Speakers() {
-  const { event } = useContext(SessionizeContext);
-
-  const { speakers } = useContext(SessionizeContext);
-
-  const { appearance } = useContext(SessionizeContext);
+  const { event, speakers, appearance } = useContext(SessionizeContext);
 
   const [selectedSpeaker, setSelectedSpeaker] = React.useState(null);
 
@@ -89,6 +86,7 @@ export default function Speakers() {
               headerShadowVisible: false,
             }}
           />
+          <Stack.Screen name="SessionInfo" component={SessionModal} />
         </Stack.Navigator>
       </NavigationContainer>
     </SpeakerContext.Provider>

@@ -507,6 +507,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = RSZSSGAP23;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -523,7 +524,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.qimatatech.ATCconferences;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ATCconferences.app/ATCconferences";
 			};
@@ -536,6 +537,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = RSZSSGAP23;
 				INFOPLIST_FILE = ATCconferencesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -548,7 +550,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.qimatatech.ATCconferences;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ATCconferences.app/ATCconferences";
 			};
@@ -576,8 +578,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.qimata.--PRODUCT-NAME-rfc1034identifier-";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.qimata.ATCconferences;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.qimatatech.--PRODUCT-NAME-rfc1034identifier-";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.qimatatech.ATCconferences;
 				PRODUCT_NAME = ATCconferences;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

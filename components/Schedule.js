@@ -1,173 +1,118 @@
+import React, {useContext} from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
   SectionList,
+  View,
+  Button,
   RefreshControl,
   SafeAreaView,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import {StyleSheet, Text} from 'react-native';
 import SessionizeContext from './context/SessionizeContext';
-import MemoizedSession from './Session.js';
-import constructSectionListData from './scripts/constructScheduleSectionListData.js';
-import fetchSessions from './scripts/fetchSessions.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Session from './Session.js';
 import format_time from './scripts/formatTime.js';
 
 export default function Schedule() {
   const {
     customData,
     event,
-    appearance,
-    sessions,
+    uUID,
     setSessions,
     bookmarks,
-    uUID,
-    filterOptions,
-    setFilterOptions,
+    setBookmarks,
+    sessions,
+    appearance,
   } = useContext(SessionizeContext);
+
   const sectionListRef = React.useRef(null);
 
   const [refreshing, setRefreshing] = React.useState(false);
-  const [sections, setSections] = React.useState(
-    constructSectionListData(sessions, bookmarks),
-  );
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchSessions(event, customData, sessions.all_speakers, setSessions, uUID);
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
   }, []);
 
-  useEffect(() => {
-    onRefresh();
-  }, [filterOptions]);
+  // a function that costructs a list of session data thats compatible with the SectionList component
+  const constructSectionListData = bookmarks => {
+    // create an empty array to store the data
+    let data = [];
+    // loop through the sessions
+    sessions.start_times.forEach(time => {
+      // create an empty object to store the data
+      let obj = {};
+      // set the title of the object to the start time of the session and add to the same hour sessions
+      obj.title = format_time(time);
+      // set the data of the object to the sessions that start at the same time
+      obj.data = bookmarks.filter(bookmark => bookmark.startsAt === time);
 
-  const applyFilters = newSections => {
-    let rooms = [];
-    let times = [];
-    filterOptions.forEach(option => {
-      if (option.name === 'Rooms' || option.name === 'Times') {
-        option.options.forEach(subOption => {
-          if (subOption.value) {
-            if (option.name === 'Rooms') {
-              rooms.push(subOption.name);
-            } else if (option.name === 'Times') {
-              times.push(subOption.name);
-            }
-          }
+      if (obj.data.length > 0) {
+        // change the bookmarked state of the session to true
+        obj.data.forEach(session => {
+          session.bookmarked = true;
         });
+        // push the object to the data array
+        data.push(obj);
       }
     });
-    if (rooms.length === 0 && times.length === 0) {
-      return newSections;
-    }
-    let filteredSections = [];
-    newSections.forEach(section => {
-      let filteredData = [];
-      section.data.forEach(item => {
-        // if rooms and times are not empty, filter by both
-        if (rooms.length > 0 && times.length > 0) {
-          if (
-            rooms.includes(item.room) &&
-            times.includes(format_time(item.startsAt))
-          ) {
-            filteredData.push(item);
-          }
-          // if rooms is not empty, filter by rooms
-        } else if (rooms.length > 0) {
-          if (rooms.includes(item.room)) {
-            filteredData.push(item);
-          }
-          // if times is not empty, filter by times
-        } else if (times.length > 0) {
-          if (times.includes(format_time(item.startsAt))) {
-            filteredData.push(item);
-          }
-        }
-      });
-      if (filteredData.length > 0) {
-        filteredSections.push({title: section.title, data: filteredData});
-      }
-    });
-    return filteredSections;
+    // return the data array
+    return data;
   };
 
-  useEffect(() => {
-    let rooms = [];
-    let times = [];
-    // loops through all sessions and adds the rooms to the rooms array
-    sessions.sessions.map(session => {
-      if (!rooms.includes(session.room)) {
-        rooms.push(session.room);
-      }
-    });
-    // loops through all sessions and adds the times to the times array
-    sessions.sessions.map(session => {
-      if (!times.includes(session.startsAt)) {
-        times.push(session.startsAt);
-      }
-    });
-    let roomsObjects = [];
-    let timesObjects = [];
-    // loops through all rooms and creates an object for each room
-    rooms.map(room => {
-      roomsObjects.push({name: room, value: false});
-    });
-    // loops through all times and creates an object for each time
-    times.map(time => {
-      let formattedTime = format_time(time);
-      timesObjects.push({name: formattedTime, value: false});
-    });
-    let newFilterOptions = filterOptions;
-    // sets the options for the times filter
-    newFilterOptions[2].options = timesObjects;
-    // sets the options for the rooms filter
-    newFilterOptions[1].options = roomsObjects;
-    setFilterOptions(newFilterOptions);
-  }, []);
+  // a function that clears all asyncstorage data
+  const clearAll = async () => {
+    try {
+      await AsyncStorage.clear();
+      setBookmarks([]);
+      console.log('cleared');
+    } catch (e) {
+      // clear error
+      console.log('clear error');
+    }
+  };
 
-  useEffect(() => {
-    let newSections = constructSectionListData(sessions, bookmarks);
-    let filteredSections = applyFilters(newSections);
-    setSections(filteredSections);
-  }, [sessions]);
-
-  // conditional render for when there are no sessions
-  if (sessions.sessions.length === 0) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.noSessionsContainer}>
-          <Text
-            style={[
-              styles.noSessionsText,
-              {color: event.colors[appearance].text},
-            ]}>
-            No sessions found
-          </Text>
-        </View>
-      </SafeAreaView>
-    );
-  } else {
-    return (
+  const conditionalRender =
+    bookmarks.length === 0 ? (
+      <View
+        style={[
+          styles.no_sessions_container,
+          {backgroundColor: event.colors[appearance].background},
+        ]}>
+        <Text
+          style={[styles.noSessions, {color: event.colors[appearance].text}]}>
+          No sessions added
+        </Text>
+        <Text style={[styles.addSome, {color: event.colors[appearance].text}]}>
+          Go to the Sessions page and add some!
+        </Text>
+      </View>
+    ) : (
       <SafeAreaView
         style={[
           styles.container,
           {backgroundColor: event.colors[appearance].background},
         ]}>
+        <Button
+          color={event.colors[appearance].primary}
+          title="Clear My Schedule"
+          onPress={() => clearAll()}
+        />
+
         <SectionList
-          sections={sections}
+          sections={constructSectionListData(bookmarks)}
           ref={sectionListRef}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
-          style={{height: '100%', flex: 1, margin: 10}}
-          keyExtractor={(item, index) => item + index}
+          style={{height: '100%', flex: 1, margin: 10, marginRight: 0}}
+          keyExtractor={item => item.id}
           contentContainerStyle={{paddingBottom: 50}}
           renderItem={({item, index, section}) => (
-            <MemoizedSession
+            <Session
               session={item}
+              key={index}
               starts={item.startsAt}
               ends={item.endsAt}
               // starts={getNewTime(item.startsAt)}
@@ -175,18 +120,12 @@ export default function Schedule() {
               itemIndex={index}
               sectionIndex={section.index}
               sectionListRef={sectionListRef}
-              setSections={setSections}
               refreshing={refreshing}
               onRefresh={onRefresh}
             />
           )}
           renderSectionHeader={({section: {title, index}}) => (
-            <View
-              style={[
-                styles.timeblock,
-                {backgroundColor: event.colors[appearance].background},
-              ]}
-              key={index}>
+            <View style={styles.timeblock} key={index}>
               <Text
                 style={[
                   styles.timeblock_text,
@@ -197,65 +136,34 @@ export default function Schedule() {
             </View>
           )}
         />
-        {/* <View style={styles.time_scroll_container}>
-          <TimeScroll
-            sectionListData={sections}
-            sectionListRef={sectionListRef}
-            scrollToTime={scrollToTime}
-          />
-        </View> */}
       </SafeAreaView>
     );
-  }
+
+  return conditionalRender;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
   },
   timeblock_text: {
     fontSize: 15,
     fontWeight: 'bold',
   },
   timeblock: {
-    flex: 1,
-    padding: 10,
-  },
-  session: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 10,
-    borderRadius: 10,
     margin: 10,
   },
-  title: {
+  noSessions: {
+    textAlign: 'center',
+    fontSize: 20,
+  },
+  addSome: {
     textAlign: 'center',
     fontSize: 15,
-    fontWeight: 'bold',
+    marginTop: 10,
   },
-  times: {
-    textAlign: 'center',
-    fontSize: 12,
-  },
-  time_scroll_container: {
-    borderRadius: 30,
-    maxWidth: 30,
-    margin: 10,
-    marginLeft: 0,
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    elevation: 5,
-  },
-  noSessionsContainer: {
+  no_sessions_container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-  },
-  noSessionsText: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
 });

@@ -14,7 +14,7 @@ import SessionizeContext from './context/SessionizeContext';
 import SpeakerInfo from './SpeakerInfo';
 import Session from './Session';
 
-export default function SpeakerWithSessions() {
+export default function SpeakerWithSessions(props) {
   const {selectedSpeaker} = React.useContext(SpeakerContext);
 
   const {event, appearance, sessions} = React.useContext(SessionizeContext);
@@ -35,6 +35,7 @@ export default function SpeakerWithSessions() {
             key={index}
             starts={session.startsAt}
             ends={session.endsAt}
+            navigation={props.navigation}
           />
         )}
         ListHeaderComponent={

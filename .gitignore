@@ -63,3 +63,7 @@ yarn-error.log
 .metro-health-check*
 android/app/keystore.jks
 ios/Podfile.lock
+android/app/debug.keystore
+android/atcconferences.keystore
+android/gradle.properties
+android/gradle.properties

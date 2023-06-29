@@ -66,4 +66,3 @@ ios/Podfile.lock
 android/app/debug.keystore
 android/atcconferences.keystore
 android/gradle.properties
-android/gradle.properties

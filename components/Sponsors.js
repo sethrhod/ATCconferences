@@ -14,9 +14,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import SessionizeContext from './context/SessionizeContext';
 import SessionInfo from './SessionInfo';
 import Session from './Session';
+import BookmarkButton from './BookmarkButton';
 
 export default function Sponsors() {
-  const {event, appearance, sessions} = useContext(SessionizeContext);
+  const {event, appearance, sessions, selectedSession} = useContext(SessionizeContext);
 
   const [data, setData] = React.useState(null);
 
@@ -129,6 +130,7 @@ export default function Sponsors() {
           headerShadowVisible: false,
         }} />
         <Stack.Screen name="SessionInfo" component={SessionInfo} options={{
+          headerRight: () => <BookmarkButton session={selectedSession} color={event.colors[appearance].text} />,
           headerTitle: "Session Info",
           headerStyle: {
             backgroundColor: event.colors[appearance].background,

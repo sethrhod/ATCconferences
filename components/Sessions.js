@@ -5,6 +5,7 @@ import {
   SectionList,
   RefreshControl,
   SafeAreaView,
+  Pressable,
 } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -16,18 +17,20 @@ import fetchSessions from './scripts/fetchSessions.js';
 import format_time from './scripts/formatTime.js';
 import SessionInfo from './SessionInfo';
 import FilterList from './FilterList';
+import BookmarkButton from './BookmarkButton';
 
 export default function Sessions(props) {
   const {
     customData,
     event,
     appearance,
-    sessions,
-    setSessions,
     bookmarks,
     uUID,
     filterOptions,
     setFilterOptions,
+    selectedSession,
+    sessions,
+    setSessions,
   } = useContext(SessionizeContext);
   const sectionListRef = React.useRef(null);
 
@@ -149,6 +152,12 @@ export default function Sessions(props) {
     );
   };
 
+  const headerRightSessionInfo = () => {
+    return (
+        <BookmarkButton session={selectedSession} />
+    );
+  };
+
   const ConditionalRender = (props) => {
     // conditional render for when there are no sessions
     if (sessions.sessions.length === 0) {
@@ -245,6 +254,7 @@ export default function Sessions(props) {
         }}
         />
         <Stack.Screen name="SessionInfo" component={SessionInfo} options={{
+          headerRight: () => <BookmarkButton session={selectedSession} color={event.colors[appearance].text} />,
           headerTitle: "Session Info",
           headerStyle: {
             backgroundColor: event.colors[appearance].background,
@@ -312,5 +322,20 @@ const styles = StyleSheet.create({
   section_list: {
     height: '100%',
     flex: 1,
+  },
+  header_right_schedule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  header_right_session_info: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  left_swipe_titles: {
+    marginRight: 5,
   },
 });

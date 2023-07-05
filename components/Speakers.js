@@ -18,9 +18,10 @@ import SpeakerContext from './context/SpeakerContext';
 import SpeakerInfo from './SpeakerInfo';
 import SpeakerWithSessions from './SpeakerWithSessions';
 import SessionModal from './SessionInfo';
+import BookmarkButton from './BookmarkButton';
 
 export default function Speakers() {
-  const { event, speakers, appearance } = useContext(SessionizeContext);
+  const { event, speakers, appearance, selectedSession } = useContext(SessionizeContext);
 
   const [selectedSpeaker, setSelectedSpeaker] = React.useState(null);
 
@@ -87,16 +88,17 @@ export default function Speakers() {
             }}
           />
           <Stack.Screen name="SessionInfo" component={SessionModal} options={{
-          headerTitle: "Session Info",
-          headerStyle: {
-            backgroundColor: event.colors[appearance].background,
-          },
-          headerTitleStyle: {
-            color: event.colors[appearance].text,
-          },
-          headerTintColor: event.colors[appearance].text,
-          headerShadowVisible: false,
-        }}  />
+            headerRight: () => <BookmarkButton session={selectedSession} color={event.colors[appearance].text} />,
+            headerTitle: "Session Info",
+            headerStyle: {
+              backgroundColor: event.colors[appearance].background,
+            },
+            headerTitleStyle: {
+              color: event.colors[appearance].text,
+            },
+            headerTintColor: event.colors[appearance].text,
+            headerShadowVisible: false,
+          }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SpeakerContext.Provider>

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View, Platform } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import uuid from 'react-native-uuid';
 import Overview from './Overview';
@@ -13,7 +12,6 @@ import Sessions from './Sessions';
 import Schedule from './Schedule';
 import SessionizeContext from './context/SessionizeContext';
 import fetchAllData from './scripts/fetchAllData';
-import FilterList from './FilterList';
 
 export default function Event(props) {
   const Tab = createBottomTabNavigator();
@@ -201,13 +199,14 @@ export default function Event(props) {
             tabBarStyle: {
               borderTopWidth: 0,
               backgroundColor: event.colors[appearance].background,
-              height: Platform.OS === 'ios' ? 70 : 60,
+              // set height to 10% of screen height
+              height: Dimensions.get('window').height * 0.1,
               paddingTop: 5,
             },
             tabBarLabelStyle: {
               fontSize: 12,
               paddingBottom: 10,
-            },
+            }
           }}>
           <Tab.Screen
             name="Overview"

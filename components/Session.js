@@ -2,20 +2,14 @@ import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import React, {useEffect, useContext, memo} from 'react';
 import SessionizeContext from './context/SessionizeContext';
 import Feedback from './Feedback';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import SessionModal from './SessionInfo';
 import FeedbackForm from './FeedbackForm';
 import LeftSwipeActionsMemo from './LeftSwipeActions';
 import Times from './Times';
 
 export default function Session(props) {
   const {event, appearance, setSelectedSession} = useContext(SessionizeContext);
-
-  // the state for the list of bookmarks
-  const {bookmarks} = useContext(SessionizeContext);
-  const {setBookmarks} = useContext(SessionizeContext);
 
   const [imageMounted, setImageMounted] = React.useState(false);
 
@@ -35,58 +29,6 @@ export default function Session(props) {
 
   const SwipeableRef = React.useRef(null);
 
-  const addBookmark = () => {
-    // either remove or add as bookmark depending on previous state
-    if (props.session.bookmarked == true) {
-      // remove bookmark
-      removeFromBookmarks(props.session);
-    } else if (props.session.bookmarked == false) {
-      // add new bookmark
-      addToBookmarks(props.session);
-    }
-    // close swipe after 100 ms
-    setTimeout(() => {
-      if (SwipeableRef.current) {
-        SwipeableRef.current.close();
-      }
-    }, 100);
-  };
-
-  const removeFromBookmarks = session => {
-    session.bookmarked = false;
-    var list = bookmarks.filter(bookmark => bookmark.id !== session.id);
-    setBookmarks(list);
-    remove(session);
-  };
-
-  const remove = async session => {
-    try {
-      await AsyncStorage.removeItem(String(session.id));
-    } catch (err) {
-      alert(err);
-    }
-  };
-
-  const addToBookmarks = session => {
-    // add session to list if it doesn't already exist
-    session.bookmarked = true;
-    var list = [];
-    bookmarks.forEach(bookmark => list.push(bookmark));
-    if (!list.some(bookmark => bookmark.id === session.id)) {
-      list.push(session);
-    }
-    setBookmarks(list);
-    save(session);
-  };
-
-  const save = async session => {
-    try {
-      await AsyncStorage.setItem(String(session.id), JSON.stringify(session));
-    } catch (err) {
-      alert(err);
-    }
-  };
-
   // close swipeable ref when component renders or refreshes
   useEffect(() => {
     setFeedbackEntryVisible(false);
@@ -101,7 +43,6 @@ export default function Session(props) {
   const LeftSwipeAction = () => {
     return (
       <LeftSwipeActionsMemo
-        addBookmark={addBookmark}
         session={props.session}
         setFeedbackEntryVisible={setFeedbackEntryVisible}
         feedbackEntryVisible={feedbackEntryVisible}
@@ -121,10 +62,13 @@ export default function Session(props) {
       <GestureHandlerRootView style={styles.container}>
         <Swipeable
           renderLeftActions={() => LeftSwipeAction()}
+          renderRightActions={() => LeftSwipeAction()}
+          leftThreshold={50}
+          rightThreshold={50}
           overshootLeft={false}
-          leftThreshold={100}
+          overshootRight={false}
           friction={2}
-          overshootFriction={8}
+          overshootFriction={2}
           ref={SwipeableRef}>
           <Pressable
             style={[styles.session, {backgroundColor: bg}]}
@@ -140,14 +84,6 @@ export default function Session(props) {
             onPressIn={() => {
               bg = event.colors[appearance].accent;
             }}>
-            {/* drag icon */}
-            <View>
-              <Icon
-                name="drag-indicator"
-                size={30}
-                color={event.colors[appearance].text}
-              />
-            </View>
 
             <View style={styles.session_info}>
               {/* // session title */}

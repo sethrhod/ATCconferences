@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from './context/SessionizeContext';
+import BookmarkButton from './BookmarkButton';
 
 export default function LeftSwipeActions(props) {
   const {event, appearance, setSelectedSession} = React.useContext(SessionizeContext);
@@ -47,16 +48,12 @@ export default function LeftSwipeActions(props) {
           setIconsize(event.nativeEvent.layout.height / 4);
         }
       }}>
-      <Pressable style={styles.Pressable} onPress={() => props.addBookmark()}>
+      <View style={styles.Pressable}>
         <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
           Add to Schedule
         </Text>
-        {props.session.bookmarked ? (
-          <Icon name="bookmark" size={iconsize} solid />
-        ) : (
-          <Icon name="bookmark" size={iconsize} />
-        )}
-      </Pressable>
+        <BookmarkButton session={props.session} size={iconsize}/>
+      </View>
       <Pressable
         style={styles.Pressable}
         onPress={() => props.setFeedbackEntryVisible(!props.feedbackEntryVisible)}>

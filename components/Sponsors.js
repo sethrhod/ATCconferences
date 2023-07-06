@@ -22,7 +22,7 @@ export default function Sponsors() {
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
-    fetch('https://atlcloudconf.com/sponsors.json')
+    fetch(event.sponsorsAPI)
       .then(response => response.json())
       .then(json => setData(json))
       .catch(error => console.error(error))

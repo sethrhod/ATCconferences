@@ -8,6 +8,7 @@ import {
   Text,
   TouchableHighlight,
   Linking,
+  Platform,
 } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -72,16 +73,14 @@ export default function Sponsors() {
 
   const sponsor_level_color = sponsor_level => {
     switch (sponsor_level) {
-      case 'Platinum':
-        return '#DFDFE2';
       case 'Gold':
         return '#FFD700';
       case 'Silver':
-        return '#C0C0C0';
+        return '#b9c0cb';
       case 'Swag':
         return event.colors[appearance].text;
       default:
-        return '#DFDFE2';
+        return '#c5cbe2';
     }
   };
 
@@ -164,9 +163,10 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   sponsor_level: {
-    // create black outline
+    width: '100%',
+    textAlign: 'center',
     textShadowColor: '#000',
-    textShadowRadius: 5,
+    textShadowRadius: Platform.OS === 'ios' ? 3 : 5,
     textShadowOffset: {width: -1, height: 1},
     fontSize: 32,
     fontWeight: 'bold',

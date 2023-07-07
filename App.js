@@ -70,10 +70,16 @@ export default function App() {
               <Text style={styles.location}>{data.location}</Text>
             </View>
           </View>
-          <Text style={styles.description_box}>{data.description}</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            <Text style={styles.bottom_box}>{format_date(data.date)}</Text>
-            <Text style={styles.bottom_box}>{data.time}</Text>
+          <View style={styles.description_box} >
+            <Text style={styles.description}>{data.description}</Text>
+          </View>
+          <View style={styles.bottom_box_container}>
+            <View style={styles.bottom_box}>
+              <Text style={styles.bottom_box_text}>{format_date(data.date)}</Text>
+            </View>
+            <View style={styles.bottom_box}>
+              <Text style={styles.bottom_box_text}>{data.time}</Text>
+            </View>
           </View>
         </TouchableOpacity>
       </View>
@@ -257,13 +263,13 @@ const colors =
       background: '#121212',
       card: '#2c2c2c',
       text: '#F4F4F5',
-      accent: '#DFDFE2',
+      accent: '#4D4D56',
     }
     : {
       background: '#FFFFFF',
       card: '#C9C9CF',
       text: '#000000',
-      accent: '#DFDFE2',
+      accent: '#C9C9CF',
     };
 
 const styles = StyleSheet.create({
@@ -316,17 +322,36 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   bottom_box: {
-    fontSize: 10,
-    fontWeight: '600',
-    textAlign: 'center',
+    flex: 1,
+    margin: 5,
     backgroundColor: colors.accent,
     borderRadius: 10,
-    overflow: 'hidden',
-    padding: 7,
+    padding: 5,
+  },
+  bottom_box_container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     margin: 5,
   },
+  bottom_box_text: {
+    fontSize: 13,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: colors.text,
+  },
   description_box: {
-    fontSize: 10,
+    flex: 1,
+    margin: 5,
+    backgroundColor: colors.accent,
+    borderRadius: 10,
+    padding: 5,
+  },
+  description: {
+    fontSize: 12,
+    letterSpacing: 0.5,
+    lineHeight: 20,
     fontWeight: '600',
     textAlign: 'left',
     margin: 5,

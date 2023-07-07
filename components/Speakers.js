@@ -114,35 +114,5 @@ const styles = StyleSheet.create({
   item_container: {
     flex: 1,
     width: '100%',
-  },
-  item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderRadius: 5,
-    width: '90%',
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  name: {
-    fontSize: 17,
-    flexWrap: 'wrap',
-    textAlign: 'center',
-  },
-  bio: {
-    fontSize: 12,
-  },
-  logo: {
-    width: 85,
-    height: 85,
-    borderRadius: 50,
-  },
+  }
 });

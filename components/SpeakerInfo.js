@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     marginHorizontal: 15,
+    elevation: 2,
   },
   logo: {
     width: 50,

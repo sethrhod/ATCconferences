@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Appearance,
 } from 'react-native';
-import { unzip } from 'react-native-zip-archive';
+import {ThemeProvider} from 'react-native-elements';
+import {unzip} from 'react-native-zip-archive';
 import Event from './components/Event';
 import RNFS from 'react-native-fs';
 
@@ -32,7 +33,7 @@ export default function App() {
   }, []);
 
   const EventItem = props => {
-    const { unzippedPath, data } = props;
+    const {unzippedPath, data} = props;
 
     const handlePress = () => {
       data.unzippedPath = unzippedPath;
@@ -41,7 +42,7 @@ export default function App() {
 
     const format_date = date => {
       const date_object = new Date(date);
-      const month = date_object.toLocaleString('default', { month: 'long' });
+      const month = date_object.toLocaleString('default', {month: 'long'});
       const day = date_object.getDate();
       const year = date_object.getFullYear();
       return `${month} ${day}, ${year}`;
@@ -58,19 +59,19 @@ export default function App() {
     return (
       <View style={styles.item}>
         <TouchableOpacity onPress={() => handlePress()}>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <Image
-              source={{ uri: 'file://' + unzippedPath + data.logo }}
+              source={{uri: 'file://' + unzippedPath + data.logo}}
               style={styles.image}
               resizeMode="contain"
             />
-            <View style={{ flex: 1, flexDirection: 'column', margin: 20 }}>
-              <Text style={styles.title}>{data.name}</Text>
-              <Text style={styles.location}>{data.location}</Text>
+            <View style={{flex: 1, flexDirection: 'column', margin: 20}}>
+              <Text style={[theme.Text.h2Style, {color: colors.text}]}>{data.name}</Text>
+              <Text style={[theme.Text.h4Style, {color: colors.sub_text}]}>{data.location}</Text>
             </View>
           </View>
-          <Text style={styles.description_box}>{data.description}</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          <Text style={[theme.Text.pStyle, {color: colors.text}]}>{data.description}</Text>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
             <Text style={styles.bottom_box}>{format_date(data.date)}</Text>
             <Text style={styles.bottom_box}>{data.time}</Text>
           </View>
@@ -128,7 +129,7 @@ export default function App() {
     return (
       <View style={styles.item}>
         <TouchableOpacity onPress={() => handlePress()}>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.title}>{props.name}</Text>
           </View>
         </TouchableOpacity>
@@ -221,49 +222,80 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flex: 0.2,
-          justifyContent: 'flex-end',
-          alignItems: 'flex-start',
-          padding: 20,
-        }}>
-        <Text style={styles.header}>Hello 👋</Text>
-        <Text style={styles.subheader}>
-          Which event would you like to view?
-        </Text>
+    <ThemeProvider theme={theme}>
+      <View style={styles.container}>
+        <FlatList
+          data={events.events}
+          style={{flex: 0.8}}
+          ListHeaderComponent={() => (
+            <View style={styles.header_container}>
+              <Text style={[theme.Text.h1Style, {color: colors.text}]}>
+                Hello 👋
+              </Text>
+              <Text style={[theme.Text.h2Style, {color: colors.text}]}>
+                Which event would you like to view?
+              </Text>
+            </View>
+          )}
+          ListHeaderComponentStyle={styles.header_container}
+          renderItem={({item}) => (
+            <ListConditionalRender
+              zip_path={item.zip_path}
+              name={item.name}
+              date={item.date}
+            />
+          )}
+          keyExtractor={item => item.name}
+        />
       </View>
-      <FlatList
-        data={events.events}
-        style={{ flex: 0.8 }}
-        renderItem={({ item }) => (
-          <ListConditionalRender
-            zip_path={item.zip_path}
-            name={item.name}
-            date={item.date}
-          />
-        )}
-        keyExtractor={item => item.name}
-      />
-    </View>
+    </ThemeProvider>
   );
+}
+
+const theme = {
+  Text: {
+    fontFamily: 'Avenir',
+    h1Style: {
+      fontSize: 30,
+      fontWeight: 'bold',
+    },
+    h2Style: {
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+    h3Style: {
+      fontSize: 15,
+      fontWeight: 'bold',
+    },
+    h4Style: {
+      fontSize: 12,
+      fontWeight: 'bold',
+    },
+    pStyle: {
+      fontSize: 12,
+    },
+    sub_text: {
+      fontSize: 10,
+    },
+  },
 };
 
 const colors =
   Appearance.getColorScheme() === 'dark'
     ? {
-      background: '#121212',
-      card: '#2c2c2c',
-      text: '#F4F4F5',
-      accent: '#DFDFE2',
-    }
+        background: '#121212',
+        card: '#2c2c2c',
+        text: '#F4F4F5',
+        sub_text: '#808080',
+        accent: '#DFDFE2',
+      }
     : {
-      background: '#FFFFFF',
-      card: '#C9C9CF',
-      text: '#000000',
-      accent: '#DFDFE2',
-    };
+        background: '#FFFFFF',
+        card: '#C9C9CF',
+        text: '#121212',
+        sub_text: '#808080',
+        accent: '#DFDFE2',
+      };
 
 const styles = StyleSheet.create({
   container: {
@@ -271,10 +303,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.background,
   },
-  header: {
-    color: colors.text,
-    fontSize: 30,
-    fontWeight: 'bold',
+  header_container: {
+    flex: 0.2,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    padding: 20,
   },
   subheader: {
     color: colors.text,

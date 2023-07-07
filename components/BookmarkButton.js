@@ -58,6 +58,9 @@ export default function BookmarkButton(props) {
       // add new bookmark
       addToBookmarks(session);
     }
+    if (props.swipeableRef) {
+      props.swipeableRef.current.close();
+    }
   };
 
   // check if props.session exists before returning

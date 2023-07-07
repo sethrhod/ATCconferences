@@ -5,7 +5,8 @@ import SessionizeContext from './context/SessionizeContext';
 import BookmarkButton from './BookmarkButton';
 
 export default function LeftSwipeActions(props) {
-  const {event, appearance, setSelectedSession} = React.useContext(SessionizeContext);
+  const {event, appearance, setSelectedSession} =
+    React.useContext(SessionizeContext);
   const leftSwipeBoxRef = React.useRef(null);
 
   const [fontSize, setFontSize] = React.useState(15);
@@ -30,17 +31,12 @@ export default function LeftSwipeActions(props) {
     }
   };
 
-
   return (
     <View
-      style={{
-        flex: 1,
-        borderRadius: 5,
-        flexDirection: 'row',
-        backgroundColor: event.colors[appearance].primary,
-        margin: 5,
-        padding: 20,
-      }}
+      style={[
+        styles.container,
+        {backgroundColor: event.colors[appearance].primary},
+      ]}
       ref={leftSwipeBoxRef}
       onLayout={event => {
         if (event.nativeEvent.layout.height !== undefined) {
@@ -48,22 +44,24 @@ export default function LeftSwipeActions(props) {
           setIconsize(event.nativeEvent.layout.height / 4);
         }
       }}>
-      <View style={styles.Pressable}>
+      <View style={[styles.Pressable, {borderColor: event.colors[appearance].background}]}>
         <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
           Add to Schedule
         </Text>
-        <BookmarkButton session={props.session} size={iconsize}/>
+        <BookmarkButton session={props.session} size={iconsize} swipeableRef={props.swipeableRef} />
       </View>
       <Pressable
-        style={styles.Pressable}
-        onPress={() => props.setFeedbackEntryVisible(!props.feedbackEntryVisible)}>
+        style={[styles.Pressable, {borderColor: event.colors[appearance].background}]}
+        onPress={() =>
+          props.setFeedbackEntryVisible(!props.feedbackEntryVisible)
+        }>
         <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
           Add Feedback
         </Text>
         <Icon name="plus-square" size={iconsize} solid />
       </Pressable>
       <Pressable
-        style={styles.Pressable}
+        style={[styles.Pressable, {borderColor: event.colors[appearance].background}]}
         onPress={() => {
           setSelectedSession(props.session);
           props.navigation.navigate('SessionInfo');
@@ -84,17 +82,25 @@ export default function LeftSwipeActions(props) {
 export const LeftSwipeActionsMemo = React.memo(LeftSwipeActions);
 
 const styles = StyleSheet.create({
-  left_swipe_titles: {
+  container: {
     flex: 1,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    margin: 5,
+  },
+  left_swipe_titles: {
     fontWeight: '600',
-    padding: 5,
-    paddingLeft: 0,
-    textAlign: 'left',
-    flexWrap: 'wrap',
+    textAlign: 'center',
+    margin: 5,
   },
   Pressable: {
     flex: 1,
-    marginRight: 10,
-    justifyContent: 'space-between',
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
   },
 });

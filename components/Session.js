@@ -80,6 +80,11 @@ export default function Session(props) {
                 SwipeableRef.current.close();
               }
             }}
+            onLongPress={() => {
+              if (SwipeableRef.current) {
+                SwipeableRef.current.openRight();
+              }
+            }}
             // on press in darken the background
             onPressIn={() => {
               bg = event.colors[appearance].accent;
@@ -225,6 +230,8 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 5,
     overflow: 'hidden',
+    elevation: 2,
+    shadowRadius: 5,
   },
   session_info: {
     flex: 1,

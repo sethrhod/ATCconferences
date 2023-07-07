@@ -117,7 +117,6 @@ export default function FilterList(props) {
               styles.modalView,
               {
                 backgroundColor: event.colors[appearance].primary,
-                shadowColor: event.colors[appearance].background,
               },
             ]}>
             {filterView ? (
@@ -171,13 +170,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 20,
     padding: 25,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.75,
-    shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 4,
   },
   modalText: {
     fontSize: 20,
@@ -191,7 +184,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
     padding: 10,
-    elevation: 2,
+    elevation: 4,
     margin: 20,
     marginTop: 0,
   },

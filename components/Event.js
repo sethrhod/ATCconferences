@@ -206,7 +206,8 @@ export default function Event(props) {
             tabBarLabelStyle: {
               fontSize: 12,
               paddingBottom: 10,
-            }
+            },
+            AnimationEnabled: true,
           }}>
           <Tab.Screen
             name="Overview"

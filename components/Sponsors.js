@@ -76,8 +76,12 @@ export default function Sponsors() {
         return '#DFDFE2';
       case 'Gold':
         return '#FFD700';
+      case 'Silver':
+        return '#C0C0C0';
+      case 'Swag':
+        return event.colors[appearance].text;
       default:
-        return '#FFFFFF';
+        return '#DFDFE2';
     }
   };
 
@@ -160,10 +164,12 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   sponsor_level: {
+    // create black outline
+    textShadowColor: '#000',
+    textShadowRadius: 5,
+    textShadowOffset: {width: -1, height: 1},
     fontSize: 32,
     fontWeight: 'bold',
-    textShadowOffset: {width: 1, height: 1},
-    textShadowRadius: 5,
     letterSpacing: 2,
     textTransform: 'uppercase',
     fontStyle: 'italic',

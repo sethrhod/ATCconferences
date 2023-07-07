@@ -89,7 +89,10 @@ export default function Feedback(props) {
           <Swipeable
             ref={DeleteSwipeableRef}
             renderLeftActions={() => Delete()}
+            renderRightActions={() => Delete()}
             overshootLeft={false}
+            overshootRight={false}
+            rightThreshold={100}
             leftThreshold={100}
             friction={2}
             overshootFriction={8}>

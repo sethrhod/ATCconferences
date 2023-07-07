@@ -6,16 +6,19 @@ import {
   SafeAreaView,
   Pressable,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import SessionizeContext from './context/SessionizeContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function CodeOfConduct(props) {
   const {event, appearance} = useContext(SessionizeContext);
 
-  const handleBack = () => {
-    props.setCodeOfConduct(false);
-  };
+  useEffect(() => {
+    const popToTop = props.navigation.addListener('tabPress', () => {
+      props.navigation.navigate('Overview');
+    });
+    return popToTop;
+  }, [props.navigation]);
 
   return (
     <SafeAreaView
@@ -23,15 +26,6 @@ export default function CodeOfConduct(props) {
         styles.container,
         {backgroundColor: event.colors[appearance].background},
       ]}>
-      <Pressable
-        style={[
-          styles.backButton,
-          {backgroundColor: event.colors[appearance].secondary},
-        ]}
-        onPress={() => handleBack()}>
-        <Icon name="chevron-left" size={20} color={'white'} />
-        <Text style={[styles.backButtonText, {color: 'white'}]}>Back</Text>
-      </Pressable>
       <ScrollView
         contentContainerStyle={{
           alignItems: 'center',
@@ -115,15 +109,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     margin: 20,
     textAlign: 'left',
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-  },
-  backButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 5,
-  },
+  }
 });

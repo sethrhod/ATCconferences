@@ -31,7 +31,7 @@ export default function SpeakerInfo(props) {
       }}>
       {/*profile pic*/}
 
-      <Image style={styles.logo} source={{uri: props.speaker.profilePicture}} />
+      <Image style={styles.profile_pic} source={{uri: props.speaker.profilePicture}} />
 
       {/*Name and links*/}
 
@@ -44,7 +44,7 @@ export default function SpeakerInfo(props) {
           {props.speaker.fullName}
         </Text>
         <View
-          style={styles.logos}>
+          style={styles.logos_container}>
           {props.speaker.links.map((link, index) => {
             var title = link.title;
             // an if statement to catch the company website link and change the icon to a briefcase
@@ -59,7 +59,7 @@ export default function SpeakerInfo(props) {
               }
             }
             return (
-              <View key={index} style={{justifyContent: 'center', padding: 5}}>
+              <View key={index} style={styles.logos}>
                 <TouchableOpacity onPress={() => Linking.openURL(link.url)}>
                   {Icon.hasIcon(title.toLowerCase()) ? (
                     <Icon
@@ -95,46 +95,46 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderRadius: 5,
-    width: '90%',
+    alignItems: 'center',
     padding: 10,
-    marginVertical: 10,
-    marginHorizontal: 15,
-    elevation: 2,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 10,
   },
-  logo: {
-    width: 50,
-    height: 50,
+  profile_pic: {
+    width: 70,
+    height: 70,
     borderRadius: 50,
-    marginRight: 10,
   },
   name: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: 'bold',
     flexWrap: 'wrap',
   },
   bio: {
-    fontSize: 12,
+    fontSize: 14,
     textAlign: 'left',
+    flexWrap: 'wrap',
   },
   middle_box: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    flexWrap: 'wrap',
     marginLeft: 10,
   },
-  logos: {
+  logos_container: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
+  },
+  logos: {
+    margin: 5,
   },
   right_box: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    flexWrap: 'wrap',
   },
 });

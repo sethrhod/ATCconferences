@@ -41,7 +41,7 @@ export default function Event(props) {
     },
   ]);
   // event to display
-  const [event, setEvent] = useState(props.event);
+  const [event, setEvent] = useState(props.eventToRender);
   //custom data
   const [customData, setCustomData] = useState(props.customData);
   //phones appearance setting for dark or light mode
@@ -153,29 +153,11 @@ export default function Event(props) {
     }
   }, [bookmarks]);
 
-  const headerRightChangeEvent = () => {
-    return (
-      <Pressable
-        onPress={() => {
-          props.setEvent(null);
-        }}
-        style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center' }}>
-        <FontAwesome5
-          name="exchange-alt"
-          size={20}
-          color={event.colors[appearance].text}
-          marginLeft={10}
-        />
-        <Text style={{ color: event.colors[appearance].text, fontSize: 20, marginLeft: 10 }}>Event</Text>
-      </Pressable>
-    );
-  };
-
   // only shows app home page if bookmarks are done loading from db
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <Text style={{ color: event.colors[appearance].text }}>Loading...</Text>
+        <Text style={[styles.loading, { color: event.colors[appearance].text }]}>Loading...</Text>
       </View>
     );
   }
@@ -194,7 +176,6 @@ export default function Event(props) {
             headerTintColor: event.colors[appearance].text,
             tabBarActiveTintColor: event.colors[appearance].primary,
             headerShadowVisible: false,
-            headerRight: () => headerRightChangeEvent(),
             // change tab bar background color and remove shadow
             tabBarStyle: {
               borderTopWidth: 0,
@@ -213,6 +194,7 @@ export default function Event(props) {
             name="Overview"
             component={Overview}
             options={{
+              headerShown: false,
               tabBarIcon: ({ color, size }) => (
                 <FontAwesome5 name="home" size={size} color={color} />
               ),
@@ -281,5 +263,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 10,
+  },
+  loading: {
+    fontSize: 32,
+    letterSpacing: 2,
   },
 });

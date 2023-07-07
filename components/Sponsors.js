@@ -21,13 +21,14 @@ export default function Sponsors() {
   const {event, appearance, sessions, selectedSession} = useContext(SessionizeContext);
 
   const [data, setData] = React.useState(null);
+  const [isLoading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     fetch(event.sponsorsAPI)
       .then(response => response.json())
       .then(json => setData(json))
       .catch(error => console.error(error))
-      .finally(() => console.log('done'));
+      .finally(() => setLoading(false));
   }, []);
 
   const sponsoredSession = props => {
@@ -107,6 +108,11 @@ export default function Sponsors() {
   const SponsorsList = props => {
     return (
       <SafeAreaView style={[styles.item_container, { backgroundColor: event.colors[appearance].background }]}>
+        {isLoading &&
+          <View style={[styles.loading_container, {backgroundColor: event.colors[appearance].background}]}>
+            <Text style={[styles.loading, {color: event.colors[appearance].text}]}>Loading...</Text>
+          </View>
+        }
         <FlatList
           data={data}
           renderItem={({ item }) => <Item item={item} navigation={props.navigation} />}
@@ -192,5 +198,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     shadowOffset: {width: 1, height: 1},
+  },
+  loading_container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loading: {
+    fontSize: 32,
+    letterSpacing: 2,
   },
 });

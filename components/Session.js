@@ -1,15 +1,15 @@
-import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
-import React, {useEffect, useContext, memo} from 'react';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import React, { useEffect, useContext, memo } from 'react';
 import SessionizeContext from './context/SessionizeContext';
 import Feedback from './Feedback';
-import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
+import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FeedbackForm from './FeedbackForm';
 import LeftSwipeActionsMemo from './LeftSwipeActions';
 import Times from './Times';
 
 export default function Session(props) {
-  const {event, appearance, setSelectedSession} = useContext(SessionizeContext);
+  const { event, appearance, setSelectedSession } = useContext(SessionizeContext);
 
   const [imageMounted, setImageMounted] = React.useState(false);
 
@@ -18,10 +18,10 @@ export default function Session(props) {
       <Image
         key={index}
         style={styles.logo}
-        source={{uri: speaker.profilePicture}}
+        source={{ uri: speaker.profilePicture }}
         onLayout={() => setImageMounted(true)}
       />
-      <Text style={[styles.name, {color: event.colors[appearance].text}]}>
+      <Text style={[styles.name, { color: event.colors[appearance].text }]}>
         {speaker.fullName}
       </Text>
     </View>
@@ -54,8 +54,30 @@ export default function Session(props) {
   };
 
   var bg = props.session.bookmarked
-    ? event.colors[appearance].accent
+    ? event.colors[appearance].secondary
     : event.colors[appearance].card;
+
+  const times = () => props.starts ? <View
+    style={[
+      styles.bottom_text,
+      {
+        color: event.colors[appearance].text,
+        backgroundColor: event.colors[appearance].accent,
+      },
+    ]}>
+    <Times starts={props.starts} ends={props.ends} />
+  </View> : null
+
+  const rooms = () => <Text
+    style={[
+      styles.bottom_text,
+      {
+        color: event.colors[appearance].text,
+        backgroundColor: event.colors[appearance].accent,
+      },
+    ]}>
+    {props.session.room ? props.session.room : 'TBD'}
+  </Text>;
 
   return (
     <View style={styles.container}>
@@ -71,7 +93,7 @@ export default function Session(props) {
           overshootFriction={2}
           ref={SwipeableRef}>
           <Pressable
-            style={[styles.session, {backgroundColor: bg}]}
+            style={[styles.session, { backgroundColor: bg }]}
             onPress={() => {
               setSelectedSession(props.session);
               props.navigation.navigate('SessionInfo');
@@ -105,7 +127,7 @@ export default function Session(props) {
                 <Text
                   style={[
                     styles.title,
-                    {width: 300, color: event.colors[appearance].text},
+                    { width: 300, color: event.colors[appearance].text },
                   ]}>
                   {props.session.title}
                 </Text>
@@ -121,6 +143,7 @@ export default function Session(props) {
                   justifyContent: 'space-between',
                   alignItems: 'flex-end',
                 }}>
+
                 {/* // check if there are speakers */}
                 {props.session.speakers.length > 0 ? (
                   <View
@@ -130,53 +153,23 @@ export default function Session(props) {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                     }}>
+
                     {/* // session time */}
-                    <View
-                      style={[
-                        styles.bottom_text,
-                        {
-                          color: event.colors[appearance].text,
-                          backgroundColor: event.colors[appearance].accent,
-                        },
-                      ]}>
-                      <Times starts={props.starts} ends={props.ends} />
-                    </View>
+                    {times()}
 
                     {/* // session room */}
-                    <Text
-                      style={[
-                        styles.bottom_text,
-                        {
-                          color: event.colors[appearance].text,
-                          backgroundColor: event.colors[appearance].accent,
-                        },
-                      ]}>
-                      {props.session.room}
-                    </Text>
+                    {rooms()}
                   </View>
                 ) : (
                   // main-event session room
                   <View style={styles.main_event_session}>
-                    <View
-                      style={[
-                        styles.bottom_text,
-                        {
-                          color: event.colors[appearance].text,
-                          backgroundColor: event.colors[appearance].accent,
-                        },
-                      ]}>
-                      <Times starts={props.starts} ends={props.ends} />
-                    </View>
-                    <Text
-                      style={[
-                        styles.bottom_text,
-                        {
-                          color: event.colors[appearance].text,
-                          backgroundColor: event.colors[appearance].accent,
-                        },
-                      ]}>
-                      {props.session.room}
-                    </Text>
+
+                    {/* // session time */}
+                    {times()}
+
+                    {/* // session room */}
+                    {rooms()}
+
                   </View>
                 )}
               </View>

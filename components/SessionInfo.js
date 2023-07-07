@@ -14,6 +14,7 @@ import SessionizeContext from './context/SessionizeContext';
 import FeedbackForm from './FeedbackForm';
 import Feedback from './Feedback';
 import Times from './Times';
+import SpeakerInfo from './SpeakerInfo';
 
 export default function SessionInfo(props) {
   const { event, appearance, selectedSession } = useContext(SessionizeContext);
@@ -23,21 +24,8 @@ export default function SessionInfo(props) {
   const SessionInfo = () => {
     return (
       <View style={styles.session_info}>
-        {selectedSession.speakers.map((speaker, index) => (
-          <View
-            key={index}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Image
-              style={styles.profilePicture}
-              source={{ uri: speaker.profilePicture }}
-            />
-            <Text style={[styles.fullName, { color: event.colors[appearance].text }]}>
-              {speaker.fullName}
-            </Text>
-          </View>
+        {selectedSession.speakers.map((speaker) => (
+          <SpeakerInfo speaker={speaker} navigation={props.navigation} event={event} appearance={appearance} />
         ))}
         <Text style={[styles.title, { color: event.colors[appearance].text }]}>
           {selectedSession.title}
@@ -52,7 +40,7 @@ export default function SessionInfo(props) {
                 backgroundColor: event.colors[appearance].accent,
               },
             ]}>
-            {selectedSession.room}
+            {selectedSession.room ? selectedSession.room : 'TBD'}
           </Text>
           <View
             style={[
@@ -177,12 +165,16 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   fullName: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     margin: 10,
   },
   title: {
+    flex: 1,
     fontSize: 20,
+    textAlign: 'left',
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
     margin: 10,
   },
   room: {
@@ -201,26 +193,30 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   description: {
-    fontSize: 15,
-    margin: 20,
+    fontSize: 17,
+    letterSpacing: 0.5,
+    margin: 15,
   },
   description_box: {
-    marginBottom: 20,
+    flex: 0.7,
   },
   scroll_view: {
     flex: 0.7,
   },
   feedback_entry: {
     flex: 0.3,
-    padding: 10,
+    marginTop: 10,
   },
   feedback_button: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
   },
   feedback_button_text: {
     marginRight: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   feedback: {
     flex: 1,

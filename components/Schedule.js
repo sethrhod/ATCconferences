@@ -11,11 +11,13 @@ import {StyleSheet, Text} from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import SessionizeContext from './context/SessionizeContext';
+import SpeakerContext from './context/SpeakerContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MemoizedSession from './Session.js';
 import format_time from './scripts/formatTime.js';
 import SessionInfo from './SessionInfo';
 import SessionSectionList from './SessionSectionList';
+import SpeakerWithSessions from './SpeakerWithSessions';
 
 export default function Schedule(props) {
   const {
@@ -28,6 +30,8 @@ export default function Schedule(props) {
     sessions,
     appearance,
   } = useContext(SessionizeContext);
+
+  const [selectedSpeaker, setSelectedSpeaker] = React.useState(null);
 
   // a function that costructs a list of session data thats compatible with the SectionList component
   const constructSectionListData = bookmarks => {
@@ -87,59 +91,82 @@ export default function Schedule(props) {
   };
 
   const ConditionalRender = (props) => {
-  return (
-    bookmarks.length === 0 ? (
-      <View
-        style={[
-          styles.no_sessions_container,
-          {backgroundColor: event.colors[appearance].background},
-        ]}>
-        <Text
-          style={[styles.noSessions, {color: event.colors[appearance].text}]}>
-          No sessions added
-        </Text>
-        <Text style={[styles.addSome, {color: event.colors[appearance].text}]}>
-          Go to the Sessions page and add some!
-        </Text>
-      </View>
-    ) : (
-      <SessionSectionList
-        navigation={props.navigation}
-        data={constructSectionListData(bookmarks)}
-      />
-    )
-  );}
+    return (
+      bookmarks.length === 0 ? (
+        <View
+          style={[
+            styles.no_sessions_container,
+            { backgroundColor: event.colors[appearance].background },
+          ]}>
+          <Text
+            style={[styles.noSessions, { color: event.colors[appearance].text }]}>
+            No sessions added
+          </Text>
+          <Text style={[styles.addSome, { color: event.colors[appearance].text }]}>
+            Go to the Sessions page and add some!
+          </Text>
+        </View>
+      ) : (
+        <SessionSectionList
+          navigation={props.navigation}
+          data={constructSectionListData(bookmarks)}
+        />
+      )
+    );
+  }
+
+  const value = {
+    selectedSpeaker,
+    setSelectedSpeaker,
+  }
 
   const Stack = createNativeStackNavigator();
 
   return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator>
-        <Stack.Screen name="Schedule" component={ConditionalRender} options={{
-          headerTitle: "Schedule",
-          headerRight: () => <ClearAllButton />,
-          headerStyle: {
-            backgroundColor: event.colors[appearance].background,
-          },
-          headerTitleStyle: {
-            color: event.colors[appearance].text,
-          },
-          headerTintColor: event.colors[appearance].text,
-          headerShadowVisible: false,
-        }} />
-        <Stack.Screen name="SessionInfo" component={SessionInfo} options={{
-          headerTitle: "Session Info",
-          headerStyle: {
-            backgroundColor: event.colors[appearance].background,
-          },
-          headerTitleStyle: {
-            color: event.colors[appearance].text,
-          },
-          headerTintColor: event.colors[appearance].text,
-          headerShadowVisible: false,
-        }} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SpeakerContext.Provider value={value}>
+      <NavigationContainer independent={true}>
+        <Stack.Navigator>
+          <Stack.Screen name="Schedule" component={ConditionalRender} options={{
+            headerTitle: "Schedule",
+            headerRight: () => <ClearAllButton />,
+            headerStyle: {
+              backgroundColor: event.colors[appearance].background,
+            },
+            headerTitleStyle: {
+              color: event.colors[appearance].text,
+            },
+            headerTintColor: event.colors[appearance].text,
+            headerShadowVisible: false,
+          }} />
+          <Stack.Screen name="SessionInfo" component={SessionInfo} options={{
+            headerTitle: "Session Info",
+            headerStyle: {
+              backgroundColor: event.colors[appearance].background,
+            },
+            headerTitleStyle: {
+              color: event.colors[appearance].text,
+            },
+            headerTintColor: event.colors[appearance].text,
+            headerShadowVisible: false,
+          }} />
+          <Stack.Screen
+            name="SpeakerWithSessions"
+            component={SpeakerWithSessions}
+            options={{
+              headerTitle: 'Speaker',
+              headerStyle: {
+                backgroundColor: event.colors[appearance].background,
+              },
+              headerTitleStyle: {
+                color: event.colors[appearance].text,
+              },
+              headerTintColor: event.colors[appearance].text,
+              headerShadowVisible: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SpeakerContext.Provider>
   );
 }
 

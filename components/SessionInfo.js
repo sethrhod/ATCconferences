@@ -24,8 +24,8 @@ export default function SessionInfo(props) {
   const SessionInfo = () => {
     return (
       <View style={styles.session_info}>
-        {selectedSession.speakers.map((speaker) => (
-          <SpeakerInfo speaker={speaker} navigation={props.navigation} event={event} appearance={appearance} />
+        {selectedSession.speakers.map((speaker, index) => (
+          <SpeakerInfo index={index} speaker={speaker} navigation={props.navigation} event={event} appearance={appearance} />
         ))}
         <Text style={[styles.title, { color: event.colors[appearance].text }]}>
           {selectedSession.title}

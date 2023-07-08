@@ -54,7 +54,7 @@ export default function Session(props) {
   };
 
   var bg = props.session.bookmarked
-    ? event.colors[appearance].secondary
+    ? event.colors[appearance].accent
     : event.colors[appearance].card;
 
   const times = () => props.starts ? <View

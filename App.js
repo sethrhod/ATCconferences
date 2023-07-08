@@ -267,7 +267,7 @@ const colors =
     }
     : {
       background: '#FFFFFF',
-      card: '#C9C9CF',
+      card: '#DFDFE2',
       text: '#000000',
       accent: '#C9C9CF',
     };
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 12,
     letterSpacing: 0.5,
-    lineHeight: 20,
+    lineHeight: 15,
     fontWeight: '600',
     textAlign: 'left',
     margin: 5,

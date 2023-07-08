@@ -125,11 +125,17 @@ export default function Event(props) {
       keys.map(key => {
         // if key doesnt match any of the sessions ids in the bookmarks array then it adds it to the bookmarks array
         if (
-          bookmarks.find(session => session.id === key) === undefined &&
-          key !== '@uuid'
+          key == event.id || key !== "@uuid"
         ) {
-          const session = sessions.sessions.find(session => session.id === key);
-          setBookmarks(bookmarks => [...bookmarks, session]);
+          const bookmarkedSessions = AsyncStorage.getItem(key);
+          const bookmarkedSessionsJSON = JSON.parse(bookmarkedSessions);
+          bookmarkedSessionsJSON.map(session => {
+            sessions.map(sessionObject => {
+              if (sessionObject.id == session) {
+                setBookmarks(bookmarks => [...bookmarks, sessionObject]);
+              }
+            });
+          });
         } else {
           return;
         }
@@ -147,9 +153,14 @@ export default function Event(props) {
       return;
     } else {
       // loops through all bookmarks and saves them to the db
+      const list = []
       bookmarks.map(session => {
-        AsyncStorage.setItem(session.id, session.id);
+        list.push(session.id);
       });
+      if (list.length == 0) {
+        AsyncStorage.removeItem(event.id);
+      }
+      AsyncStorage.setItem(event.id, JSON.stringify(list));
     }
   }, [bookmarks]);
 

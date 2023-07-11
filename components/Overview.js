@@ -106,7 +106,7 @@ export default function Overview(props) {
           color={event.colors[appearance].text}
           marginLeft={10}
         />
-        <Text style={{ color: event.colors[appearance].text, fontSize: 20, marginLeft: 10 }}>Event</Text>
+        <Text style={{ color: event.colors[appearance].text, fontSize: 20, marginLeft: 10 }}>Events</Text>
       </Pressable>
     );
   };

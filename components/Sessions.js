@@ -186,7 +186,7 @@ export default function Sessions(props) {
             }
             style={styles.section_list}
             keyExtractor={(item, index) => item + index}
-            contentContainerStyle={{ paddingBottom: 30, padding: 5 }}
+            contentContainerStyle={{ }}
             renderItem={({ item, index, section }) => (
               <MemoizedSession
                 session={item}
@@ -220,13 +220,6 @@ export default function Sessions(props) {
               </View>
             )}
           />
-          {/* <View style={styles.time_scroll_container}>
-            <TimeScroll
-              sectionListData={sections}
-              sectionListRef={sectionListRef}
-              scrollToTime={scrollToTime}
-            />
-          </View> */}
         </SafeAreaView>
       );
     }
@@ -301,6 +294,7 @@ const styles = StyleSheet.create({
   timeblock: {
     flex: 1,
     padding: 15,
+    paddingLeft: 20,
   },
   session: {
     flex: 1,

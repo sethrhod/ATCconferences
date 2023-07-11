@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,32 +8,46 @@ import {
   TouchableOpacity,
   Appearance,
 } from 'react-native';
-import { unzip } from 'react-native-zip-archive';
+import {unzip} from 'react-native-zip-archive';
 import EventToRenderContext from './components/context/EventToRenderContext';
 import Event from './components/Event';
 import RNFS from 'react-native-fs';
+import fetchWithTimeout from './components/scripts/fetchWithTimeout';
+import ConnectionErrorMessage from './components/ConnectionErrorMessage';
+import checkInternetConnection from './components/scripts/checkInternetConnection';
+import TimeoutErrorMessage from './components/TimeoutErrorMessage';
 
 export default function App() {
   const [events, setEvents] = useState([]);
   const [eventToRender, setEventToRender] = useState(null);
+  const [timeoutError, setTimeoutError] = useState(false);
   const CustomData = require('./app.json');
 
   useEffect(() => {
-    fetch(CustomData.DevelopersAssociationofGeorgiaAPI + '/events', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
+    async function fetchEvents() {
+      try {
+        const response = await fetchWithTimeout(
+          CustomData.DevelopersAssociationofGeorgiaAPI + '/events',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            timeout: 6000,
+          },
+        );
+        const data = await response.json();
         setEvents(data);
-      })
-      .catch(error => console.log(error));
+      } catch (error) {
+        console.log(error.name === 'AbortError');
+        setTimeoutError(true);
+      }
+    }
+    fetchEvents();
   }, []);
 
   const EventItem = props => {
-    const { unzippedPath, data } = props;
+    const {unzippedPath, data} = props;
 
     const handlePress = () => {
       data.unzippedPath = unzippedPath;
@@ -42,7 +56,7 @@ export default function App() {
 
     const format_date = date => {
       const date_object = new Date(date);
-      const month = date_object.toLocaleString('default', { month: 'long' });
+      const month = date_object.toLocaleString('default', {month: 'long'});
       const day = date_object.getDate();
       const year = date_object.getFullYear();
       return `${month} ${day}, ${year}`;
@@ -59,23 +73,25 @@ export default function App() {
     return (
       <View style={styles.item}>
         <TouchableOpacity onPress={() => handlePress()}>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <Image
-              source={{ uri: 'file://' + unzippedPath + data.logo }}
+              source={{uri: 'file://' + unzippedPath + data.logo}}
               style={styles.image}
               resizeMode="contain"
             />
-            <View style={{ flex: 1, flexDirection: 'column', margin: 20 }}>
+            <View style={{flex: 1, flexDirection: 'column', margin: 20}}>
               <Text style={styles.title}>{data.name}</Text>
               <Text style={styles.location}>{data.location}</Text>
             </View>
           </View>
-          <View style={styles.description_box} >
+          <View style={styles.description_box}>
             <Text style={styles.description}>{data.description}</Text>
           </View>
           <View style={styles.bottom_box_container}>
             <View style={styles.bottom_box}>
-              <Text style={styles.bottom_box_text}>{format_date(data.date)}</Text>
+              <Text style={styles.bottom_box_text}>
+                {format_date(data.date)}
+              </Text>
             </View>
             <View style={styles.bottom_box}>
               <Text style={styles.bottom_box_text}>{data.time}</Text>
@@ -135,7 +151,7 @@ export default function App() {
     return (
       <View style={styles.item}>
         <TouchableOpacity onPress={() => handlePress()}>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.title}>{props.name}</Text>
           </View>
         </TouchableOpacity>
@@ -216,9 +232,53 @@ export default function App() {
     }
   };
 
+  const eventList = () => {
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={events.events}
+          style={{flex: 0.8}}
+          ListHeaderComponent={
+            <View style={styles.header_container}>
+              <Text style={styles.header}>Hello 👋</Text>
+              <Text style={styles.subheader}>
+                Which event would you like to view?
+              </Text>
+            </View>
+          }
+          ListHeaderComponentStyle={{marginTop: 30}}
+          renderItem={({item}) => (
+            <ListConditionalRender
+              zip_path={item.zip_path}
+              name={item.name}
+              date={item.date}
+            />
+          )}
+          keyExtractor={item => item.name}
+        />
+      </View>
+    );
+  };
+
+  if (timeoutError) {
+    return(
+      <View style={styles.container}>
+        <TimeoutErrorMessage setTimeoutError={setTimeoutError}/>
+      </View>
+    )
+  }
+
+  if (!checkInternetConnection()) {
+    return (
+      <View style={styles.container}>
+        <ConnectionErrorMessage setTimeoutError={setTimeoutError} />
+      </View>
+    )
+  }
+
   if (eventToRender) {
     return (
-      <EventToRenderContext.Provider value={{ setEventToRender }}>
+      <EventToRenderContext.Provider value={{setEventToRender}}>
         <Event
           eventToRender={eventToRender}
           setEventToRender={setEventToRender}
@@ -229,48 +289,23 @@ export default function App() {
     );
   }
 
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={events.events}
-        style={{ flex: 0.8 }}
-        ListHeaderComponent={
-          <View
-            style={styles.header_container}>
-            <Text style={styles.header}>Hello 👋</Text>
-            <Text style={styles.subheader}>
-              Which event would you like to view?
-            </Text>
-          </View>
-        }
-        ListHeaderComponentStyle={{ marginTop: 30 }}
-        renderItem={({ item }) => (
-          <ListConditionalRender
-            zip_path={item.zip_path}
-            name={item.name}
-            date={item.date}
-          />
-        )}
-        keyExtractor={item => item.name}
-      />
-    </View>
-  );
-};
+  return eventList();
+}
 
 const colors =
   Appearance.getColorScheme() === 'dark'
     ? {
-      background: '#121212',
-      card: '#2c2c2c',
-      text: '#F4F4F5',
-      accent: '#4D4D56',
-    }
+        background: '#121212',
+        card: '#2c2c2c',
+        text: '#F4F4F5',
+        accent: '#4D4D56',
+      }
     : {
-      background: '#FFFFFF',
-      card: '#DFDFE2',
-      text: '#000000',
-      accent: '#C9C9CF',
-    };
+        background: '#FFFFFF',
+        card: '#DFDFE2',
+        text: '#000000',
+        accent: '#C9C9CF',
+      };
 
 const styles = StyleSheet.create({
   container: {

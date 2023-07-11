@@ -12,6 +12,7 @@ import Sessions from './Sessions';
 import Schedule from './Schedule';
 import SessionizeContext from './context/SessionizeContext';
 import fetchAllData from './scripts/fetchAllData';
+import TimeoutErrorMessage from './TimeoutErrorMessage';
 
 export default function Event(props) {
   const Tab = createBottomTabNavigator();
@@ -48,6 +49,8 @@ export default function Event(props) {
   const [appearance, setAppearance] = useState(props.appearance);
   // selected session for the session info view
   const [selectedSession, setSelectedSession] = useState(null);
+  // timeout error for when the fetch takes too long
+  const [timeoutError, setTimeoutError] = useState(false);
 
   // // refresh the app when the bookmarks change
   // const [refresh, setRefresh] = useState(false);
@@ -86,7 +89,7 @@ export default function Event(props) {
     if (uUID === null) {
       return;
     } else {
-      fetchAllData(event, customData, setSessions, setSpeakers, uUID);
+      fetchAllData(setTimeoutError, event, customData, setSessions, setSpeakers, uUID);
     }
   }, [uUID]);
 
@@ -163,6 +166,14 @@ export default function Event(props) {
       AsyncStorage.setItem(event.id, JSON.stringify(list));
     }
   }, [bookmarks]);
+
+  if (timeoutError) {
+    return (
+      <View style={styles.container}>
+        <TimeoutErrorMessage setTimeoutError={setTimeoutError} />
+      </View>
+    );
+  }
 
   // only shows app home page if bookmarks are done loading from db
   if (isLoading) {
@@ -277,6 +288,5 @@ const styles = StyleSheet.create({
   },
   loading: {
     fontSize: 32,
-    letterSpacing: 2,
   },
 });

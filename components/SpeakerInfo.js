@@ -6,6 +6,7 @@ import {
   Pressable,
   StyleSheet,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import SpeakerContext from './context/SpeakerContext';
 import Icon from 'react-native-vector-icons/FontAwesome';

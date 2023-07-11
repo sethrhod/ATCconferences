@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 5,
+    marginTop: 0,
   },
   session: {
     flex: 1,

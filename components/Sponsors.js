@@ -16,19 +16,30 @@ import SessionizeContext from './context/SessionizeContext';
 import SessionInfo from './SessionInfo';
 import Session from './Session';
 import BookmarkButton from './BookmarkButton';
+import fetchWithTimeout from './scripts/fetchWithTimeout';
+import TimeoutErrorMessage from './TimeoutErrorMessage';
 
 export default function Sponsors() {
   const {event, appearance, sessions, selectedSession} = useContext(SessionizeContext);
 
   const [data, setData] = React.useState(null);
   const [isLoading, setLoading] = React.useState(true);
+  const [timeoutError, setTimeoutError] = React.useState(false);
 
   React.useEffect(() => {
-    fetch(event.sponsorsAPI)
-      .then(response => response.json())
-      .then(json => setData(json))
-      .catch(error => console.error(error))
-      .finally(() => setLoading(false));
+    const fetchSponsors = async () => {
+      try {
+        const response = await fetchWithTimeout(event.sponsorsAPI, {timeout: 8000});
+        const json = await response.json();
+        setData(json);
+      } catch (error) {
+        console.log(error.name === 'AbortError');
+        setTimeoutError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSponsors();
   }, []);
 
   const sponsoredSession = props => {
@@ -123,6 +134,14 @@ export default function Sponsors() {
     );
   };
 
+  if (timeoutError) {
+    return (
+      <View style={[styles.container, {backgroundColor: event.colors[appearance].background}]}>
+        <TimeoutErrorMessage />
+      </View>
+    )
+  }
+
   const Stack = createNativeStackNavigator();
 
   return (
@@ -206,6 +225,5 @@ const styles = StyleSheet.create({
   },
   loading: {
     fontSize: 32,
-    letterSpacing: 2,
   },
 });

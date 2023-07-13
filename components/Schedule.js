@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   SectionList,
   View,
@@ -16,8 +16,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MemoizedSession from './Session.js';
 import format_time from './scripts/formatTime.js';
 import SessionInfo from './SessionInfo';
-import SessionSectionList from './SessionSectionList';
+import ScheduleSectionList from './ScheduleSectionList';
 import SpeakerWithSessions from './SpeakerWithSessions';
+import loadBookmarks from './scripts/loadBookmarks';
+import constructSectionListData from './scripts/constructSectionListData';
 
 export default function Schedule(props) {
   const {
@@ -25,38 +27,50 @@ export default function Schedule(props) {
     event,
     uUID,
     setSessions,
-    bookmarks,
-    setBookmarks,
     sessions,
     appearance,
   } = useContext(SessionizeContext);
 
   const [selectedSpeaker, setSelectedSpeaker] = React.useState(null);
+  const [bookmarks, setBookmarks] = React.useState([]);
+  const [data, setData] = React.useState([]);
 
-  // a function that costructs a list of session data thats compatible with the SectionList component
-  const constructSectionListData = bookmarks => {
-    // create an empty array to store the data
-    let data = [];
-    // loop through the sessions
-    sessions.start_times.forEach(time => {
-      // create an empty object to store the data
-      let obj = {};
-      // set the title of the object to the start time of the session and add to the same hour sessions
-      obj.title = format_time(time);
-      // set the data of the object to the sessions that start at the same time
-      obj.data = bookmarks.filter(bookmark => bookmark.startsAt === time);
+  useEffect(() => {
+    getBookmarks();
+  }, [sessions]);
 
-      if (obj.data.length > 0) {
-        // change the bookmarked state of the session to true
-        obj.data.forEach(session => {
-          session.bookmarked = true;
-        });
-        // push the object to the data array
-        data.push(obj);
+  const getBookmarks = async () => {
+    const bookmarks = await loadBookmarks(event, sessions);
+    setBookmarks(bookmarks);
+    const bookmarkSessions = findBookmarkSessions(sessions, bookmarks);
+    const data = constructSectionListData(bookmarkSessions, bookmarks);
+    const sortedData = sortData(data);
+    setData(sortedData);
+  };
+
+  const sortData = (data) => {
+    const sorted = [];
+
+    data.map((item) => {
+      if (item.data.length === 0) {
+        return;
+      } else {
+        sorted.push(item);
       }
     });
-    // return the data array
-    return data;
+    return sorted;
+  };
+
+      
+  const findBookmarkSessions = (sessions, bookmarks) => {
+    let bookmarkSessions = [];
+    sessions.sessions.forEach((session) => {
+      if (bookmarks.includes(session.id)) {
+        bookmarkSessions.push(session);
+      }
+    });
+    sessions.sessions = bookmarkSessions;
+    return sessions;
   };
 
   // a function that clears all asyncstorage data
@@ -107,9 +121,9 @@ export default function Schedule(props) {
           </Text>
         </View>
       ) : (
-        <SessionSectionList
+        <ScheduleSectionList
           navigation={props.navigation}
-          data={constructSectionListData(bookmarks)}
+          data={data}
         />
       )
     );

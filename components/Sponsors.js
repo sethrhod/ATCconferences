@@ -224,6 +224,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loading: {
-    fontSize: 32,
+    fontSize: 25,
   },
 });

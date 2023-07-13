@@ -15,17 +15,16 @@ export default async function fetchAllData(
       timeout: 8000,
     });
 
-    const data = await response.json();
-
     let all_speakers = [];
+
+    const data = await response.json()
 
     data.map(speaker => {
       let classinstance = new Speaker(speaker);
       all_speakers.push(classinstance);
     });
-
+    await fetchSessions(event, customData, all_speakers, setSessions, uuid);
     setSpeakers(all_speakers);
-    fetchSessions(event, customData, all_speakers, setSessions, uuid);
   } catch (error) {
     console.log(error.name === 'AbortError');
     setTimeoutError(true);

@@ -1,4 +1,3 @@
-import {Text} from 'react-native';
 import format_time from './formatTime';
 
 // a function that costructs a list of session data thats compatible with the SectionList component
@@ -24,7 +23,7 @@ const constructSectionListData = (sessions, bookmarks) => {
       } else {
         // compare ids in sessions and bookmarks array, if id exists in both, set bookmarked state of the session to true
         bookmarks.forEach(bookmark => {
-          if (session.id === bookmark.id) {
+          if (session.id === bookmark) {
             session.bookmarked = true;
           }
         });

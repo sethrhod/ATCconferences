@@ -12,6 +12,13 @@ export default function Session(props) {
   const { event, appearance, setSelectedSession } = useContext(SessionizeContext);
 
   const [imageMounted, setImageMounted] = React.useState(false);
+  const [bookmarked, setBookmarked] = React.useState(() => {
+    if (props.bookmarks) {
+      return props.bookmarks.includes(props.session.id);
+    } else {
+      return false;
+    }
+  });
 
   const speakers = props.session.speakers.map((speaker, index) => (
     <View style={styles.speaker_box} key={index}>
@@ -49,13 +56,11 @@ export default function Session(props) {
         imageMounted={imageMounted}
         navigation={props.navigation}
         swipeableRef={SwipeableRef}
+        bookmarked={bookmarked}
+        setBookmarked={setBookmarked}
       />
     );
   };
-
-  var bg = props.session.bookmarked
-    ? event.colors[appearance].accent
-    : event.colors[appearance].card;
 
   const times = () => props.starts ? <View
     style={[
@@ -93,7 +98,14 @@ export default function Session(props) {
           overshootFriction={2}
           ref={SwipeableRef}>
           <Pressable
-            style={[styles.session, { backgroundColor: bg }]}
+            style={[
+              styles.session,
+              {
+                backgroundColor: bookmarked
+                  ? event.colors[appearance].accent
+                  : event.colors[appearance].card,
+              },
+            ]}
             onPress={() => {
               setSelectedSession(props.session);
               props.navigation.navigate('SessionInfo');
@@ -106,12 +118,7 @@ export default function Session(props) {
               if (SwipeableRef.current) {
                 SwipeableRef.current.openRight();
               }
-            }}
-            // on press in darken the background
-            onPressIn={() => {
-              bg = event.colors[appearance].accent;
             }}>
-
             <View style={styles.session_info}>
               {/* // session title */}
 
@@ -127,7 +134,7 @@ export default function Session(props) {
                 <Text
                   style={[
                     styles.title,
-                    { width: 300, color: event.colors[appearance].text },
+                    {width: 300, color: event.colors[appearance].text},
                   ]}>
                   {props.session.title}
                 </Text>
@@ -143,7 +150,6 @@ export default function Session(props) {
                   justifyContent: 'space-between',
                   alignItems: 'flex-end',
                 }}>
-
                 {/* // check if there are speakers */}
                 {props.session.speakers.length > 0 ? (
                   <View
@@ -153,7 +159,6 @@ export default function Session(props) {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                     }}>
-
                     {/* // session time */}
                     {times()}
 
@@ -163,13 +168,11 @@ export default function Session(props) {
                 ) : (
                   // main-event session room
                   <View style={styles.main_event_session}>
-
                     {/* // session time */}
                     {times()}
 
                     {/* // session room */}
                     {rooms()}
-
                   </View>
                 )}
               </View>

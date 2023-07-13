@@ -246,7 +246,7 @@ export default function App() {
               </Text>
             </View>
           }
-          ListHeaderComponentStyle={{marginTop: 30}}
+          ListHeaderComponentStyle={{marginTop: 50}}
           renderItem={({item}) => (
             <ListConditionalRender
               zip_path={item.zip_path}

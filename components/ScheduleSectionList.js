@@ -3,8 +3,7 @@ import { View, Text, SectionList, RefreshControl, SafeAreaView, StyleSheet } fro
 import MemoizedSession from './Session.js';
 import SessionizeContext from './context/SessionizeContext';
 
-
-const SessionSectionList = (props) => {
+const ScheduleSectionList = (props) => {
   const sectionListRef = useRef(null);
   const {
     event,
@@ -78,7 +77,7 @@ const SessionSectionList = (props) => {
   )
 }
 
-export default SessionSectionList;
+export default ScheduleSectionList;
 
 
 const styles = StyleSheet.create({

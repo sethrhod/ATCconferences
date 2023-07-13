@@ -21,8 +21,6 @@ export default function Event(props) {
   const [speakers, setSpeakers] = useState(null);
   //session objects containing assigned speaker objects
   const [sessions, setSessions] = useState(null);
-  //list of session objects to appear in the users timeline
-  const [bookmarks, setBookmarks] = useState([]);
   //boolean for whether the id's have been retrived from the db or not
   const [isLoading, setIsLoading] = useState(true);
   //uuid for the user
@@ -52,17 +50,10 @@ export default function Event(props) {
   // timeout error for when the fetch takes too long
   const [timeoutError, setTimeoutError] = useState(false);
 
-  // // refresh the app when the bookmarks change
-  // const [refresh, setRefresh] = useState(false);
-  // useEffect(() => {
-  //   setRefresh(!refresh);
-  // }, [bookmarks]);
-
   // context value
   const value = {
     speakers,
     sessions,
-    bookmarks,
     uUID,
     filterOptions,
     event,
@@ -75,7 +66,6 @@ export default function Event(props) {
     setEvent,
     setSpeakers,
     setSessions,
-    setBookmarks,
     setUUID,
     setFilterOptions,
   };
@@ -86,11 +76,19 @@ export default function Event(props) {
   }, []);
 
   useEffect(() => {
-    if (uUID === null) {
-      return;
-    } else {
-      fetchAllData(setTimeoutError, event, customData, setSessions, setSpeakers, uUID);
-    }
+    const asyncFetch = async () => {
+      if (uUID === null) {
+        return;
+      } else {
+        try {
+          await fetchAllData(setTimeoutError, event, customData, setSessions, setSpeakers, uUID);
+          setIsLoading(false);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    asyncFetch();
   }, [uUID]);
 
   const checkUUID = async () => {
@@ -110,62 +108,6 @@ export default function Event(props) {
     await AsyncStorage.setItem('@uuid', newUUID);
     return newUUID;
   };
-
-  // load bookmarked sessions from db using asyncstorage when sesssions is not null
-  useEffect(() => {
-    if (sessions === null) {
-      return;
-    } else {
-      load();
-    }
-  }, [sessions]);
-
-  const load = async () => {
-    try {
-      // gets all keys from db
-      keys = await AsyncStorage.getAllKeys();
-      // loops through all values and add them to the bookmarks array if its id doesnt match any of the keys
-      keys.map(key => {
-        // if key doesnt match any of the sessions ids in the bookmarks array then it adds it to the bookmarks array
-        if (
-          key == event.id || key !== "@uuid"
-        ) {
-          const bookmarkedSessions = AsyncStorage.getItem(key);
-          const bookmarkedSessionsJSON = JSON.parse(bookmarkedSessions);
-          bookmarkedSessionsJSON.map(session => {
-            sessions.map(sessionObject => {
-              if (sessionObject.id == session) {
-                setBookmarks(bookmarks => [...bookmarks, sessionObject]);
-              }
-            });
-          });
-        } else {
-          return;
-        }
-      });
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // checks if sessions is null, if it is then it returns
-    if (sessions === null) {
-      return;
-    } else {
-      // loops through all bookmarks and saves them to the db
-      const list = []
-      bookmarks.map(session => {
-        list.push(session.id);
-      });
-      if (list.length == 0) {
-        AsyncStorage.removeItem(event.id);
-      }
-      AsyncStorage.setItem(event.id, JSON.stringify(list));
-    }
-  }, [bookmarks]);
 
   if (timeoutError) {
     return (
@@ -287,6 +229,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   loading: {
-    fontSize: 32,
+    fontSize: 25,
   },
 });

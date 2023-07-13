@@ -48,7 +48,7 @@ export default function LeftSwipeActions(props) {
         <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
           Add to Schedule
         </Text>
-        <BookmarkButton session={props.session} size={iconsize} swipeableRef={props.swipeableRef} />
+        <BookmarkButton session={props.session} size={iconsize} swipeableRef={props.swipeableRef} bookmarked={props.bookmarked} setBookmarked={props.setBookmarked} />
       </View>
       <Pressable
         style={[styles.Pressable, {borderColor: event.colors[appearance].background}]}

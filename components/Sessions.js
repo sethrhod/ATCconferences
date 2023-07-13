@@ -13,20 +13,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import SessionizeContext from './context/SessionizeContext';
 import SpeakerContext from './context/SpeakerContext';
 import MemoizedSession from './Session.js';
-import constructSectionListData from './scripts/constructScheduleSectionListData.js';
+import constructSectionListData from './scripts/constructSectionListData.js';
 import fetchSessions from './scripts/fetchSessions.js';
 import format_time from './scripts/formatTime.js';
 import SessionInfo from './SessionInfo';
 import FilterList from './FilterList';
 import BookmarkButton from './BookmarkButton';
 import SpeakerWithSessions from './SpeakerWithSessions';
+import loadBookmarks from './scripts/loadBookmarks';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export default function Sessions(props) {
   const {
     customData,
     event,
     appearance,
-    bookmarks,
     uUID,
     filterOptions,
     setFilterOptions,
@@ -37,28 +38,75 @@ export default function Sessions(props) {
   const sectionListRef = React.useRef(null);
 
   const [refreshing, setRefreshing] = React.useState(false);
-  const [sections, setSections] = React.useState(
-    constructSectionListData(sessions, bookmarks),
-  );
+  const [sections, setSections] = React.useState([]);
   const [selectedSpeaker, setSelectedSpeaker] = React.useState(null);
+  const [bookmarks, setBookmarks] = React.useState([]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchSessions(event, customData, sessions.all_speakers, setSessions, uUID);
+    getBookmarks();
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
   }, []);
 
   useEffect(() => {
-    onRefresh();
+    const sections = constructSectionListData(sessions, bookmarks);
+    const filteredSections = applyFilters(sections);
+    setSections(filteredSections);
   }, [filterOptions]);
+
+  useEffect(() => {
+    getBookmarks();
+  }, [sessions]);
+
+  const getBookmarks = async () => {
+    const bookmarks = await loadBookmarks(event, sessions);
+    setBookmarks(bookmarks);
+    const sections = constructSectionListData(sessions, bookmarks);
+    setSections(sections);
+  };
+
+  useEffect(() => {
+    let rooms = [];
+    let times = [];
+    // loops through all sessions and adds the rooms to the rooms array
+    sessions.sessions.map(session => {
+      if (!rooms.includes(session.room)) {
+        rooms.push(session.room);
+      }
+    });
+    // loops through all sessions and adds the times to the times array
+    sessions.sessions.map(session => {
+      if (!times.includes(session.startsAt)) {
+        times.push(session.startsAt);
+      }
+    });
+    let roomsObjects = [];
+    let timesObjects = [];
+    // loops through all rooms and creates an object for each room
+    rooms.map(room => {
+      roomsObjects.push({ name: room, value: false });
+    });
+    // loops through all times and creates an object for each time
+    times.map(time => {
+      let formattedTime = format_time(time);
+      timesObjects.push({ name: formattedTime, value: false });
+    });
+    let newFilterOptions = filterOptions;
+    // sets the options for the times filter
+    newFilterOptions[2].options = timesObjects;
+    // sets the options for the rooms filter
+    newFilterOptions[1].options = roomsObjects;
+    setFilterOptions(newFilterOptions);
+  }, []);
 
   const applyFilters = newSections => {
     let rooms = [];
     let times = [];
     filterOptions.forEach(option => {
-      if (option.name === 'Rooms' || option.name === 'Times') {
+      if (!option.name === 'Rooms' || !option.name === 'Times') {
         option.options.forEach(subOption => {
           if (subOption.value) {
             if (option.name === 'Rooms') {
@@ -103,46 +151,6 @@ export default function Sessions(props) {
     });
     return filteredSections;
   };
-
-  useEffect(() => {
-    let rooms = [];
-    let times = [];
-    // loops through all sessions and adds the rooms to the rooms array
-    sessions.sessions.map(session => {
-      if (!rooms.includes(session.room)) {
-        rooms.push(session.room);
-      }
-    });
-    // loops through all sessions and adds the times to the times array
-    sessions.sessions.map(session => {
-      if (!times.includes(session.startsAt)) {
-        times.push(session.startsAt);
-      }
-    });
-    let roomsObjects = [];
-    let timesObjects = [];
-    // loops through all rooms and creates an object for each room
-    rooms.map(room => {
-      roomsObjects.push({ name: room, value: false });
-    });
-    // loops through all times and creates an object for each time
-    times.map(time => {
-      let formattedTime = format_time(time);
-      timesObjects.push({ name: formattedTime, value: false });
-    });
-    let newFilterOptions = filterOptions;
-    // sets the options for the times filter
-    newFilterOptions[2].options = timesObjects;
-    // sets the options for the rooms filter
-    newFilterOptions[1].options = roomsObjects;
-    setFilterOptions(newFilterOptions);
-  }, []);
-
-  useEffect(() => {
-    let newSections = constructSectionListData(sessions, bookmarks);
-    let filteredSections = applyFilters(newSections);
-    setSections(filteredSections);
-  }, [sessions]);
 
   const headerRightSchedule = () => {
     return (
@@ -201,6 +209,7 @@ export default function Sessions(props) {
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 navigation={props.navigation}
+                bookmarks={bookmarks}
               />
             )}
             renderSectionHeader={({ section: { title, index } }) => (

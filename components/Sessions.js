@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import SessionizeContext from './context/SessionizeContext';
 import SpeakerContext from './context/SpeakerContext';
 import MemoizedSession from './Session.js';
@@ -21,7 +21,6 @@ import FilterList from './FilterList';
 import BookmarkButton from './BookmarkButton';
 import SpeakerWithSessions from './SpeakerWithSessions';
 import loadBookmarks from './scripts/loadBookmarks';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export default function Sessions(props) {
   const {
@@ -31,7 +30,6 @@ export default function Sessions(props) {
     uUID,
     filterOptions,
     setFilterOptions,
-    selectedSession,
     sessions,
     setSessions,
   } = useContext(SessionizeContext);
@@ -40,35 +38,33 @@ export default function Sessions(props) {
   const [refreshing, setRefreshing] = React.useState(false);
   const [sections, setSections] = React.useState([]);
   const [selectedSpeaker, setSelectedSpeaker] = React.useState(null);
-  const [bookmarks, setBookmarks] = React.useState([]);
+  const [selectedSession, setSelectedSession] = React.useState(null);
+  const [bookmarksChanged, setBookmarksChanged] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchSessions(event, customData, sessions.all_speakers, setSessions, uUID);
-    getBookmarks();
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000);
+    }, 3000);
   }, []);
 
-  useEffect(() => {
-    const sections = constructSectionListData(sessions, bookmarks);
-    const filteredSections = applyFilters(sections);
-    setSections(filteredSections);
-  }, [filterOptions]);
+  useFocusEffect(
+    React.useCallback(() => {
+      const newSections = async () => {
+        const sections = constructSectionListData(sessions);
+        const filteredSections = applyFilters(sections);
+        setSections(filteredSections);
+      };
+      newSections();
+    }, [filterOptions, selectedSession, sessions]),
+  );
 
   useEffect(() => {
-    getBookmarks();
-  }, [sessions]);
+    createNewFilterOptions();
+  }, []);
 
-  const getBookmarks = async () => {
-    const bookmarks = await loadBookmarks(event, sessions);
-    setBookmarks(bookmarks);
-    const sections = constructSectionListData(sessions, bookmarks);
-    setSections(sections);
-  };
-
-  useEffect(() => {
+  const createNewFilterOptions = () => {
     let rooms = [];
     let times = [];
     // loops through all sessions and adds the rooms to the rooms array
@@ -95,27 +91,34 @@ export default function Sessions(props) {
       timesObjects.push({ name: formattedTime, value: false });
     });
     let newFilterOptions = filterOptions;
-    // sets the options for the times filter
-    newFilterOptions[2].options = timesObjects;
-    // sets the options for the rooms filter
-    newFilterOptions[1].options = roomsObjects;
+    newFilterOptions.forEach(option => {  
+      if (option.name === 'Rooms') {
+          // sets the options for the rooms filter
+        option.options = roomsObjects;
+      } else if (option.name === 'Times') {
+          // sets the options for the times filter
+        option.options = timesObjects;
+      }
+    });
     setFilterOptions(newFilterOptions);
-  }, []);
+  };
 
   const applyFilters = newSections => {
     let rooms = [];
     let times = [];
     filterOptions.forEach(option => {
-      if (!option.name === 'Rooms' || !option.name === 'Times') {
-        option.options.forEach(subOption => {
-          if (subOption.value) {
-            if (option.name === 'Rooms') {
-              rooms.push(subOption.name);
-            } else if (option.name === 'Times') {
-              times.push(subOption.name);
+      if (option.name === 'Rooms' || option.name === 'Times') {
+        if (option.options) {
+          option.options.forEach(subOption => {
+            if (subOption.value) {
+              if (option.name === 'Rooms') {
+                rooms.push(subOption.name);
+              } else if (option.name === 'Times') {
+                times.push(subOption.name);
+              }
             }
-          }
-        });
+          });
+        }
       }
     });
     if (rooms.length === 0 && times.length === 0) {
@@ -194,7 +197,6 @@ export default function Sessions(props) {
             }
             style={styles.section_list}
             keyExtractor={(item, index) => item + index}
-            contentContainerStyle={{ }}
             renderItem={({ item, index, section }) => (
               <MemoizedSession
                 session={item}
@@ -209,7 +211,9 @@ export default function Sessions(props) {
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 navigation={props.navigation}
-                bookmarks={bookmarks}
+                setSelectedSession={setSelectedSession}
+                bookmarksChanged={bookmarksChanged}
+                setBookmarksChanged={setBookmarksChanged}
               />
             )}
             renderSectionHeader={({ section: { title, index } }) => (
@@ -234,8 +238,41 @@ export default function Sessions(props) {
     }
   };
 
+  const HeaderRight = (props) => {
+    const [bookmarked, setBookmarked] = React.useState(false);
+
+    useEffect(() => {
+      const getBookmarks = async () => {
+        return await loadBookmarks(event, sessions);
+      };
+      getBookmarks().then((bookmarksList) => {
+        // find if session is bookmarked
+        const bookmarked = bookmarksList.find(
+          bookmark => bookmark === selectedSession.id,
+        );
+        if (bookmarked) {
+          setBookmarked(true);
+        } else {
+          setBookmarked(false);
+        }
+      });
+    }, [selectedSession]);
+
+    return (
+      <BookmarkButton
+        session={selectedSession}
+        bookmarked={bookmarked}
+        setBookmarked={setBookmarked}
+        bookmarksChanged={bookmarksChanged}
+        setBookmarksChanged={setBookmarksChanged}
+      />
+    );
+  };
+
   const value = {
     selectedSpeaker,
+    selectedSession,
+    setSelectedSession,
     setSelectedSpeaker,
   }
 
@@ -259,7 +296,7 @@ export default function Sessions(props) {
           }}
           />
           <Stack.Screen name="SessionInfo" component={SessionInfo} options={{
-            headerRight: () => <BookmarkButton session={selectedSession} color={event.colors[appearance].text} />,
+            headerRight: () => <HeaderRight />,
             headerTitle: "Session Info",
             headerStyle: {
               backgroundColor: event.colors[appearance].background,

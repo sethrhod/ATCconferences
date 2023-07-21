@@ -1,33 +1,24 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-async function loadBookmarks(event, sessions) {
+async function loadBookmarks(event) {
 
   const getData = async key => {
     try {
       const Json = await AsyncStorage.getItem(key);
-      return Json != null ? Json : null;
+      return Json;
     } catch (err) {
       console.log(err);
     }
   };
 
   const bookmarkedSessions = await getData(event.id);
+  const bookmarks = JSON.parse(bookmarkedSessions);
 
-  var bookmarks = [];
-
-  try {
-    const bookmarkedSessionsJSON = JSON.parse(bookmarkedSessions);
-    bookmarkedSessionsJSON.map(sessionID => {
-      sessions.sessions.map(session => {
-        if (sessionID == session.id) {
-          bookmarks.push(sessionID);
-        }
-      });
-    });
-  } catch (err) {
-    console.log(err);
+  if (!bookmarkedSessions) {
+    return [];
+  } else {
+    return bookmarks;
   }
-  return bookmarks;
 }
 
 export default loadBookmarks;

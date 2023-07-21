@@ -119,7 +119,7 @@ export default function FilterList(props) {
                 backgroundColor: event.colors[appearance].primary,
               },
             ]}>
-            {filterView ? (
+            {filterView !== null ? (
               <SafeAreaView style={styles.filter_options}>
                 <TouchableOpacity onPress={() => setFilterView(null)}>
                   <Icon name="chevron-circle-left" size={20} />
@@ -140,8 +140,8 @@ export default function FilterList(props) {
               </SafeAreaView>
             ) : (
               <View>
+                <FilterOptionsList item={props.filterOptions[0]} index={0}  />
                 <FilterOptionsList item={props.filterOptions[1]} index={1} />
-                <FilterOptionsList item={props.filterOptions[2]} index={2} />
               </View>
             )}
           </View>

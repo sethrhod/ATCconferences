@@ -16,22 +16,9 @@ const constructSectionListData = (sessions, bookmarks) => {
     
     // set the data of the object to the sessions that start at the same time
     obj.data = sessions.sessions.filter(session => session.startsAt == time);
-    obj.data.forEach(session => {
-      //check if bookmarks array is empty and if it is, set the bookmarked state to false
-      if (bookmarks.length === 0) {
-        session.bookmarked = false;
-      } else {
-        // compare ids in sessions and bookmarks array, if id exists in both, set bookmarked state of the session to true
-        bookmarks.forEach(bookmark => {
-          if (session.id === bookmark) {
-            session.bookmarked = true;
-          }
-        });
-      }
-      // set the index of the object to the index of the time in the start_times array
-      const startTimesArray = Array.from(sessions.start_times);
-      obj.index = startTimesArray.indexOf(time);
-    });
+    // set the index of the object to the index of the time in the start_times array
+    const startTimesArray = Array.from(sessions.start_times);
+    obj.index = startTimesArray.indexOf(time);
     // push the object to the data array
     data.push(obj);
   });

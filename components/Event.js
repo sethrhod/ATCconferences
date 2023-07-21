@@ -27,7 +27,6 @@ export default function Event(props) {
   const [uUID, setUUID] = useState(null);
   // list of filter options
   const [filterOptions, setFilterOptions] = useState([
-    { name: 'My Timeline', value: false },
     {
       name: 'Rooms',
       value: false,
@@ -45,8 +44,6 @@ export default function Event(props) {
   const [customData, setCustomData] = useState(props.customData);
   //phones appearance setting for dark or light mode
   const [appearance, setAppearance] = useState(props.appearance);
-  // selected session for the session info view
-  const [selectedSession, setSelectedSession] = useState(null);
   // timeout error for when the fetch takes too long
   const [timeoutError, setTimeoutError] = useState(false);
 
@@ -59,8 +56,6 @@ export default function Event(props) {
     event,
     customData,
     appearance,
-    selectedSession,
-    setSelectedSession,
     setAppearance,
     setCustomData,
     setEvent,
@@ -81,7 +76,14 @@ export default function Event(props) {
         return;
       } else {
         try {
-          await fetchAllData(setTimeoutError, event, customData, setSessions, setSpeakers, uUID);
+          await fetchAllData(
+            setTimeoutError,
+            event,
+            customData,
+            setSessions,
+            setSpeakers,
+            uUID,
+          );
           setIsLoading(false);
         } catch (error) {
           console.log(error);
@@ -121,7 +123,9 @@ export default function Event(props) {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <Text style={[styles.loading, { color: event.colors[appearance].text }]}>Loading...</Text>
+        <Text style={[styles.loading, {color: event.colors[appearance].text}]}>
+          Loading...
+        </Text>
       </View>
     );
   }
@@ -159,7 +163,7 @@ export default function Event(props) {
             component={Overview}
             options={{
               headerShown: false,
-              tabBarIcon: ({ color, size }) => (
+              tabBarIcon: ({color, size}) => (
                 <FontAwesome5 name="home" size={size} color={color} />
               ),
             }}
@@ -169,7 +173,7 @@ export default function Event(props) {
             component={Speakers}
             options={{
               headerShown: false,
-              tabBarIcon: ({ color, size }) => (
+              tabBarIcon: ({color, size}) => (
                 <FontAwesome5 name="users" size={size} color={color} />
               ),
             }}
@@ -179,7 +183,7 @@ export default function Event(props) {
             component={Sponsors}
             options={{
               headerShown: false,
-              tabBarIcon: ({ color, size }) => (
+              tabBarIcon: ({color, size}) => (
                 <FontAwesome5
                   name="hand-holding-heart"
                   size={size}
@@ -194,7 +198,7 @@ export default function Event(props) {
             component={Sessions}
             options={{
               headerShown: false,
-              tabBarIcon: ({ color, size }) => (
+              tabBarIcon: ({color, size}) => (
                 <FontAwesome5 name="calendar" size={size} color={color} />
               ),
             }}
@@ -204,7 +208,7 @@ export default function Event(props) {
             component={Schedule}
             options={{
               headerShown: false,
-              tabBarIcon: ({ color, size }) => (
+              tabBarIcon: ({color, size}) => (
                 <FontAwesome5 name="clock" size={size} color={color} />
               ),
               headerRight: null,

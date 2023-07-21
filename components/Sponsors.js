@@ -9,27 +9,37 @@ import {
   TouchableHighlight,
   Linking,
   Platform,
+  Dimensions,
 } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import SessionizeContext from './context/SessionizeContext';
+import SpeakerContext from './context/SpeakerContext';
 import SessionInfo from './SessionInfo';
+import SpeakerWithSessions from './SpeakerWithSessions';
 import Session from './Session';
 import BookmarkButton from './BookmarkButton';
 import fetchWithTimeout from './scripts/fetchWithTimeout';
 import TimeoutErrorMessage from './TimeoutErrorMessage';
+import loadBookmarks from './scripts/loadBookmarks';
 
 export default function Sponsors() {
-  const {event, appearance, sessions, selectedSession} = useContext(SessionizeContext);
+  const {event, appearance, sessions} = useContext(SessionizeContext);
 
   const [data, setData] = React.useState(null);
   const [isLoading, setLoading] = React.useState(true);
   const [timeoutError, setTimeoutError] = React.useState(false);
+  const [bookmarksChanged, setBookmarksChanged] = React.useState(false);
+  const [selectedSession, setSelectedSession] = React.useState(null);
+  const [selectedSpeaker, setSelectedSpeaker] = React.useState(null);
 
-  React.useEffect(() => {
+  useFocusEffect(
+  React.useCallback(() => {
     const fetchSponsors = async () => {
       try {
-        const response = await fetchWithTimeout(event.sponsorsAPI, {timeout: 8000});
+        const response = await fetchWithTimeout(event.sponsorsAPI, {
+          timeout: 8000,
+        });
         const json = await response.json();
         setData(json);
       } catch (error) {
@@ -40,7 +50,8 @@ export default function Sponsors() {
       }
     };
     fetchSponsors();
-  }, []);
+  }, [bookmarksChanged]),
+  );
 
   const sponsoredSession = props => {
     var sponsored_sessions = [];
@@ -66,6 +77,8 @@ export default function Sponsors() {
             starts={session.startsAt}
             ends={session.endsAt}
             navigation={props.navigation}
+            setSelectedSession={setSelectedSession}
+            bookmarksChanged={bookmarksChanged}
           />
         ))}
       </View>
@@ -134,6 +147,38 @@ export default function Sponsors() {
     );
   };
 
+  const headerRight = () => {
+    const [bookmarked, setBookmarked] = React.useState(false);
+
+    React.useEffect(() => {
+      const getBookmarks = async () => {
+        return await loadBookmarks(event, sessions);
+      };
+      getBookmarks()
+        .then(bookmarksList => {
+          // find if session is bookmarked
+          const bookmarked = bookmarksList.find(
+            bookmark => bookmark === selectedSession.id,
+          );
+          if (bookmarked) {
+            setBookmarked(true);
+          } else {
+            setBookmarked(false);
+          }
+        })
+    }, [selectedSession]);
+
+    return (
+      <BookmarkButton
+        session={selectedSession}
+        bookmarked={bookmarked}
+        setBookmarked={setBookmarked}
+        bookmarksChanged={bookmarksChanged}
+        setBookmarksChanged={setBookmarksChanged}
+      />
+    );
+  };
+
   if (timeoutError) {
     return (
       <View style={[styles.container, {backgroundColor: event.colors[appearance].background}]}>
@@ -144,34 +189,66 @@ export default function Sponsors() {
 
   const Stack = createNativeStackNavigator();
 
+  const value = {
+    selectedSpeaker,
+    selectedSession,
+    setSelectedSession,
+    setSelectedSpeaker,
+  }
+
   return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator>
-        <Stack.Screen name="Sponsors" component={SponsorsList} options={{
-          headerStyle: {
-            backgroundColor: event.colors[appearance].background,
-          },
-          headerTitleStyle: {
-            color: event.colors[appearance].text,
-          },
-          headerTintColor: event.colors[appearance].text,
-          headerShadowVisible: false,
-        }} />
-        <Stack.Screen name="SessionInfo" component={SessionInfo} options={{
-          headerRight: () => <BookmarkButton session={selectedSession} color={event.colors[appearance].text} />,
-          headerTitle: "Session Info",
-          headerStyle: {
-            backgroundColor: event.colors[appearance].background,
-          },
-          headerTitleStyle: {
-            color: event.colors[appearance].text,
-          },
-          headerTintColor: event.colors[appearance].text,
-          headerShadowVisible: false,
-        }} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  )
+    <SpeakerContext.Provider value={value}>
+      <NavigationContainer independent={true}>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Sponsors"
+            component={SponsorsList}
+            options={{
+              headerStyle: {
+                backgroundColor: event.colors[appearance].background,
+              },
+              headerTitleStyle: {
+                color: event.colors[appearance].text,
+              },
+              headerTintColor: event.colors[appearance].text,
+              headerShadowVisible: false,
+            }}
+          />
+          <Stack.Screen
+            name="SessionInfo"
+            component={SessionInfo}
+            options={{
+              headerRight: () => headerRight(),
+              headerTitle: 'Session Info',
+              headerStyle: {
+                backgroundColor: event.colors[appearance].background,
+              },
+              headerTitleStyle: {
+                color: event.colors[appearance].text,
+              },
+              headerTintColor: event.colors[appearance].text,
+              headerShadowVisible: false,
+            }}
+          />
+          <Stack.Screen
+            name="SpeakerWithSessions"
+            component={SpeakerWithSessions}
+            options={{
+              headerTitle: 'Speaker',
+              headerStyle: {
+                backgroundColor: event.colors[appearance].background,
+              },
+              headerTitleStyle: {
+                color: event.colors[appearance].text,
+              },
+              headerTintColor: event.colors[appearance].text,
+              headerShadowVisible: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SpeakerContext.Provider>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -220,6 +297,8 @@ const styles = StyleSheet.create({
   },
   loading_container: {
     flex: 1,
+    marginTop: Dimensions.get('window').height / 3,
+    marginBottom: Dimensions.get('window').height / 3,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -15,9 +15,11 @@ import FeedbackForm from './FeedbackForm';
 import Feedback from './Feedback';
 import Times from './Times';
 import SpeakerInfo from './SpeakerInfo';
+import SpeakerContext from './context/SpeakerContext';
 
 export default function SessionInfo(props) {
-  const { event, appearance, selectedSession } = useContext(SessionizeContext);
+  const {event, appearance} = useContext(SessionizeContext);
+  const {selectedSession} = useContext(SpeakerContext);
 
   const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
 
@@ -25,13 +27,18 @@ export default function SessionInfo(props) {
     return (
       <View style={styles.session_info}>
         {selectedSession.speakers.map((speaker, index) => (
-          <SpeakerInfo key={index} speaker={speaker} navigation={props.navigation} event={event} appearance={appearance} />
+          <SpeakerInfo
+            key={index}
+            speaker={speaker}
+            navigation={props.navigation}
+            event={event}
+            appearance={appearance}
+          />
         ))}
-        <Text style={[styles.title, { color: event.colors[appearance].text }]}>
+        <Text style={[styles.title, {color: event.colors[appearance].text}]}>
           {selectedSession.title}
         </Text>
-        <View
-          style={styles.session_info_boxes}>
+        <View style={styles.session_info_boxes}>
           <Text
             style={[
               styles.bottom_text,
@@ -50,7 +57,10 @@ export default function SessionInfo(props) {
                 backgroundColor: event.colors[appearance].accent,
               },
             ]}>
-            <Times starts={selectedSession.startsAt} ends={selectedSession.endsAt} />
+            <Times
+              starts={selectedSession.startsAt}
+              ends={selectedSession.endsAt}
+            />
           </View>
         </View>
         <View
@@ -60,7 +70,11 @@ export default function SessionInfo(props) {
               borderBottomColor: 'white',
             },
           ]}>
-          <Text style={[styles.description, { color: event.colors[appearance].text }]}>
+          <Text
+            style={[
+              styles.description,
+              {color: event.colors[appearance].text},
+            ]}>
             {selectedSession.description}
           </Text>
         </View>
@@ -75,10 +89,18 @@ export default function SessionInfo(props) {
   const LeaveFeedbackButton = () => {
     return (
       <Pressable style={styles.feedback_button} onPress={() => handlePress()}>
-        <Text style={[styles.feedback_button_text, { color: event.colors[appearance].text }]}>
+        <Text
+          style={[
+            styles.feedback_button_text,
+            {color: event.colors[appearance].text},
+          ]}>
           Leave Feedback
         </Text>
-        <Icon name="plus-square" size={30} color={event.colors[appearance].text} />
+        <Icon
+          name="plus-square"
+          size={30}
+          color={event.colors[appearance].text}
+        />
       </Pressable>
     );
   };
@@ -103,13 +125,18 @@ export default function SessionInfo(props) {
     };
     if (feedbackEntryVisible) {
       scrollToEnd();
-    } 
+    }
   }, [marginBottom]);
 
   return (
-    <ScrollView style={[styles.scroll_view, { backgroundColor: event.colors[appearance].background }]} ref={scrollViewRef}>
+    <ScrollView
+      style={[
+        styles.scroll_view,
+        {backgroundColor: event.colors[appearance].background},
+      ]}
+      ref={scrollViewRef}>
       <SessionInfo />
-      <View style={[styles.feedback_entry, { marginBottom: marginBottom }]}>
+      <View style={[styles.feedback_entry, {marginBottom: marginBottom}]}>
         {/* conditional render for leave feedback button based on if feedback already exists or not but checks that selectedSession exists first */}
         {selectedSession.feedback === undefined ? (
           <LeaveFeedbackButton />

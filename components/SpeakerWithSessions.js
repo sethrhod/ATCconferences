@@ -15,7 +15,7 @@ import SpeakerInfo from './SpeakerInfo';
 import Session from './Session';
 
 export default function SpeakerWithSessions(props) {
-  const {selectedSpeaker} = React.useContext(SpeakerContext);
+  const {selectedSpeaker, setSelectedSession, bookmarksChanged, setBookmarksChanged} = React.useContext(SpeakerContext);
 
   const {event, appearance, sessions} = React.useContext(SessionizeContext);
 
@@ -36,6 +36,9 @@ export default function SpeakerWithSessions(props) {
             starts={session.startsAt}
             ends={session.endsAt}
             navigation={props.navigation}
+            bookmarksChanged={bookmarksChanged}
+            setBookmarksChanged={setBookmarksChanged}
+            setSelectedSession={setSelectedSession}
           />
         )}
         ListHeaderComponent={

@@ -30,6 +30,9 @@ export default class Sessions {
 
   matchFeedback(feedback) {
     this.sessions.forEach((session) => {
+      if (!feedback) {
+        return;
+      }
       var matching_feedback = feedback.find((x) => x.sessionid === session.id);
       if (matching_feedback) {
         session.feedback = matching_feedback;

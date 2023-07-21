@@ -44,14 +44,31 @@ export default function LeftSwipeActions(props) {
           setIconsize(event.nativeEvent.layout.height / 4);
         }
       }}>
-      <View style={[styles.Pressable, {borderColor: event.colors[appearance].background}]}>
+      <View
+        style={[
+          styles.Pressable,
+          {borderColor: event.colors[appearance].background},
+        ]}>
         <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
-          Add to Schedule
+          {props.bookmarked ? 'Remove from Schedule' : 'Add to Schedule'}
         </Text>
-        <BookmarkButton session={props.session} size={iconsize} swipeableRef={props.swipeableRef} bookmarked={props.bookmarked} setBookmarked={props.setBookmarked} />
+        <BookmarkButton
+          session={props.session}
+          size={iconsize}
+          swipeableRef={props.swipeableRef}
+          bookmarked={props.bookmarked}
+          setBookmarked={props.setBookmarked}
+          bookmarksChanged={props.bookmarksChanged}
+          setBookmarksChanged={props.setBookmarksChanged}
+          updateSchedule={props.updateSchedule}
+          setUpdateSchedule={props.setUpdateSchedule}
+        />
       </View>
       <Pressable
-        style={[styles.Pressable, {borderColor: event.colors[appearance].background}]}
+        style={[
+          styles.Pressable,
+          {borderColor: event.colors[appearance].background},
+        ]}
         onPress={() =>
           props.setFeedbackEntryVisible(!props.feedbackEntryVisible)
         }>
@@ -61,7 +78,10 @@ export default function LeftSwipeActions(props) {
         <Icon name="plus-square" size={iconsize} solid />
       </Pressable>
       <Pressable
-        style={[styles.Pressable, {borderColor: event.colors[appearance].background}]}
+        style={[
+          styles.Pressable,
+          {borderColor: event.colors[appearance].background},
+        ]}
         onPress={() => {
           setSelectedSession(props.session);
           props.navigation.navigate('SessionInfo');

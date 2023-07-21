@@ -1,34 +1,49 @@
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
-import React, { useEffect, useContext, memo } from 'react';
+import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
+import React, {useEffect, useContext, memo} from 'react';
 import SessionizeContext from './context/SessionizeContext';
 import Feedback from './Feedback';
-import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
+import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FeedbackForm from './FeedbackForm';
 import LeftSwipeActionsMemo from './LeftSwipeActions';
+import loadBookmarks from './scripts/loadBookmarks';
 import Times from './Times';
 
 export default function Session(props) {
-  const { event, appearance, setSelectedSession } = useContext(SessionizeContext);
+  const {event, appearance, sessions} =
+    useContext(SessionizeContext);
 
   const [imageMounted, setImageMounted] = React.useState(false);
-  const [bookmarked, setBookmarked] = React.useState(() => {
-    if (props.bookmarks) {
-      return props.bookmarks.includes(props.session.id);
-    } else {
-      return false;
-    }
-  });
+  const [bookmarked, setBookmarked] = React.useState(null);
+  // bookmarks boolean to signal change in bookmarks storage
+  const [bookmarksChanged, setBookmarksChanged] = React.useState(false);
+
+  useEffect(() => {
+    const getBookmarks = async () => {
+      return await loadBookmarks(event, sessions);
+    };
+    getBookmarks().then((bookmarksList) => {
+      // find if session is bookmarked
+      const bookmarked = bookmarksList.find(
+        bookmark => bookmark === props.session.id,
+      );
+      if (bookmarked) {
+        setBookmarked(true);
+      } else {
+        setBookmarked(false);
+      }
+    });
+  }, [bookmarksChanged, props.bookmarksChanged]);
 
   const speakers = props.session.speakers.map((speaker, index) => (
     <View style={styles.speaker_box} key={index}>
       <Image
         key={index}
         style={styles.logo}
-        source={{ uri: speaker.profilePicture }}
+        source={{uri: speaker.profilePicture}}
         onLayout={() => setImageMounted(true)}
       />
-      <Text style={[styles.name, { color: event.colors[appearance].text }]}>
+      <Text style={[styles.name, {color: event.colors[appearance].text}]}>
         {speaker.fullName}
       </Text>
     </View>
@@ -58,31 +73,52 @@ export default function Session(props) {
         swipeableRef={SwipeableRef}
         bookmarked={bookmarked}
         setBookmarked={setBookmarked}
+        bookmarksChanged={bookmarksChanged}
+        setBookmarksChanged={setBookmarksChanged}
+        updateSchedule={props.updateSchedule}
+        setUpdateSchedule={props.setUpdateSchedule}
       />
     );
   };
 
-  const times = () => props.starts ? <View
-    style={[
-      styles.bottom_text,
-      {
-        color: event.colors[appearance].text,
-        backgroundColor: event.colors[appearance].accent,
-      },
-    ]}>
-    <Times starts={props.starts} ends={props.ends} />
-  </View> : null
+  const times = () =>
+    props.starts ? (
+      <View
+        style={[
+          styles.bottom_text,
+          {
+            color: event.colors[appearance].text,
+            backgroundColor: event.colors[appearance].accent,
+          },
+        ]}>
+        <Times starts={props.starts} ends={props.ends} />
+      </View>
+    ) : null;
 
-  const rooms = () => <Text
-    style={[
-      styles.bottom_text,
-      {
-        color: event.colors[appearance].text,
-        backgroundColor: event.colors[appearance].accent,
-      },
-    ]}>
-    {props.session.room ? props.session.room : 'TBD'}
-  </Text>;
+  const rooms = () => (
+    <Text
+      style={[
+        styles.bottom_text,
+        {
+          color: event.colors[appearance].text,
+          backgroundColor: event.colors[appearance].accent,
+        },
+      ]}>
+      {props.session.room ? props.session.room : 'TBD'}
+    </Text>
+  );
+
+  if (bookmarked === null) {
+    return (
+      <View style={styles.container}>
+        <View
+          style={[
+            styles.session,
+            {backgroundColor: event.colors[appearance].card},
+          ]}></View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -107,7 +143,7 @@ export default function Session(props) {
               },
             ]}
             onPress={() => {
-              setSelectedSession(props.session);
+              props.setSelectedSession(props.session);
               props.navigation.navigate('SessionInfo');
 
               if (SwipeableRef.current) {
@@ -189,7 +225,6 @@ export default function Session(props) {
           sectionListRef={props.sectionListRef}
           itemIndex={props.itemIndex}
           sectionIndex={props.sectionIndex}
-          setSections={props.setSections}
           onRefresh={props.onRefresh}
           request="POST"
         />
@@ -200,7 +235,6 @@ export default function Session(props) {
         sectionListRef={props.sectionListRef}
         itemIndex={props.itemIndex}
         sectionIndex={props.sectionIndex}
-        setSections={props.setSections}
         refreshing={props.refreshing}
         onRefresh={props.onRefresh}
       />
@@ -274,5 +308,5 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     marginRight: 5,
-  }
+  },
 });

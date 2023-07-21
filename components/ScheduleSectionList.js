@@ -1,15 +1,20 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, Text, SectionList, RefreshControl, SafeAreaView, StyleSheet } from 'react-native';
+import React, {useState, useEffect, useRef, useContext} from 'react';
+import {
+  View,
+  Text,
+  SectionList,
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+} from 'react-native';
 import MemoizedSession from './Session.js';
 import SessionizeContext from './context/SessionizeContext';
+import SpeakerContext from './context/SpeakerContext';
 
-const ScheduleSectionList = (props) => {
+const ScheduleSectionList = props => {
   const sectionListRef = useRef(null);
-  const {
-    event,
-    appearance,
-  } = useContext(SessionizeContext);
-
+  const {event, appearance} = useContext(SessionizeContext);
+  const {selectedSession, setSelectedSession} = useContext(SpeakerContext);
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -23,7 +28,7 @@ const ScheduleSectionList = (props) => {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: event.colors[appearance].background },
+        {backgroundColor: event.colors[appearance].background},
       ]}>
       <SectionList
         sections={props.data}
@@ -33,8 +38,7 @@ const ScheduleSectionList = (props) => {
         }
         style={styles.section_list}
         keyExtractor={(item, index) => item + index}
-        contentContainerStyle={{ paddingBottom: 30, padding: 5 }}
-        renderItem={({ item, index, section }) => (
+        renderItem={({item, index, section}) => (
           <MemoizedSession
             session={item}
             starts={item.startsAt}
@@ -47,19 +51,23 @@ const ScheduleSectionList = (props) => {
             refreshing={refreshing}
             onRefresh={onRefresh}
             navigation={props.navigation}
+            updateSchedule={props.updateSchedule}
+            setUpdateSchedule={props.setUpdateSchedule}
+            selectedSession={selectedSession}
+            setSelectedSession={setSelectedSession}
           />
         )}
-        renderSectionHeader={({ section: { title, index } }) => (
+        renderSectionHeader={({section: {title, index}}) => (
           <View
             style={[
               styles.timeblock,
-              { backgroundColor: event.colors[appearance].background },
+              {backgroundColor: event.colors[appearance].background},
             ]}
             key={index}>
             <Text
               style={[
                 styles.timeblock_text,
-                { color: event.colors[appearance].text },
+                {color: event.colors[appearance].text},
               ]}>
               {title}
             </Text>
@@ -74,22 +82,24 @@ const ScheduleSectionList = (props) => {
           />
         </View> */}
     </SafeAreaView>
-  )
-}
+  );
+};
 
 export default ScheduleSectionList;
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
   },
   timeblock_text: {
     fontSize: 15,
     fontWeight: 'bold',
   },
   timeblock: {
-    margin: 10,
+    flex: 1,
+    padding: 15,
+    paddingLeft: 20,
   },
   noSessions: {
     textAlign: 'center',
@@ -107,14 +117,6 @@ const styles = StyleSheet.create({
   section_list: {
     height: '100%',
     flex: 1,
-  },
-  timeblock_text: {
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  timeblock: {
-    flex: 1,
-    padding: 15,
   },
   session: {
     flex: 1,

@@ -1,22 +1,32 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import {Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from './context/SessionizeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import loadBookmarks from './scripts/loadBookmarks';
 
 export default function BookmarkButton(props) {
+  const {event, sessions} = React.useContext(SessionizeContext);
 
-  const { event, sessions } = React.useContext(SessionizeContext);
-
-  const addToBookmarks = async (session) => {
+  const addToBookmarks = async session => {
     props.setBookmarked(true);
     const bookmarks = await loadBookmarks(event, sessions);
     bookmarks.push(session.id);
-    save(bookmarks);
+    save(bookmarks)
+      .then(() => {
+        if (props.setBookmarksChanged) {
+          props.setBookmarksChanged(!props.bookmarksChanged);
+        }
+        if (props.setUpdateSchedule) {
+          props.setUpdateSchedule(!props.updateSchedule);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
-  const save = async (bookmarks) => {
+  const save = async bookmarks => {
     try {
       await AsyncStorage.setItem(event.id, JSON.stringify(bookmarks));
     } catch (err) {
@@ -24,14 +34,25 @@ export default function BookmarkButton(props) {
     }
   };
 
-  const removeFromBookmarks = async (session) => {
+  const removeFromBookmarks = async session => {
     props.setBookmarked(false);
     const bookmarks = await loadBookmarks(event, sessions);
-    filteredBookmarks = bookmarks.filter(item => item !== session.id);
-    save(filteredBookmarks);
+    const filteredBookmarks = bookmarks.filter(item => item !== session.id);
+    save(filteredBookmarks)
+      .then(() => {
+        if (props.setBookmarksChanged) {
+          props.setBookmarksChanged(!props.bookmarksChanged);
+        }
+        if (props.setUpdateSchedule) {
+          props.setUpdateSchedule(!props.updateSchedule);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
-  const toggleBookmark = async (session) => {
+  const toggleBookmark = async session => {
     // either remove or add as bookmark depending on previous state
     if (props.bookmarked == true) {
       // remove bookmark
@@ -56,10 +77,19 @@ export default function BookmarkButton(props) {
         toggleBookmark(props.session);
       }}>
       {props.bookmarked ? (
-        <Icon name="bookmark" size={props.size ? props.size : 30} solid color={props.color ? props.color : null} />
+        <Icon
+          name="bookmark"
+          size={props.size ? props.size : 30}
+          solid
+          color={props.color ? props.color : null}
+        />
       ) : (
-        <Icon name="bookmark-o" size={props.size ? props.size : 30} color={props.color ? props.color : null} />
+        <Icon
+          name="bookmark-o"
+          size={props.size ? props.size : 30}
+          color={props.color ? props.color : null}
+        />
       )}
     </Pressable>
   );
-};
+}

@@ -78,7 +78,6 @@ export default function Feedback(props) {
           sectionListRef={props.sectionListRef}
           itemIndex={props.itemIndex}
           sectionIndex={props.sectionIndex}
-          setSections={props.setSections}
           onRefresh={props.onRefresh}
           request="PUT"
         />

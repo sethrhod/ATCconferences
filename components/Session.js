@@ -15,6 +15,7 @@ export default function Session(props) {
 
   const [imageMounted, setImageMounted] = React.useState(false);
   const [bookmarked, setBookmarked] = React.useState(null);
+  const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
   // bookmarks boolean to signal change in bookmarks storage
   const [bookmarksChanged, setBookmarksChanged] = React.useState(false);
 
@@ -59,8 +60,6 @@ export default function Session(props) {
       SwipeableRef.current.close();
     }
   }, [props.refreshing]);
-
-  const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
 
   const LeftSwipeAction = () => {
     return (

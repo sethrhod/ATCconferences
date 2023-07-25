@@ -16,6 +16,7 @@ export default function Session(props) {
   const [imageMounted, setImageMounted] = React.useState(false);
   const [bookmarked, setBookmarked] = React.useState(null);
   const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
+  const [editView, setEditView] = React.useState(false);
   // bookmarks boolean to signal change in bookmarks storage
   const [bookmarksChanged, setBookmarksChanged] = React.useState(false);
 
@@ -67,6 +68,8 @@ export default function Session(props) {
         session={props.session}
         setFeedbackEntryVisible={setFeedbackEntryVisible}
         feedbackEntryVisible={feedbackEntryVisible}
+        editView={editView}
+        setEditView={setEditView}
         imageMounted={imageMounted}
         navigation={props.navigation}
         swipeableRef={SwipeableRef}
@@ -76,6 +79,9 @@ export default function Session(props) {
         setBookmarksChanged={setBookmarksChanged}
         updateSchedule={props.updateSchedule}
         setUpdateSchedule={props.setUpdateSchedule}
+        sectionListRef={props.sectionListRef}
+        itemIndex={props.itemIndex}
+        sectionIndex={props.sectionIndex}
       />
     );
   };
@@ -215,19 +221,6 @@ export default function Session(props) {
           </Pressable>
         </Swipeable>
       </GestureHandlerRootView>
-      {feedbackEntryVisible ? (
-        <FeedbackForm
-          session={props.session}
-          feedbackEntryVisible={feedbackEntryVisible}
-          setFeedbackEntryVisible={setFeedbackEntryVisible}
-          SwipeableRef={SwipeableRef}
-          sectionListRef={props.sectionListRef}
-          itemIndex={props.itemIndex}
-          sectionIndex={props.sectionIndex}
-          onRefresh={props.onRefresh}
-          request="POST"
-        />
-      ) : null}
       <Feedback
         session={props.session}
         SwipeableRef={SwipeableRef}
@@ -236,6 +229,10 @@ export default function Session(props) {
         sectionIndex={props.sectionIndex}
         refreshing={props.refreshing}
         onRefresh={props.onRefresh}
+        feedbackEntryVisible={feedbackEntryVisible}
+        setFeedbackEntryVisible={setFeedbackEntryVisible}
+        editView={editView}
+        setEditView={setEditView}
       />
     </View>
   );

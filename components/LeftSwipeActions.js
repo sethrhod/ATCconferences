@@ -5,8 +5,7 @@ import SessionizeContext from './context/SessionizeContext';
 import BookmarkButton from './BookmarkButton';
 
 export default function LeftSwipeActions(props) {
-  const {event, appearance, setSelectedSession} =
-    React.useContext(SessionizeContext);
+  const {event, appearance} = React.useContext(SessionizeContext);
   const leftSwipeBoxRef = React.useRef(null);
 
   const [fontSize, setFontSize] = React.useState(15);
@@ -30,6 +29,31 @@ export default function LeftSwipeActions(props) {
       return 11;
     }
   };
+
+  const handlePress = () => {
+    const scroll = async () => {
+      {
+        if (props.sectionListRef)
+          props.sectionListRef.current.scrollToLocation({
+            animated: true,
+            itemIndex: props.itemIndex,
+            sectionIndex: props.sectionIndex,
+            viewOffset: 0,
+            viewPosition: 0,
+          });
+      }
+    };
+    if (props.session.feedback) {
+      scroll().then(() => {
+        props.setEditView(true);
+      });
+    } else {
+      scroll().then(() => {
+        props.setFeedbackEntryVisible(true);
+      });
+    }
+  };
+    
 
   return (
     <View
@@ -69,11 +93,9 @@ export default function LeftSwipeActions(props) {
           styles.Pressable,
           {borderColor: event.colors[appearance].background},
         ]}
-        onPress={() =>
-          props.setFeedbackEntryVisible(!props.feedbackEntryVisible)
-        }>
+        onPress={() => handlePress()}>
         <Text style={[styles.left_swipe_titles, {fontSize: checkFontValue()}]}>
-          Add Feedback
+          {props.session.feedback ? 'Edit Feedback' : 'Leave Feedback'}
         </Text>
         <Icon name="plus-square" size={iconsize} solid />
       </Pressable>
@@ -83,7 +105,7 @@ export default function LeftSwipeActions(props) {
           {borderColor: event.colors[appearance].background},
         ]}
         onPress={() => {
-          setSelectedSession(props.session);
+          props.setSelectedSession(props.session);
           props.navigation.navigate('SessionInfo');
 
           if (props.swipeableRef.current) {

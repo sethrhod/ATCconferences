@@ -59,15 +59,8 @@ export default function FeedbackForm(props) {
   const inputRef = React.useRef();
 
   useEffect(() => {
-    if (props.sectionListRef) {
-    props.sectionListRef.current.scrollToLocation({
-      itemIndex: props.itemIndex,
-      sectionIndex: props.sectionIndex,
-      viewPosition: 0,
-      viewOffset: -50,
-      animated: true,
-    });
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
   }, []);
 
@@ -81,34 +74,40 @@ export default function FeedbackForm(props) {
       };
       if (props.request === 'POST') {
         submitFeedback(props.session.id, text);
-        if (props.SwipeableRef) {
-          props.SwipeableRef.current.close();
-        }
       } else if (props.request === 'PUT') {
         editFeedback(props.session.id, text);
       }
     }
+    props.SwipeableRef ? props.SwipeableRef.current.close() : null;
     props.setFeedbackEntryVisible ? props.setFeedbackEntryVisible(false) : null;
     props.setEditView ? props.setEditView(false) : null;
   };
 
   return (
-    <View
-      style={[styles.feedback_input, {backgroundColor: event.colors[appearance].primary}]}>
-      <TextInput
-        onChangeText={text => setText(text)}
-        multiline={true}
-        onBlur={() => handleBlur()}
-        value={text}
-        autoFocus={true}
-        placeholder="Feedback"
-        placeholderTextColor={event.colors[appearance].secondary}
-        cursorColor={event.colors[appearance].secondary}
-        ref={inputRef}
-        style={{
-          color: event.colors[appearance].text,
-        }}
-      />
+    <View style={styles.container}>
+      <View
+        style={[
+          styles.feedback,
+          {backgroundColor: event.colors[appearance].primary},
+        ]}>
+        <TextInput
+          onChangeText={text => setText(text)}
+          multiline={true}
+          onBlur={() => handleBlur()}
+          value={text}
+          autoFocus={true}
+          placeholder="Feedback"
+          placeholderTextColor={event.colors[appearance].secondary}
+          cursorColor={event.colors[appearance].secondary}
+          ref={inputRef}
+          style={[
+            styles.feedback_text,
+            {
+              color: event.colors[appearance].text,
+            },
+          ]}
+        />
+      </View>
     </View>
   );
 }
@@ -116,15 +115,19 @@ export default function FeedbackForm(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  feedback_input: {
+  feedback: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 10,
-    borderRadius: 10,
     padding: 10,
+    margin: 10,
+    marginTop: 0,
+    marginBottom: 15,
+    borderRadius: 10,
+  },
+  feedback_text: {
+    textAlign: 'center',
+    fontSize: 15,
   },
 });

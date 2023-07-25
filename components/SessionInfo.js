@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from './context/SessionizeContext';
-import FeedbackForm from './FeedbackForm';
 import Feedback from './Feedback';
 import Times from './Times';
 import SpeakerInfo from './SpeakerInfo';
@@ -22,6 +21,7 @@ export default function SessionInfo(props) {
   const {selectedSession} = useContext(SpeakerContext);
 
   const [feedbackEntryVisible, setFeedbackEntryVisible] = React.useState(false);
+  const [editView, setEditView] = React.useState(false);
 
   const SessionInfo = () => {
     return (
@@ -141,32 +141,18 @@ export default function SessionInfo(props) {
         {selectedSession.feedback === undefined ? (
           <LeaveFeedbackButton />
         ) : null}
-        {feedbackEntryVisible ? (
-          <View style={styles.feedback}>
-            <FeedbackForm
-              session={selectedSession}
-              feedbackEntryVisible={feedbackEntryVisible}
-              setFeedbackEntryVisible={setFeedbackEntryVisible}
-              SwipeableRef={props.SwipeableRef}
-              sectionListRef={props.sectionListRef}
-              itemIndex={props.itemIndex}
-              sectionIndex={props.sectionIndex}
-              setSections={props.setSections}
-              onRefresh={props.onRefresh}
-              request="POST"
-            />
-          </View>
-        ) : null}
         <View style={styles.feedback}>
           <Feedback
             session={selectedSession}
-            SwipeableRef={props.SwipeableRef}
             sectionListRef={props.sectionListRef}
             itemIndex={props.itemIndex}
             sectionIndex={props.sectionIndex}
-            setSections={props.setSections}
             refreshing={props.refreshing}
             onRefresh={props.onRefresh}
+            feedbackEntryVisible={feedbackEntryVisible}
+            setFeedbackEntryVisible={setFeedbackEntryVisible}
+            editView={editView}
+            setEditView={setEditView}
           />
         </View>
       </View>

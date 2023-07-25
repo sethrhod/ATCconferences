@@ -6,6 +6,7 @@ import {
   RefreshControl,
   SafeAreaView,
   StyleSheet,
+  KeyboardAvoidingView,
 } from 'react-native';
 import MemoizedSession from './Session.js';
 import SessionizeContext from './context/SessionizeContext';
@@ -25,11 +26,14 @@ const ScheduleSectionList = props => {
   }, []);
 
   return (
-    <SafeAreaView
+    <KeyboardAvoidingView
       style={[
         styles.container,
         {backgroundColor: event.colors[appearance].background},
-      ]}>
+      ]}
+      behavior="padding"
+      keyboardVerticalOffset={95}
+      >
       <SectionList
         sections={props.data}
         ref={sectionListRef}
@@ -81,7 +85,7 @@ const ScheduleSectionList = props => {
             scrollToTime={scrollToTime}
           />
         </View> */}
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -90,7 +94,6 @@ export default ScheduleSectionList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
   },
   timeblock_text: {
     fontSize: 15,

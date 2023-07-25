@@ -58,6 +58,9 @@ export default function Schedule(props) {
         sorted.push(item);
       }
     });
+    sorted.map((item, index) => {
+      item.index = index;
+    });
     return sorted;
   };
 

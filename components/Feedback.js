@@ -6,15 +6,11 @@ import FeedbackForm from './FeedbackForm';
 import SessionizeContext from './context/SessionizeContext';
 
 export default function Feedback(props) {
-  const { uUID, event, appearance, customData } = useContext(SessionizeContext);
-
-  const [editView, setEditView] = React.useState(false);
+  const {uUID, event, appearance, customData} = useContext(SessionizeContext);
 
   const DeleteSwipeableRef = React.useRef(null);
 
   useEffect(() => {
-    setEditView(false);
-
     if (DeleteSwipeableRef.current) {
       DeleteSwipeableRef.current.close();
     }
@@ -47,69 +43,93 @@ export default function Feedback(props) {
       props.session.feedback.feedback,
     );
     props.session.feedback = undefined;
-    setEditView(!editView);
+    props.setEditView(!props.editView);
   };
 
   const Delete = () => {
     return (
       <TouchableOpacity
-        style={[styles.delete_feedback, {backgroundColor: event.colors[appearance].accent}]}
+        style={[
+          styles.feedback_delete,
+          {backgroundColor: event.colors[appearance].accent},
+        ]}
         onPress={() => handlePress()}>
         <Text
-          style={[styles.delete_feedback_text, {color: event.colors[appearance].text}]}>
+          style={[
+            styles.feedback_text,
+            {color: event.colors[appearance].text},
+          ]}>
           Delete
         </Text>
-        <View style={styles.delete_feedback_icon}>
-          <Icon name="trash" size={20} color={event.colors[appearance].primary} />
+        <View style={styles.delete_icon}>
+          <Icon
+            name="trash"
+            size={20}
+            color={event.colors[appearance].primary}
+          />
         </View>
       </TouchableOpacity>
     );
   };
 
-  // only render if feedback is not null
-  if (props.session.feedback !== undefined) {
-    if (editView === true) {
-      return (
-        <FeedbackForm
-          session={props.session}
-          setEditView={setEditView}
-          feedbackText={props.session.feedback.feedback}
-          SwipeableRef={props.SwipeableRef}
-          sectionListRef={props.sectionListRef}
-          itemIndex={props.itemIndex}
-          sectionIndex={props.sectionIndex}
-          onRefresh={props.onRefresh}
-          request="PUT"
-        />
-      );
-    } else {
-      return (
-        <GestureHandlerRootView style={styles.container}>
-          <Swipeable
-            ref={DeleteSwipeableRef}
-            renderLeftActions={() => Delete()}
-            renderRightActions={() => Delete()}
-            overshootLeft={false}
-            overshootRight={false}
-            rightThreshold={100}
-            leftThreshold={100}
-            friction={2}
-            overshootFriction={8}>
-            <View
-              style={[
-                styles.feedback,
-                {backgroundColor: event.colors[appearance].primary},
-              ]}>
-              <TouchableOpacity onPress={() => setEditView(!editView)}>
-                <Text style={{color: event.colors[appearance].text}}>
-                  {props.session.feedback.feedback}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Swipeable>
-        </GestureHandlerRootView>
-      );
-    }
+  // only render if feedback is not undefined
+  if (props.session.feedback && props.editView) {
+    return (
+      <FeedbackForm
+        session={props.session}
+        feedbackText={props.session.feedback.feedback}
+        SwipeableRef={props.SwipeableRef}
+        feedbackEntryVisible={props.feedbackEntryVisible}
+        setFeedbackEntryVisible={props.setFeedbackEntryVisible}
+        sectionListRef={props.sectionListRef}
+        itemIndex={props.itemIndex}
+        sectionIndex={props.sectionIndex}
+        onRefresh={props.onRefresh}
+        setEditView={props.setEditView}
+        request="PUT"
+      />
+    );
+  } else if (props.feedbackEntryVisible) {
+    return (
+      <FeedbackForm
+        session={props.session}
+        feedbackEntryVisible={props.feedbackEntryVisible}
+        setFeedbackEntryVisible={props.setFeedbackEntryVisible}
+        SwipeableRef={props.SwipeableRef}
+        sectionListRef={props.sectionListRef}
+        itemIndex={props.itemIndex}
+        sectionIndex={props.sectionIndex}
+        onRefresh={props.onRefresh}
+        request="POST"
+      />
+    );
+  } else if (props.session.feedback && !props.editView) {
+    return (
+      <GestureHandlerRootView style={styles.container}>
+        <Swipeable
+          ref={DeleteSwipeableRef}
+          renderLeftActions={() => Delete()}
+          renderRightActions={() => Delete()}
+          overshootLeft={false}
+          overshootRight={false}
+          rightThreshold={100}
+          leftThreshold={100}
+          friction={2}
+          overshootFriction={8}>
+          <View
+            style={[
+              styles.feedback,
+              {backgroundColor: event.colors[appearance].primary},
+            ]}>
+            <TouchableOpacity onPress={() => props.setEditView(!props.editView)}>
+              <Text style={[styles.feedback_text, {color: event.colors[appearance].text}]}>
+                {props.session.feedback.feedback}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Swipeable>
+      </GestureHandlerRootView>
+    );
   }
   return null;
 }
@@ -138,27 +158,32 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
   },
-  feedback_container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-  },
   feedback: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 10,
-    borderRadius: 10,
     padding: 10,
-    marginBottom: 20,
+    margin: 10,
     marginTop: 0,
+    marginBottom: 15,
+    borderRadius: 10,
+  },
+  feedback_delete: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    marginTop: 0,
+    marginBottom: 15,
+    borderRadius: 10,
+    flexDirection: 'row',
+  },
+  delete_icon: {
+    marginLeft: 10,
   },
   feedback_text: {
-    flex: 1,
-    fontSize: 10,
-    color: 'black',
+    textAlign: 'center',
+    fontSize: 15,
   },
   header: {
     flex: 0.1,
@@ -211,20 +236,5 @@ const styles = StyleSheet.create({
   dropdown_icon: {
     flex: 0.1,
     textAlign: 'center',
-  },
-  delete_feedback: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 10,
-    borderRadius: 10,
-    marginBottom: 20,
-    marginTop: 0,
-  },
-  delete_feedback_text: {
-    marginRight: 10,
-  },
-  delete_feedback_icon: {
   },
 });

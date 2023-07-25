@@ -26,13 +26,11 @@ const ScheduleSectionList = props => {
   }, []);
 
   return (
-    <KeyboardAvoidingView
+    <SafeAreaView
       style={[
         styles.container,
         {backgroundColor: event.colors[appearance].background},
       ]}
-      behavior="padding"
-      keyboardVerticalOffset={95}
       >
       <SectionList
         sections={props.data}
@@ -85,7 +83,7 @@ const ScheduleSectionList = props => {
             scrollToTime={scrollToTime}
           />
         </View> */}
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

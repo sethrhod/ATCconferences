@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
 import SessionizeContext from './context/SessionizeContext';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function CodeOfConduct(props) {
   const {event, appearance} = useContext(SessionizeContext);
@@ -42,7 +41,8 @@ export default function CodeOfConduct(props) {
           Need Help?
         </Text>
         <Text style={[styles.p, {color: event.colors[appearance].text}]}>
-          You have our contact details in the emails we've sent you.
+          You can contact us at AtlDev@georgiadevelopers.org with any questions
+          or concerns.
         </Text>
         <Text style={[styles.header, {color: event.colors[appearance].text}]}>
           The Quick Version

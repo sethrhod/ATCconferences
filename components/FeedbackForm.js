@@ -115,6 +115,7 @@ export default function FeedbackForm(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 300,
   },
   feedback: {
     flex: 1,

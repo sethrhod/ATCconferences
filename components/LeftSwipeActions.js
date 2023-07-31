@@ -2,11 +2,14 @@ import React from 'react';
 import {StyleSheet, Text, View, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SessionizeContext from './context/SessionizeContext';
+import SpeakerContext from './context/SpeakerContext';
 import BookmarkButton from './BookmarkButton';
 
 export default function LeftSwipeActions(props) {
   const {event, appearance} = React.useContext(SessionizeContext);
   const leftSwipeBoxRef = React.useRef(null);
+
+  const {setSelectedSession} = React.useContext(SpeakerContext);
 
   const [fontSize, setFontSize] = React.useState(15);
   const [iconsize, setIconsize] = React.useState(40);
@@ -53,7 +56,6 @@ export default function LeftSwipeActions(props) {
       });
     }
   };
-    
 
   return (
     <View
@@ -105,7 +107,7 @@ export default function LeftSwipeActions(props) {
           {borderColor: event.colors[appearance].background},
         ]}
         onPress={() => {
-          props.setSelectedSession(props.session);
+          setSelectedSession(props.session);
           props.navigation.navigate('SessionInfo');
 
           if (props.swipeableRef.current) {

@@ -22,6 +22,7 @@ export default function App() {
   const [eventToRender, setEventToRender] = useState(null);
   const [timeoutError, setTimeoutError] = useState(false);
   const CustomData = require('./app.json');
+  const currentDate = new Date();
 
   useEffect(() => {
     async function fetchEvents() {
@@ -37,7 +38,8 @@ export default function App() {
           },
         );
         const data = await response.json();
-        setEvents(data);
+        const reversedEvents = data.events.reverse();
+        setEvents(reversedEvents);
       } catch (error) {
         console.log(error.name === 'AbortError');
         setTimeoutError(true);
@@ -48,18 +50,27 @@ export default function App() {
 
   const EventItem = props => {
     const {unzippedPath, data} = props;
+    const [eventPassed, setEventPassed] = useState(false);
+    const date_object = new Date(data?.date);
+
+    useEffect(() => {
+      if (date_object < currentDate) {
+        setEventPassed(true);
+      }
+    }, [date_object]);
 
     const handlePress = () => {
       data.unzippedPath = unzippedPath;
       setEventToRender(data);
     };
 
-    const format_date = date => {
-      const date_object = new Date(date);
-      const month = date_object.toLocaleString('default', {month: 'long'});
-      const day = date_object.getDate();
-      const year = date_object.getFullYear();
-      return `${month} ${day}, ${year}`;
+    const format_date = () => {
+      if (date_object !== undefined) {
+        const month = date_object.toLocaleString('default', {month: 'long'});
+        const day = date_object.getDate();
+        const year = date_object.getFullYear();
+        return `${month} ${day}, ${year}`;
+      }
     };
 
     if (data === null) {
@@ -71,8 +82,14 @@ export default function App() {
     }
 
     return (
-      <View style={styles.item}>
+      <View style={[styles.item]}>
         <TouchableOpacity onPress={() => handlePress()}>
+        {eventPassed && (
+            <View
+              style={{flex: 1}}>
+              <Text style={{color: 'grey', fontWeight: 'bold'}}>This event has passed.</Text>
+            </View>
+          )}
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <Image
               source={{uri: 'file://' + unzippedPath + data.logo}}
@@ -89,9 +106,7 @@ export default function App() {
           </View>
           <View style={styles.bottom_box_container}>
             <View style={styles.bottom_box}>
-              <Text style={styles.bottom_box_text}>
-                {format_date(data.date)}
-              </Text>
+              <Text style={styles.bottom_box_text}>{format_date()}</Text>
             </View>
             <View style={styles.bottom_box}>
               <Text style={styles.bottom_box_text}>{data.time}</Text>
@@ -103,6 +118,15 @@ export default function App() {
   };
 
   const DownloadEventItem = props => {
+    const [eventPassed, setEventPassed] = useState(false);
+    const date_object = new Date(props.date);
+
+    useEffect(() => {
+      if (date_object < currentDate) {
+        setEventPassed(true);
+      }
+    }, [date_object]);
+
     const url =
       CustomData.DevelopersAssociationofGeorgiaAPI +
       'download/' +
@@ -151,6 +175,12 @@ export default function App() {
     return (
       <View style={styles.item}>
         <TouchableOpacity onPress={() => handlePress()}>
+          {eventPassed && (
+            <View
+              style={{flex: 1}}>
+              <Text style={{color: 'grey', fontWeight: 'bold'}}>This event has passed.</Text>
+            </View>
+          )}
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.title}>{props.name}</Text>
           </View>
@@ -236,7 +266,7 @@ export default function App() {
     return (
       <View style={styles.container}>
         <FlatList
-          data={events.events}
+          data={events}
           style={{flex: 0.8}}
           ListHeaderComponent={
             <View style={styles.header_container}>
@@ -261,11 +291,11 @@ export default function App() {
   };
 
   if (timeoutError) {
-    return(
+    return (
       <View style={styles.container}>
-        <TimeoutErrorMessage setTimeoutError={setTimeoutError}/>
+        <TimeoutErrorMessage setTimeoutError={setTimeoutError} />
       </View>
-    )
+    );
   }
 
   if (!checkInternetConnection()) {
@@ -273,7 +303,7 @@ export default function App() {
       <View style={styles.container}>
         <ConnectionErrorMessage setTimeoutError={setTimeoutError} />
       </View>
-    )
+    );
   }
 
   if (eventToRender) {

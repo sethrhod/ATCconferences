@@ -11,8 +11,8 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import SessionizeContext from './context/SessionizeContext';
 import SpeakerContext from './context/SpeakerContext';
 import SessionInfo from './SessionInfo';
@@ -34,23 +34,23 @@ export default function Sponsors() {
   const [selectedSpeaker, setSelectedSpeaker] = React.useState(null);
 
   useFocusEffect(
-  React.useCallback(() => {
-    const fetchSponsors = async () => {
-      try {
-        const response = await fetchWithTimeout(event.sponsorsAPI, {
-          timeout: 8000,
-        });
-        const json = await response.json();
-        setData(json);
-      } catch (error) {
-        console.log(error.name === 'AbortError');
-        setTimeoutError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSponsors();
-  }, [bookmarksChanged]),
+    React.useCallback(() => {
+      const fetchSponsors = async () => {
+        try {
+          const response = await fetchWithTimeout(event.sponsorsAPI, {
+            timeout: 8000,
+          });
+          const json = await response.json();
+          setData(json);
+        } catch (error) {
+          console.log(error.name === 'AbortError');
+          setTimeoutError(true);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchSponsors();
+    }, [bookmarksChanged]),
   );
 
   const sponsoredSession = props => {
@@ -86,13 +86,20 @@ export default function Sponsors() {
   };
 
   const SubItem = props => (
-    <View style={[styles.sub_item, {backgroundColor: event.colors[appearance].foreground}]}>
+    <View
+      style={[
+        styles.sub_item,
+        {backgroundColor: event.colors[appearance].foreground},
+      ]}>
       <TouchableHighlight onPress={() => Linking.openURL(props.sponsors.url)}>
         <View style={styles.logo_container}>
           <Image style={styles.logo} source={{uri: props.sponsors.uri}} />
         </View>
       </TouchableHighlight>
-      <SponsorsSession sponsors={props.sponsors} navigation={props.navigation} />
+      <SponsorsSession
+        sponsors={props.sponsors}
+        navigation={props.navigation}
+      />
     </View>
   );
 
@@ -122,7 +129,9 @@ export default function Sponsors() {
       </Text>
       <FlatList
         data={props.item.sponsors}
-        renderItem={({item}) => <SubItem sponsors={item} navigation={props.navigation} />}
+        renderItem={({item}) => (
+          <SubItem sponsors={item} navigation={props.navigation} />
+        )}
         contentContainerStyle={{alignItems: 'stretch'}}
         style={{width: '100%'}}
       />
@@ -131,18 +140,47 @@ export default function Sponsors() {
 
   const SponsorsList = props => {
     return (
-      <SafeAreaView style={[styles.item_container, { backgroundColor: event.colors[appearance].background }]}>
-        {isLoading &&
-          <View style={[styles.loading_container, {backgroundColor: event.colors[appearance].background}]}>
-            <Text style={[styles.loading, {color: event.colors[appearance].text}]}>Loading...</Text>
+      <SafeAreaView
+        style={[
+          styles.item_container,
+          {backgroundColor: event.colors[appearance].background},
+        ]}>
+        {isLoading && (
+          <View
+            style={[
+              styles.loading_container,
+              {backgroundColor: event.colors[appearance].background},
+            ]}>
+            <Text
+              style={[styles.loading, {color: event.colors[appearance].text}]}>
+              Loading...
+            </Text>
           </View>
-        }
-        <FlatList
-          data={data}
-          renderItem={({ item }) => <Item item={item} navigation={props.navigation} />}
-          contentContainerStyle={{ alignItems: 'stretch' }}
-          style={{ width: '100%' }}
-        />
+        )}
+        {sessions === null ? (
+          <View
+            style={[
+              styles.loading_container,
+              {backgroundColor: event.colors[appearance].background},
+            ]}>
+            <Text
+              style={[
+                styles.noSessionsText,
+                {color: event.colors[appearance].text},
+              ]}>
+              No sponsors found
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={data}
+            renderItem={({item}) => (
+              <Item item={item} navigation={props.navigation} />
+            )}
+            contentContainerStyle={{alignItems: 'stretch'}}
+            style={{width: '100%'}}
+          />
+        )}
       </SafeAreaView>
     );
   };
@@ -154,18 +192,17 @@ export default function Sponsors() {
       const getBookmarks = async () => {
         return await loadBookmarks(event, sessions);
       };
-      getBookmarks()
-        .then(bookmarksList => {
-          // find if session is bookmarked
-          const bookmarked = bookmarksList.find(
-            bookmark => bookmark === selectedSession.id,
-          );
-          if (bookmarked) {
-            setBookmarked(true);
-          } else {
-            setBookmarked(false);
-          }
-        })
+      getBookmarks().then(bookmarksList => {
+        // find if session is bookmarked
+        const bookmarked = bookmarksList.find(
+          bookmark => bookmark === selectedSession.id,
+        );
+        if (bookmarked) {
+          setBookmarked(true);
+        } else {
+          setBookmarked(false);
+        }
+      });
     }, [selectedSession]);
 
     return (
@@ -181,10 +218,14 @@ export default function Sponsors() {
 
   if (timeoutError) {
     return (
-      <View style={[styles.container, {backgroundColor: event.colors[appearance].background}]}>
+      <View
+        style={[
+          styles.container,
+          {backgroundColor: event.colors[appearance].background},
+        ]}>
         <TimeoutErrorMessage />
       </View>
-    )
+    );
   }
 
   const Stack = createNativeStackNavigator();
@@ -194,7 +235,7 @@ export default function Sponsors() {
     selectedSession,
     setSelectedSession,
     setSelectedSpeaker,
-  }
+  };
 
   return (
     <SpeakerContext.Provider value={value}>
@@ -304,5 +345,10 @@ const styles = StyleSheet.create({
   },
   loading: {
     fontSize: 25,
+  },
+  noSessionsText: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 20,
   },
 });

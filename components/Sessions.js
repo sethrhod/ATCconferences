@@ -61,7 +61,9 @@ export default function Sessions(props) {
   );
 
   useEffect(() => {
-    createNewFilterOptions();
+    if (sessions !== null) {
+      createNewFilterOptions();
+    }
   }, []);
 
   const createNewFilterOptions = () => {
@@ -168,7 +170,7 @@ export default function Sessions(props) {
 
   const ConditionalRender = (props) => {
     // conditional render for when there are no sessions
-    if (sessions.sessions.length === 0) {
+    if (sessions === null || sessions.sessions.length === 0) {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.noSessionsContainer}>
@@ -376,7 +378,8 @@ const styles = StyleSheet.create({
   },
   noSessionsText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
   },
   section_list: {
     height: '100%',

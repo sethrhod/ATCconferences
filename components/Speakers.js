@@ -21,8 +21,7 @@ import BookmarkButton from './BookmarkButton';
 import loadBookmarks from './scripts/loadBookmarks';
 
 export default function Speakers() {
-  const {event, speakers, appearance, sessions} =
-    useContext(SessionizeContext);
+  const {event, speakers, appearance, sessions} = useContext(SessionizeContext);
 
   const [selectedSession, setSelectedSession] = React.useState(null);
   const [selectedSpeaker, setSelectedSpeaker] = React.useState(null);
@@ -36,20 +35,30 @@ export default function Speakers() {
           {backgroundColor: event.colors[appearance].background},
         ]}>
         <SafeAreaView style={styles.item_container}>
-          <FlatList
-            data={speakers}
-            renderItem={({item}) => (
-              <SpeakerInfo
-                speaker={item}
-                navigation={navigation}
-                event={event}
-                appearance={appearance}
-              />
-            )}
-            keyExtractor={item => item.id}
-            contentContainerStyle={{alignItems: 'stretch'}}
-            style={{width: '100%'}}
-          />
+          {sessions === null ? (
+            <Text
+              style={[
+                styles.noSessionsText,
+                {color: event.colors[appearance].text},
+              ]}>
+              No speakers found
+            </Text>
+          ) : (
+            <FlatList
+              data={speakers}
+              renderItem={({item}) => (
+                <SpeakerInfo
+                  speaker={item}
+                  navigation={navigation}
+                  event={event}
+                  appearance={appearance}
+                />
+              )}
+              keyExtractor={item => item.id}
+              contentContainerStyle={{alignItems: 'stretch'}}
+              style={{width: '100%'}}
+            />
+          )}
         </SafeAreaView>
       </View>
     );
@@ -162,5 +171,12 @@ const styles = StyleSheet.create({
   item_container: {
     flex: 1,
     width: '100%',
+    justifyContent: 'center',
+    alightItems: 'center',
+  },
+  noSessionsText: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
